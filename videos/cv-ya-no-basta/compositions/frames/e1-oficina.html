@@ -40,6 +40,24 @@
   </div>
   <div id="applicant" class="abs" style="left:0;top:0;width:1080px;height:1350px;z-index:3">
   <!-- postulante: de pie, mirando hacia el escritorio -->
+    <!-- piernas articuladas (las piezas del usuario), detrás del saco -->
+    <div class="abs" style="left:972px;top:712px;transform:scaleX(-1);">
+      <div id="muslo1" class="abs" style="left:0;top:0;transform-origin:0 0">
+        <img class="abs" src="../../elementos/personaje/piezas/muslo-post.png" style="left:-40px;top:-7px;width:69px;transform-origin:40px 7px;transform:rotate(-6.5deg)">
+        <div id="rodilla1" class="abs" style="left:0;top:151px;transform-origin:0 0">
+          <img class="abs" src="../../elementos/personaje/piezas/pierna-post.png" style="left:-21px;top:-16px;width:116px;transform-origin:21px 16px;transform:rotate(10.1deg)">
+        </div>
+      </div>
+    </div>
+    <div class="abs" style="left:917px;top:712px;transform:scaleX(-1); filter:drop-shadow(2px 0 0 #17122b) drop-shadow(-2px 0 0 #17122b) drop-shadow(0 2px 0 #17122b);">
+      <div id="muslo2" class="abs" style="left:0;top:0;transform-origin:0 0">
+        <img class="abs" src="../../elementos/personaje/piezas/muslo-post.png" style="left:-40px;top:-7px;width:69px;transform-origin:40px 7px;transform:rotate(-6.5deg)">
+        <div id="rodilla2" class="abs" style="left:0;top:151px;transform-origin:0 0">
+          <img class="abs" src="../../elementos/personaje/piezas/pierna-post.png" style="left:-21px;top:-16px;width:116px;transform-origin:21px 16px;transform:rotate(10.1deg)">
+        </div>
+      </div>
+    </div>
+
   <!-- brazo LEJANO del postulante: va DETRÁS del cuerpo (se pinta antes).
        El torso tapa hombro y brazo superior; solo asoman antebrazo y mano.
        Mismo blanco que el cuerpo. -->
@@ -55,7 +73,8 @@
   </svg>
   <!-- coordenadas del recorte original (270x1180), mirando a la derecha; el flip lo da vuelta -->
   <svg class="abs" viewBox="0 0 270 1180" style="left:846px;top:286px;height:794px;transform:scaleX(-1);overflow:visible">
-    <image href="../../elementos/personaje/postulante-de-pie-blanco.png" width="270" height="1180"/>
+    <defs><clipPath id="sinPiernas"><path d="M-50 -50 H330 V640 H105 V740 H12 V640 H-50 Z"/></clipPath></defs>
+    <image href="../../elementos/personaje/postulante-de-pie-blanco.png" width="270" height="1180" clip-path="url(#sinPiernas)"/>
     <!-- sin corbata: se rellena el hueco y queda solo el cuello abierto -->
     <path d="M100 222 L166 236 Q184 242 189 270 L190 300 L203 512 L171 549 L135 512 L104 262 Z" fill="#f6f4fa"/>
     <!-- cuello redondo: anillo concéntrico a la cabeza -->
@@ -100,7 +119,7 @@
 
   // POSTULANTE: entra con el CV (balanceo vertical = pasos)
   tl.fromTo(["#applicant","#cv"], { x: 380 }, { x: 0, duration: 1.0, ease: "power2.out" }, 0);
-  tl.fromTo(["#applicant","#cv"], { y: 0 }, { y: -8, duration: 0.16, repeat: 5, yoyo: true, ease: "sine.inOut" }, 0);
+  tl.fromTo(["#applicant","#cv"], { y: 0 }, { y: -4, duration: 0.16, repeat: 5, yoyo: true, ease: "sine.inOut" }, 0);
   tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.5);
 
   // deja el CV arriba de la pila
@@ -111,8 +130,23 @@
   gsap.set("#applicant", { transformOrigin: "930px 700px" });
   tl.set("#applicant", { scaleX: -1 }, 1.65);
   tl.to("#applicant", { x: 420, duration: 1.2, ease: "power2.in" }, 1.7);
-  tl.to("#applicant", { y: -8, duration: 0.16, repeat: 6, yoyo: true, ease: "sine.inOut" }, 1.7);
+  tl.to("#applicant", { y: -4, duration: 0.16, repeat: 6, yoyo: true, ease: "sine.inOut" }, 1.7);
   tl.to("#tagP", { opacity: 0, duration: 0.2 }, 1.65);
+
+
+  // PASOS: muslos alternados y rodilla que se dobla al pasar la pierna
+  function pasos(t0, dur) {
+    const n = Math.round(dur / 0.32);
+    for (let k = 0; k < n; k++) {
+      const t = t0 + k * 0.32, a = k % 2 ? 1 : -1;
+      tl.to("#muslo1", { rotation: 20 * a, duration: 0.32, ease: "sine.inOut" }, t);
+      tl.to("#muslo2", { rotation: -20 * a, duration: 0.32, ease: "sine.inOut" }, t);
+      tl.to(a > 0 ? "#rodilla1" : "#rodilla2", { rotation: -28, duration: 0.16, ease: "sine.out", yoyo: true, repeat: 1 }, t);
+    }
+    tl.to(["#muslo1","#muslo2","#rodilla1","#rodilla2"], { rotation: 0, duration: 0.15 }, t0 + n * 0.32);
+  }
+  pasos(0, 0.96);
+  pasos(1.7, 1.28);
 
   window.__timelines = window.__timelines || {};
   window.__timelines["e1-oficina"] = tl;

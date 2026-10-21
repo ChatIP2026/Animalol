@@ -1,6 +1,24 @@
 {
   "version": 1,
   "skills": {
+    "carousel-narratives": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/carousel-narratives/SKILL.md",
+      "computedHash": "4a362534bb4c2d7df8ec922f86f98af15a3d30ea34af524d26fff475249d537b"
+    },
+    "channel-formula": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/channel-formula/SKILL.md",
+      "computedHash": "bb9b49d8d022142f6ff39c3b437ebc1a684c6077115725b786bd30125a593d50"
+    },
+    "email-hooks": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/email-hooks/SKILL.md",
+      "computedHash": "252ce67c7ac93d306e324b009d53c8a1765def20937077a4cc8ac3e6eddbe0ca"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -79,6 +97,12 @@
       "skillPath": "skills/hyperframes-studio/SKILL.md",
       "computedHash": "073b806d264702d330426248608b7d70efb50050b8c61800f74dd6d77a317559"
     },
+    "long-form-youtube": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/long-form-youtube/SKILL.md",
+      "computedHash": "865a6e0a25cf3c8dac49847c1a191e16d582da1c48b0fb3652dc756279227d53"
+    },
     "media-use": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -115,17 +139,53 @@
       "skillPath": "skills/remotion-to-hyperframes/SKILL.md",
       "computedHash": "17c26590575d28118b783f6a534288ac38df50fae5b95826ee9d4976328ad687"
     },
+    "retention-audit": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/retention-audit/SKILL.md",
+      "computedHash": "44dcab36f4602e04421efcac04c4a2306d43daad4a63fa29a79d672a90675872"
+    },
     "slideshow": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/slideshow/SKILL.md",
       "computedHash": "b4ac949c248f9df335a47ebe3ae7edd1aaf0d7f233f3f9080b4bc916d45c7b2f"
     },
+    "storytelling-hooks": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/storytelling-hooks/SKILL.md",
+      "computedHash": "a1d65c5d0157dcae90b4d1bea39f84f247b2269ed3e7c913a7dfbbd72900a955"
+    },
     "talking-head-recut": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/talking-head-recut/SKILL.md",
       "computedHash": "83df91f488236abbc53d3c817f31b4554de8e772c2e8a17a15c0a72664da9eca"
+    },
+    "titles-and-thumbnails": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/titles-and-thumbnails/SKILL.md",
+      "computedHash": "ef84bc68b14711c581e136f5d525baaba2cab3e8f203ab3fddef4a3736257bf6"
+    },
+    "wireframe-reviewer": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/wireframe-reviewer/SKILL.md",
+      "computedHash": "ff5fa6fb0df73c280f24c8ac4a41349f740e0bf39601d893acaa2c4488c50b3f"
+    },
+    "wireframe-writer": {
+      "source": "yaxeen/storytelling-skills",
+      "sourceType": "github",
+      "skillPath": "skills/wireframe-writer/SKILL.md",
+      "computedHash": "3b52a95e215dbe11281aea59c3a0e0bd069bfc779c14556d7caea1b8e22f3de9"
+    },
+    "writers-room-story-engine": {
+      "source": "jackterror/writers-room-story-engine",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "d406ffe07457cbe2ff9770f828cbd8b68b2ddc49bb2f7a3bb56350d52a5aa08a"
     }
   }
 }

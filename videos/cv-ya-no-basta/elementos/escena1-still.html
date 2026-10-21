@@ -16,17 +16,33 @@
   <div class="abs" style="left:196px;top:900px;width:20px;height:178px;background:#4b4170"></div>
   <div class="abs" style="left:150px;top:1066px;width:112px;height:14px;border-radius:7px;background:#4b4170"></div>
   <!-- reclutador: queda DETRÁS del escritorio -->
-  <img class="abs" src="personaje/reclutador-sentado-blanco.png" style="left:110px;top:480px;height:600px">
-
-  <!-- codo del reclutador: rellena la media luna oscura entre brazo y antebrazo -->
-  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
-    <!-- un solo codo: el brazo baja y dobla hacia la mesa en una curva continua,
-         tapando la costura y el bulto redondo de la punta del antebrazo -->
-    <path d="M268 760 L305 759 Q310 764 313 768 L316 790 L304 811 C286 812 272 802 267 784 Z"
-      fill="#f6f4fa"/>
-    <!-- pliegue interior del codo: sin escalón entre brazo y antebrazo -->
-    <path d="M305 752 Q308 763 318 768 L314 772 L302 762 Z" fill="#f6f4fa"/>
+  <!-- RECLUTADOR armado con las piezas sueltas, en las coordenadas de la pose armada de la hoja
+       (misma escala y lugar que tenía la figura entera). Orden = profundidad. -->
+  <svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1350">
+   <g transform="translate(110 480) scale(0.8696) translate(-1355 -148)">
+    <!-- brazo LEJANO, el que escribe: detrás del torso -->
+    <image href="personaje/piezas/brazo.png" x="1451" y="316" width="128" height="177"/>
+    <image href="personaje/piezas/antebrazo.png" x="1517" y="453" width="214" height="94"/>
+    <image href="personaje/piezas/muslo.png" x="1381" y="538" width="251" height="88"/>
+    <image href="personaje/piezas/torso.png" x="1361" y="314" width="202" height="296"/>
+    <!-- corbata: en la pieza es un hueco; con el brazo detrás se vería blanco, así que se repone -->
+    <g transform="translate(1361 314)" fill="#17122b">
+      <path d="M138 28 L144 28 L156 34 L158 48 L157 56 L147 56 L141 44 Z"/>
+      <path d="M151 64 L156 64 L160 84 L165 114 L170 138 L175 168 L179 192 L183 210 L183 216
+               L177 228 L171 240 L168 244 L164 240 L157 228 L148 216 L147 204 L148 180 L149 150
+               L150 120 L150 90 L151 70 Z"/>
+    </g>
+    <image href="personaje/piezas/cuello.png" x="1522" y="283" width="48" height="78" transform="rotate(55 1546 322)"/>
+    <image href="personaje/piezas/cabeza.png" x="1520" y="157" width="179" height="177"/>
+    <!-- brazo CERCANO: cuelga por el medio del costado (no tapa la corbata, que va al frente)
+         y apoya la mano sobre el muslo, junto a la cadera -->
+    <path d="M1440 356 L1436 520 L1478 576" stroke="#17122b" stroke-width="59" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M1440 356 L1436 520 L1478 576" stroke="#f6f4fa" stroke-width="52" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="1494" cy="596" rx="31" ry="38" transform="rotate(-37 1494 596)" fill="#f6f4fa"/>
+    <path d="M1462 586 Q1480 570 1500 562" stroke="#17122b" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+   </g>
   </svg>
+
   <!-- pila de CVs sobre el escritorio -->
   <svg class="abs" style="left:560px;top:640px" width="260" height="190" viewBox="0 0 260 190">
     <g id="pila"></g>

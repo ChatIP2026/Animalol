@@ -1,146 +1,121 @@
 <!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1080, height=1350" />
-    <link rel="stylesheet" href="../base.css" />
-    <script src="../../vendor/gsap.min.js"></script>
-    <style>
-      #room { z-index: 6; position: absolute; left: -116px; top: 244px; width: 1312px; }
-      .tag {
-        position: absolute; z-index: 12;
-        font-family: "IBM Plex Mono", monospace; font-size: 25px; font-weight: 500;
-        letter-spacing: 0.18em; text-transform: uppercase; color: var(--lavender);
-        white-space: nowrap; opacity: 0;
-      }
-      .tag::after {
-        content: ""; position: absolute; left: 50%; bottom: -16px;
-        width: 2px; height: 12px; background: var(--lavender); opacity: 0.6;
-      }
-      #tagPost { left: 902px; top: 506px; transform: translateX(-50%); }
-      #tagWork { left: 300px; top: 448px; transform: translateX(-50%); }
-    </style>
-  </head>
-  <body>
-    <div id="root" data-composition-id="e1-oficina" data-width="1080" data-height="1350">
-      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
-      <div class="glow glow-a" data-layout-allow-overflow></div>
-      <div class="glow glow-b" data-layout-allow-overflow></div>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;
+     background:radial-gradient(ellipse 70% 50% at 30% 30%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  .tag{position:absolute;font:500 24px "IBM Plex Mono",monospace;letter-spacing:.2em;
+       color:#c4a5e8;white-space:nowrap}
+</style></head><body>
+<div id="root" data-composition-id="e1-oficina" data-width="1080" data-height="1350">
 
-      <svg id="room" viewBox="0 0 1080 880" fill="none">
-        <path d="M0 706 H1080" stroke="#6d5f8c" stroke-width="5" opacity="0.6"/>
-        <g id="door" opacity="0.45">
-          <rect x="902" y="286" width="150" height="420" rx="5"
-            stroke="#6d5f8c" stroke-width="6" fill="rgba(109,95,140,0.10)"/>
-          <circle cx="926" cy="520" r="8" fill="#6d5f8c"/>
-        </g>
+  <!-- piso -->
+  <div class="abs" style="left:0;right:0;top:1078px;height:4px;background:#3d3360"></div>
 
-        <!-- silla: respaldo visible por encima del escritorio -->
-        <path d="M214 500 V372 a20 20 0 0 1 20 -20 h26" stroke="#6d5f8c" stroke-width="16"
-          stroke-linecap="round" fill="none"/>
+  <!-- silla -->
+  <div class="abs" style="left:176px;top:700px;width:22px;height:200px;border-radius:11px;background:#4b4170"></div>
+  <div class="abs" style="left:180px;top:880px;width:150px;height:20px;border-radius:8px;background:#4b4170"></div>
+  <div class="abs" style="left:244px;top:900px;width:20px;height:178px;background:#4b4170"></div>
+  <div class="abs" style="left:198px;top:1066px;width:112px;height:14px;border-radius:7px;background:#4b4170"></div>
+  <!-- reclutador: queda DETRÁS del escritorio -->
+  <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-sentado-v3-blanco.png" style="left:-112px;top:402px;width:827px">
 
-        <!-- EL RECLUTADOR. Silueta sólida y encorvada: de la cintura para abajo
-             lo tapa el escritorio, igual que en la referencia. -->
-        <g id="worker">
-          <g id="body">
-            <path d="M252 532 C236 450 248 384 292 352 C314 334 340 330 356 344
-                     L380 368 C390 410 382 474 378 532 Z" fill="#f6f4fa"/>
-            <ellipse id="head" cx="366" cy="304" rx="48" ry="44"
-              transform="rotate(-24 366 304)" fill="#f6f4fa"/>
-            <path id="arm" d="M362 392 L448 456 L540 480" stroke="#f6f4fa" stroke-width="32"
-              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M534 470 h34 a9 9 0 0 1 0 18 h-34 Z" fill="#f6f4fa"/>
-          </g>
-        </g>
+  <!-- pila de CVs sobre el escritorio -->
+  <img class="abs" src="../../elementos/pila.png" style="left:526px;top:631px;width:332px">
 
-        <!-- ESCRITORIO macizo, no de patas finas -->
-        <rect x="158" y="486" width="668" height="28" rx="7" fill="#c9bedd"/>
-        <path d="M190 514 H796 V706 H190 Z" fill="#7d6fa0"/>
-        <path d="M188 514 H798 V532 H188 Z" fill="#7a6d9c"/>
-        <!-- hoja sobre la que escribe -->
-        <rect x="476" y="466" width="118" height="22" rx="4" fill="#e4d6f7" opacity="0.65"/>
+  <!-- escritorio: bloque macizo, delante del reclutador -->
+  <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
+  <div class="abs" style="left:322px;top:836px;width:516px;height:244px;background:#6f6294"></div>
 
-        <g id="stack"></g>
+  <!-- la hoja en la que escribe -->
+  <div class="abs" style="left:318px;top:803px;width:150px;height:10px;border-radius:2px;background:#efe8fa"></div>
+  <!-- el CV que trae el postulante -->
+  <div id="cv" class="abs" style="left:780px;top:640px;width:54px;height:40px;border-radius:3px;background:#efe8fa;z-index:4">
+    <div style="margin:9px 8px 0;height:4px;width:30px;background:#7a6d9c;border-radius:2px"></div>
+    <div style="margin:5px 8px 0;height:4px;width:36px;background:#7a6d9c;border-radius:2px"></div>
+    <div style="margin:5px 8px 0;height:4px;width:22px;background:#7a6d9c;border-radius:2px"></div>
+  </div>
+  <div id="applicant" class="abs" style="left:0;top:0;width:1080px;height:1350px;z-index:3">
+  <!-- postulante: de pie, mirando hacia el escritorio -->
+  <!-- brazo LEJANO del postulante: va DETRÁS del cuerpo (se pinta antes).
+       El torso tapa hombro y brazo superior; solo asoman antebrazo y mano.
+       Mismo blanco que el cuerpo. -->
+  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
+    <path d="M900 476 L874 600 L828 644" stroke="#f6f4fa" stroke-width="40" fill="none"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- la misma mano del diseño original, espejada y girada según el antebrazo -->
+    <!-- mano: manopla ovalada, un poco más ancha que la manga (eso marca la muñeca),
+         con el eje mayor alineado al antebrazo, igual que la mano original -->
+    <ellipse cx="808" cy="664" rx="25" ry="31" transform="rotate(44 808 664)" fill="#f6f4fa"/>
+    <!-- une hombro y brazo en una sola curva (sin muesca entre las dos jorobas) -->
+    <path d="M914 446 C898 446 884 458 879 484 L904 506 L920 470 Z" fill="#f6f4fa"/>
+  </svg>
+  <!-- coordenadas del recorte original (270x1180), mirando a la derecha; el flip lo da vuelta -->
+  <svg class="abs" viewBox="0 0 270 1180" style="left:846px;top:286px;height:794px;transform:scaleX(-1);overflow:visible">
+    <image href="../../elementos/personaje/postulante-de-pie-blanco.png" width="270" height="1180"/>
+    <!-- sin corbata: se rellena el hueco y queda solo el cuello abierto -->
+    <path d="M100 222 L166 236 Q184 242 189 270 L190 300 L203 512 L171 549 L135 512 L104 262 Z" fill="#f6f4fa"/>
+    <!-- cuello redondo: anillo concéntrico a la cabeza -->
+    <path fill="#17122b" fill-rule="evenodd" d="
+      M24 119 a115 121 0 1 0 230 0 a115 121 0 1 0 -230 0 Z
+      M39 119 a100 105 0 1 0 200 0 a100 105 0 1 0 -200 0 Z"/>
+    <!-- pelo: volumen arriba y atrás, con flequillo adelante -->
+    <path d="M40 182 C14 112 46 22 132 10 C196 2 246 38 252 88
+             L236 82 L240 104 L220 92 L216 112 L198 96
+             C162 74 104 88 66 156 Z"
+          fill="#f6f4fa" stroke="#17122b" stroke-width="7" stroke-linejoin="round"/>
+  </svg>
 
-        <!-- EL POSTULANTE: misma silueta sólida, de pie -->
-        <g id="applicant" opacity="0">
-          <path d="M-62 448 C-100 448 -110 508 -110 598 L-108 706 L-66 706 L-64 606
-                   L-60 606 L-58 706 L-16 706 L-14 598 C-14 508 -24 448 -62 448 Z"
-            fill="#f6f4fa"/>
-          <path d="M-74 420 h24 v34 h-24 Z" fill="#f6f4fa"/>
-          <circle cx="-62" cy="398" r="40" fill="#f6f4fa"/>
-          <path id="appArm" d="M-62 486 L-134 520" stroke="#f6f4fa" stroke-width="28"
-            stroke-linecap="round"/>
-          <g id="cvHand">
-            <rect x="-180" y="492" width="62" height="46" rx="4" fill="#e4d6f7"/>
-            <g fill="#4a267f"><rect x="-172" y="502" width="36" height="5" rx="2"/>
-            <rect x="-172" y="514" width="44" height="5" rx="2"/>
-            <rect x="-172" y="526" width="24" height="5" rx="2"/></g>
-          </g>
-        </g>
-      </svg>
+  <!-- cortes oscuros del brazo lejano, como los del brazo original:
+       1) a lo largo del borde delantero del torso (leído de la imagen), donde el brazo pasa por detrás
+       2) en la muñeca -->
+  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
+    <defs><filter id="suave" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.7"/></filter></defs>
+    <!-- 1) a lo largo del borde del torso, hasta que se junta con el hueco de la axila -->
+    <path d="M902 486 C897 501 893 515 890 528 C889 542 887 555 886 569 C885 582 884 596 883.5 624"
+      stroke="#17122b" stroke-width="3.6" fill="none" stroke-linecap="round" filter="url(#suave)"/>
+    <!-- 2) muñecas: un corte que cruza la muñeca, igual en las dos manos -->
+    <g transform="translate(808 664) rotate(44)">
+      <path d="M-19 -21 Q0 -26 20 -23" stroke="#17122b" stroke-width="3.6" fill="none"
+        stroke-linecap="round" filter="url(#suave)"/>
+    </g>
+    <path d="M976 713 Q992 719 1008 714" stroke="#17122b" stroke-width="3.6" fill="none"
+      stroke-linecap="round" filter="url(#suave)"/>
+  </svg>
+  <div id="tagP" class="tag" style="left:938px;top:226px">POSTULANTE</div>
+  </div>
+  <div id="tagR" class="tag" style="left:290px;top:420px">RECLUTADOR</div>
+</div>
+<script>
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(["#tagR","#tagP"], { xPercent: -50 });
+  // RECLUTADOR: escribe sin parar (balanceo leve desde la cadera)
+  gsap.set("#reclu", { transformOrigin: "300px 470px" });
+  tl.to("#reclu", { rotation: 0.8, duration: 0.2, repeat: 15, yoyo: true, ease: "sine.inOut" }, 0);
+  tl.fromTo("#tagR", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
 
-      <div class="tag" id="tagWork">reclutador</div>
-      <div class="tag" id="tagPost">postulante</div>
-      <div class="vignette"></div>
-    </div>
+  // POSTULANTE: entra con el CV (balanceo vertical = pasos)
+  tl.fromTo(["#applicant","#cv"], { x: 380 }, { x: 0, duration: 1.0, ease: "power2.out" }, 0);
+  tl.fromTo(["#applicant","#cv"], { y: 0 }, { y: -8, duration: 0.16, repeat: 5, yoyo: true, ease: "sine.inOut" }, 0);
+  tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.5);
 
-    <script>
-      // La pila inicial. Cada hoja es su propio elemento para que la nueva se sume encima.
-      const stack = document.getElementById("stack");
-      const SVGNS = "http://www.w3.org/2000/svg";
-      function sheet(i, id) {
-        const r = document.createElementNS(SVGNS, "rect");
-        const w = 152 + Math.sin(i * 2.4) * 14;
-        const x = 630 + Math.cos(i * 1.9) * 9;
-        const y = 466 - i * 19;
-        r.setAttribute("x", x); r.setAttribute("y", y);
-        r.setAttribute("width", w); r.setAttribute("height", 17);
-        r.setAttribute("rx", 3);
-        r.setAttribute("fill", i % 2 ? "#85207b" : "#7b3ff2");
-        // cada hoja cae con su propio ángulo: una pila real no está perfecta
-        r.setAttribute("transform",
-          "rotate(" + (Math.sin(i * 3.3) * 1.6).toFixed(2) + " " + (x + w / 2) + " " + (y + 8) + ")");
-        if (id) r.id = id;
-        stack.appendChild(r);
-        return r;
-      }
-      for (let i = 0; i < 8; i++) sheet(i);
-      const newSheet = sheet(8, "newSheet");
+  // deja el CV arriba de la pila
+  tl.to("#cv", { x: -150, y: 18, rotation: -4, duration: 0.4, ease: "power2.inOut" }, 1.1);
+  tl.to("#applicant", { x: -10, duration: 0.4, ease: "power2.inOut" }, 1.1);
 
-      const tl = gsap.timeline({ paused: true });
-      tl.fromTo("#mesh", { y: 0 }, { y: 26, duration: 3.2, ease: "none" }, 0);
+  // se da vuelta y se va
+  gsap.set("#applicant", { transformOrigin: "930px 700px" });
+  tl.set("#applicant", { scaleX: -1 }, 1.65);
+  tl.to("#applicant", { x: 420, duration: 1.2, ease: "power2.in" }, 1.7);
+  tl.to("#applicant", { y: -8, duration: 0.16, repeat: 6, yoyo: true, ease: "sine.inOut" }, 1.7);
+  tl.to("#tagP", { opacity: 0, duration: 0.2 }, 1.65);
 
-      // 0.0 - 0.7 · el lugar y quién es. Ya está trabajando cuando empieza el video.
-      gsap.set("#arm", { transformOrigin: "362px 392px" });
-      gsap.set("#newSheet", { opacity: 0 });
-      gsap.set("#applicant", { opacity: 0 });
-      tl.fromTo("#tagWork", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
-      tl.to("#arm", { rotation: -3.5, duration: 0.3, repeat: 9, yoyo: true, ease: "sine.inOut" }, 0);
-
-      // 0.7 - 1.7 · entra el postulante (un bob vertical lee como caminata)
-      tl.set("#applicant", { opacity: 1 }, 0.7);
-      tl.fromTo("#applicant", { x: 1320 }, { x: 900, duration: 1.0, ease: "power2.out" }, 0.7);
-      tl.to("#applicant", { y: -9, duration: 0.17, repeat: 5, yoyo: true, ease: "sine.inOut" }, 0.7);
-      tl.fromTo("#tagPost", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.95);
-
-      // 1.7 - 2.2 · deja el CV sobre la pila. La pila crece.
-      tl.to("#appArm", { attr: { d: "M-62 486 L-150 430" }, duration: 0.3, ease: "power2.out" }, 1.7);
-      tl.to("#cvHand", { y: -118, x: -22, duration: 0.3, ease: "power2.out" }, 1.7);
-      tl.to("#cvHand", { opacity: 0, duration: 0.01 }, 2.0);
-      tl.fromTo("#newSheet", { opacity: 0, y: -40 },
-        { opacity: 1, y: 0, duration: 0.3, ease: "power3.in" }, 2.0);
-      tl.fromTo("#stack", { y: 0 }, { y: -3, duration: 0.1, yoyo: true, repeat: 1 }, 2.3);
-
-      // 2.2 - 3.2 · se va. Y detrás ya viene el siguiente.
-      tl.to("#tagPost", { opacity: 0, duration: 0.25 }, 2.3);
-      tl.to("#applicant", { x: 1320, duration: 0.85, ease: "power2.in" }, 2.35);
-      tl.to("#applicant", { y: -9, duration: 0.17, repeat: 4, yoyo: true, ease: "sine.inOut" }, 2.35);
-      tl.to("#door", { opacity: 1, duration: 0.3 }, 2.9);
-
-      window.__timelines = window.__timelines || {};
-      window.__timelines["e1-oficina"] = tl;
-      tl.seek(0);
-    </script>
-  </body>
-</html>
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e1-oficina"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

@@ -39,7 +39,7 @@
     <!-- la misma mano del diseño original, espejada y girada según el antebrazo -->
     <!-- mano: manopla ovalada, un poco más ancha que la manga (eso marca la muñeca),
          con el eje mayor alineado al antebrazo, igual que la mano original -->
-    <ellipse cx="812" cy="660" rx="25" ry="35" transform="rotate(44 812 660)" fill="#f6f4fa"/>
+    <ellipse cx="808" cy="664" rx="25" ry="31" transform="rotate(44 808 664)" fill="#f6f4fa"/>
     <!-- une hombro y brazo en una sola curva (sin muesca entre las dos jorobas) -->
     <path d="M914 446 C898 446 884 458 879 484 L904 506 L920 470 Z" fill="#f6f4fa"/>
   </svg>
@@ -68,14 +68,13 @@
     <!-- 1) a lo largo del borde del torso, hasta que se junta con el hueco de la axila -->
     <path d="M902 486 C897 501 893 515 890 528 C889 542 887 555 886 569 C885 582 884 596 883.5 624"
       stroke="#17122b" stroke-width="3.6" fill="none" stroke-linecap="round" filter="url(#suave)"/>
-    <!-- 2) mano: igual que la original — por UN costado: baja por el borde del antebrazo,
-         muesca en la muñeca y rodea el lado de la manopla (coords locales de la mano:
-         y a lo largo del antebrazo hacia la punta, x hacia el lado del cuerpo) -->
-    <g transform="translate(812 660) rotate(44)">
-      <path d="M16.5 -40 L16.5 -22 L11.5 -18 L18.5 -14 C21 -6 22 4 20.5 12 C19 18 17 22 14.5 25"
-        stroke="#17122b" stroke-width="3.6" fill="none" stroke-linecap="round"
-        stroke-linejoin="round" filter="url(#suave)"/>
+    <!-- 2) muñecas: un corte que cruza la muñeca, igual en las dos manos -->
+    <g transform="translate(808 664) rotate(44)">
+      <path d="M-19 -21 Q0 -26 20 -23" stroke="#17122b" stroke-width="3.6" fill="none"
+        stroke-linecap="round" filter="url(#suave)"/>
     </g>
+    <path d="M976 713 Q992 719 1008 714" stroke="#17122b" stroke-width="3.6" fill="none"
+      stroke-linecap="round" filter="url(#suave)"/>
   </svg>
   <div class="tag" style="left:290px;top:420px">RECLUTADOR</div>
   <div class="tag" style="left:938px;top:226px">POSTULANTE</div>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  body { margin:0; background:#17122b; display:flex; gap:30px; padding:40px 24px;
+         font-family: monospace; align-items:flex-start; }
+  .lbl { font-size:13px; color:#b5a9cc; text-align:center; margin-top:8px; }
+</style></head><body>
+<script>
+const BG = "#17122b", INK = "#f6f4fa", ACC = "#7b3ff2";
+// CANON 7 cabezas · cabeza 100 · total 700
+const BODY = `
+  <ellipse cx="0" cy="52" rx="38" ry="50"/>
+  <path d="M-11 96 h22 v30 h-22 Z"/>
+  <path d="M-68 148 C-68 136 -42 124 -20 122 L20 122 C42 124 68 136 68 148
+           L64 318 C64 338 52 348 40 348 L-40 348 C-52 348 -64 338 -64 318 Z"/>
+  <!-- piernas: dos piezas con una separación franca -->
+  <path d="M-46 352 L-50 668 L-52 694 L-8 694 L-7 668 L-4 352 Z"/>
+  <path d="M46 352 L50 668 L52 694 L8 694 L7 668 L4 352 Z"/>
+  <rect x="-64" y="690" width="58" height="18" rx="7"/>
+  <rect x="6" y="690" width="58" height="18" rx="7"/>`;
+// borde del saco: una línea del color del fondo separa saco de pantalón
+const HEM = `<path d="M-60 350 Q0 360 60 350" stroke="${BG}" stroke-width="7" fill="none"/>`;
+const SHIRT = `
+  <path d="M-20 122 L0 172 L20 122 Z" fill="${BG}"/>
+  <path d="M0 140 L-10 158 L0 224 L10 158 Z" fill="${ACC}"/>`;
+function arm(d, hand, extra) {
+  return `<path d="${d}" stroke="${BG}" stroke-width="40" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="${d}" stroke="${INK}" stroke-width="28" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>` +
+    (hand ? `<circle cx="${hand[0]}" cy="${hand[1]}" r="21" fill="${BG}"/>
+             <circle cx="${hand[0]}" cy="${hand[1]}" r="15" fill="${INK}"/>` : "") + (extra||"");
+}
+const DOWN_L = arm("M-58 154 L-70 252 L-66 322");
+const DOWN_R = arm("M58 154 L70 252 L66 322");
+// pensando: antebrazo cruza el pecho y la mano llega al mentón (y≈104)
+const THINK = arm("M58 154 L72 262 L22 124", [20, 108]);
+// teléfono: codo hacia afuera, mano junto a la oreja, con el aparato
+const PHONE = arm("M58 154 L96 232 L50 84", [46, 62],
+  `<rect x="40" y="26" width="16" height="52" rx="5" fill="${BG}"/>
+   <rect x="43" y="29" width="10" height="46" rx="3" fill="${ACC}"/>`);
+const POSES = [["de pie", DOWN_L + DOWN_R], ["pensando", DOWN_L + THINK],
+               ["al teléfono", DOWN_L + PHONE]];
+document.write(POSES.map(([n, arms]) => `
+  <div><svg width="230" height="750" viewBox="-115 -10 230 750">
+    <g fill="${INK}">${BODY}</g>${HEM}${SHIRT}${arms}
+  </svg><div class="lbl">${n}</div></div>`).join(""));
+</script>
+</body></html>

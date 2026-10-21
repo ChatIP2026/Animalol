@@ -30,6 +30,14 @@
   <!-- la hoja en la que escribe -->
   <div class="abs" style="left:318px;top:803px;width:150px;height:10px;border-radius:2px;background:#efe8fa"></div>
   <!-- postulante: de pie, mirando hacia el escritorio -->
+  <!-- brazo LEJANO del postulante: va DETRÁS del cuerpo (se pinta antes).
+       El torso tapa hombro y brazo superior; solo asoman antebrazo y mano.
+       Un tono más oscuro que el cuerpo marca que está más lejos. -->
+  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
+    <path d="M900 520 L872 642 L816 700" stroke="#cfc6e0" stroke-width="40" fill="none"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="810" cy="706" r="24" fill="#cfc6e0"/>
+  </svg>
   <!-- coordenadas del recorte original (270x1180), mirando a la derecha; el flip lo da vuelta -->
   <svg class="abs" viewBox="0 0 270 1180" style="left:846px;top:286px;height:794px;transform:scaleX(-1);overflow:visible">
     <image href="personaje/postulante-de-pie-blanco.png" width="270" height="1180"/>
@@ -46,15 +54,6 @@
           fill="#f6f4fa" stroke="#17122b" stroke-width="7" stroke-linejoin="round"/>
   </svg>
 
-  <!-- brazo delantero del postulante: hombro -> codo -> mano, hacia el escritorio -->
-  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
-    <path d="M897 514 L884 640 L828 700" stroke="#17122b" stroke-width="52" fill="none"
-      stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M897 514 L884 640 L828 700" stroke="#f6f4fa" stroke-width="40" fill="none"
-      stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="822" cy="706" r="30" fill="#17122b"/>
-    <circle cx="822" cy="706" r="24" fill="#f6f4fa"/>
-  </svg>
   <div class="tag" style="left:290px;top:420px">RECLUTADOR</div>
   <div class="tag" style="left:938px;top:226px">POSTULANTE</div>
 </div>

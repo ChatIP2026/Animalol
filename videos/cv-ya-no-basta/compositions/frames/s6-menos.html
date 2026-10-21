@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="../base.css" />
+    <script src="../../vendor/gsap.min.js"></script>
+    <style>
+      .shot { position: absolute; inset: 0; }
+      #desk { display: flex; align-items: center; justify-content: center; }
+      #deskSvg { width: 940px; }
+      #hours {
+        position: absolute; left: 0; right: 0; top: 268px; text-align: center; z-index: 11;
+        font-family: "IBM Plex Mono", monospace; font-size: 86px; font-weight: 500;
+        color: var(--lavender); opacity: 0;
+      }
+      #doubt, #surprise { opacity: 0; display: flex; align-items: center;
+        justify-content: center; flex-direction: column; gap: 46px; }
+      .choice { display: flex; gap: 26px; }
+      .cand {
+        width: 206px; height: 268px; border-radius: 16px;
+        background: linear-gradient(160deg, #2a1f4d, #201739);
+        border: 2px solid rgba(180,150,230,0.3);
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 16px;
+      }
+      .cand .dot { width: 58px; height: 58px; border-radius: 50%; background: rgba(180,150,230,0.3); }
+      .cand .q { font-size: 62px; font-weight: 800; color: var(--ink-soft); }
+      .cand.pick { border-color: var(--violet); background: rgba(53,32,107,0.95); }
+      .label {
+        font-size: 58px; font-weight: 800; color: var(--ink); text-align: center;
+      }
+      .label b { color: var(--violet); }
+      #curveWrap { width: 760px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="s6-menos" data-width="1080" data-height="1350">
+      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
+      <div class="glow glow-a" data-layout-allow-overflow></div>
+      <div class="glow glow-b" data-layout-allow-overflow></div>
+
+      <!-- TOMA 13: el escritorio. Pictograma propio, nunca imagen de stock. -->
+      <div class="shot" id="desk">
+        <svg id="deskSvg" viewBox="0 0 600 340" fill="none">
+          <!-- figura sentada, de perfil, mirando a su pantalla -->
+          <g id="worker">
+            <!-- silla -->
+            <path d="M92 252 V196 a14 14 0 0 1 14 -14 h16" stroke="#6d5f8c" stroke-width="11"
+              stroke-linecap="round" fill="none"/>
+            <path d="M104 252 V296" stroke="#6d5f8c" stroke-width="11" stroke-linecap="round"/>
+            <!-- piernas -->
+            <path d="M138 250 H186 V292" stroke="#f6f4fa" stroke-width="17"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- torso + cabeza: se encorva y se endereza -->
+            <g id="body">
+              <path d="M132 252 L146 186" stroke="#f6f4fa" stroke-width="30" stroke-linecap="round"/>
+              <path d="M148 196 L196 214" stroke="#f6f4fa" stroke-width="15" stroke-linecap="round"/>
+              <circle cx="150" cy="162" r="25" fill="#f6f4fa"/>
+            </g>
+          </g>
+          <!-- laptop -->
+          <path d="M204 248 H268 L276 214 H212 Z" fill="#6d5f8c"/>
+          <rect x="198" y="248" width="80" height="9" rx="4" fill="#b5a9cc"/>
+          <!-- escritorio -->
+          <rect x="60" y="256" width="492" height="13" rx="6" fill="#b5a9cc"/>
+          <rect x="520" y="269" width="12" height="54" rx="5" fill="#b5a9cc"/>
+          <!-- la pila: cada hoja desaparece por separado -->
+          <g id="stack"></g>
+        </svg>
+      </div>
+      <div id="hours">8 h</div>
+
+      <!-- TOMA 14: menos dudas -->
+      <div class="shot" id="doubt">
+        <div class="choice">
+          <div class="cand"><div class="dot"></div><div class="q">?</div></div>
+          <div class="cand"><div class="dot"></div><div class="q">?</div></div>
+          <div class="cand"><div class="dot"></div><div class="q">?</div></div>
+        </div>
+        <div class="label">menos <b>dudas</b> al elegir</div>
+      </div>
+
+      <!-- TOMA 15: menos sorpresas -->
+      <div class="shot" id="surprise">
+        <div id="curveWrap">
+          <svg viewBox="0 0 600 300" fill="none">
+            <g stroke="rgba(180,150,230,0.2)" stroke-width="3">
+              <path d="M40 60 H560"/><path d="M40 140 H560"/><path d="M40 220 H560"/>
+            </g>
+            <path id="curveBad" d="M48 92 C150 104 210 168 268 212 C318 248 400 266 552 274"
+              stroke="#6d5f8c" stroke-width="9" stroke-linecap="round" fill="none"
+              stroke-dasharray="14 18"/>
+            <path id="curveGood" d="M48 92 C160 96 250 102 330 106 C420 110 490 112 552 114"
+              stroke="#7b3ff2" stroke-width="12" stroke-linecap="round" fill="none"/>
+            <circle id="curveDot" cx="552" cy="114" r="15" fill="#c4a5e8"/>
+          </svg>
+        </div>
+        <div class="label">menos <b>sorpresas</b> después</div>
+      </div>
+      <div class="vignette"></div>
+    </div>
+
+    <script>
+      // La pila: 11 hojas. Bajan de a una, no como bloque — por eso es SVG y no una foto.
+      const stack = document.getElementById("stack");
+      const SHEETS = 11;
+      for (let i = 0; i < SHEETS; i++) {
+        const y = 240 - i * 17;
+        const w = 104 + Math.sin(i * 2.4) * 9;
+        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        r.setAttribute("x", 398 + Math.cos(i * 1.9) * 5);
+        r.setAttribute("y", y);
+        r.setAttribute("width", w);
+        r.setAttribute("height", 14);
+        r.setAttribute("rx", 3);
+        r.setAttribute("fill", i % 2 ? "#85207b" : "#7b3ff2");
+        r.setAttribute("opacity", 0.92);
+        r.id = "sheet" + i;
+        stack.appendChild(r);
+      }
+      // de arriba hacia abajo: las últimas apiladas son las primeras en irse
+      const sheets = [];
+      for (let i = SHEETS - 1; i >= 2; i--) sheets.push("#sheet" + i);
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", { y: 0 }, { y: 54, duration: 7.2, ease: "none" }, 0);
+
+      // TOMA 13 (0 - 2.2): la misma toma cambia — la pila cae y el cuerpo se endereza
+      gsap.set("#body", { transformOrigin: "132px 252px", rotation: 16 });
+      gsap.set("#deskSvg", { transformOrigin: "50% 50%" });
+      tl.fromTo("#desk", { opacity: 0, scale: 1.12 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 0);
+      tl.fromTo("#hours", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.3 }, 0.3);
+
+      const h = { v: 8 };
+      const hEl = document.getElementById("hours");
+      tl.to(h, { v: 2, duration: 1.25, ease: "power2.inOut",
+        onUpdate: () => { hEl.textContent = h.v.toFixed(1).replace(".0", "") + " h"; } }, 0.72);
+
+      tl.to(sheets, { opacity: 0, x: 26, y: -10, duration: 0.2,
+        stagger: 0.085, ease: "power2.in" }, 0.72);
+      tl.to("#body", { rotation: 0, duration: 1.1, ease: "power2.out" }, 0.95);
+      tl.to("#deskSvg", { scale: 1.1, duration: 1.4, ease: "power1.inOut" }, 0.8);
+      tl.to(["#desk", "#hours"], { opacity: 0, duration: 0.3, ease: "power2.in" }, 2.0);
+
+      // TOMA 14 (2.2 - 4.4): la duda se resuelve
+      tl.fromTo("#doubt", { opacity: 0, scale: 0.94 },
+        { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out" }, 2.2);
+      tl.fromTo(".cand", { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.36, stagger: 0.09, ease: "back.out(1.5)" }, 2.3);
+      tl.to(".cand:nth-of-type(2)", { duration: 0.4, ease: "power2.out",
+        onStart: function () { this.targets()[0].classList.add("pick"); } }, 3.25);
+      tl.to(".cand:nth-of-type(2) .q", { duration: 0.01,
+        onStart: function () { this.targets()[0].textContent = "✓"; },
+        onReverseComplete: function () { this.targets()[0].textContent = "?"; } }, 3.3);
+      tl.to(".cand:nth-of-type(2)", { scale: 1.08, duration: 0.35, ease: "back.out(2)" }, 3.3);
+      tl.to("#doubt", { opacity: 0, duration: 0.3, ease: "power2.in" }, 4.2);
+
+      // TOMA 15 (4.4 - 7.2): la permanencia se sostiene
+      tl.fromTo("#surprise", { opacity: 0, scale: 0.94 },
+        { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out" }, 4.4);
+      tl.fromTo("#curveBad", { strokeDasharray: "14 18", strokeDashoffset: 700 },
+        { strokeDashoffset: 0, duration: 0.9, ease: "power2.out" }, 4.6);
+      tl.fromTo("#curveGood", { strokeDasharray: 620, strokeDashoffset: 620 },
+        { strokeDashoffset: 0, duration: 1.1, ease: "power2.out" }, 5.1);
+      tl.fromTo("#curveDot", { opacity: 0, scale: 0 },
+        { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.4)" }, 6.1);
+      tl.to("#curveDot", { scale: 1.25, duration: 0.5, ease: "sine.inOut", repeat: 1, yoyo: true }, 6.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s6-menos"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

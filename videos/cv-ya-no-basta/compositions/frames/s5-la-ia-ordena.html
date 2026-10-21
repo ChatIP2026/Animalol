@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="../base.css" />
+    <script src="../../vendor/gsap.min.js"></script>
+    <style>
+      #field { position: absolute; inset: 0; }
+      .tile {
+        position: absolute; width: 150px; height: 104px; border-radius: 12px;
+        background: linear-gradient(160deg, #2a1f4d, #201739);
+        border: 2px solid rgba(180,150,230,0.34);
+      }
+      /* el pulso: lo que hace visible que ALGO está ordenando */
+      #pulse {
+        position: absolute; left: -30%; top: -20%; width: 46%; height: 140%;
+        background: linear-gradient(100deg, transparent, rgba(123,63,242,0.00) 18%,
+          rgba(123,63,242,0.75) 50%, rgba(196,165,232,0.95) 56%, rgba(123,63,242,0.00) 86%, transparent);
+        filter: blur(14px); opacity: 0; z-index: 9; transform: skewX(-9deg);
+      }
+      #core {
+        position: absolute; left: 50%; top: 300px;
+        z-index: 10; opacity: 0; text-align: center;
+      }
+      #core .ring { filter: drop-shadow(0 0 26px rgba(123,63,242,0.85)); }
+      /* el tablero */
+      #board {
+        position: absolute; left: 96px; right: 96px; top: 470px;
+        display: flex; flex-direction: column; gap: 18px; z-index: 6; opacity: 0;
+      }
+      .row {
+        display: flex; align-items: center; gap: 20px;
+        background: rgba(42,31,77,0.82); border: 2px solid rgba(180,150,230,0.26);
+        border-radius: 14px; padding: 20px 24px;
+      }
+      .row .dot { width: 44px; height: 44px; border-radius: 50%;
+        background: rgba(180,150,230,0.30); flex: none; }
+      .row .bars { flex: 1; display: flex; flex-direction: column; gap: 9px; }
+      .row .bars i { display: block; height: 9px; border-radius: 5px;
+        background: rgba(180,150,230,0.24); }
+      .row .score {
+        font-family: "IBM Plex Mono", monospace; font-size: 30px; font-weight: 500;
+        color: var(--lavender); flex: none; width: 76px; text-align: right;
+      }
+      .row .meter { width: 128px; height: 10px; border-radius: 5px;
+        background: rgba(180,150,230,0.18); flex: none; overflow: hidden; }
+      .row .meter span { display: block; height: 100%; width: 0; border-radius: 5px;
+        background: linear-gradient(90deg, var(--purple), var(--violet)); }
+      .row.top { border-color: var(--violet); background: rgba(53,32,107,0.92); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="s5-la-ia-ordena" data-width="1080" data-height="1350">
+      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
+      <div class="glow glow-a" data-layout-allow-overflow></div>
+      <div class="glow glow-b" data-layout-allow-overflow></div>
+
+      <div id="field"></div>
+      <div id="pulse" data-layout-allow-overflow></div>
+      <div id="core">
+        <svg class="ring" width="150" height="150" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="30" stroke="#7b3ff2" stroke-width="4" fill="none" opacity="0.5"/>
+          <circle cx="50" cy="50" r="30" stroke="#c4a5e8" stroke-width="4" fill="none"
+            stroke-linecap="round" stroke-dasharray="48 140" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="13" fill="#7b3ff2"/>
+        </svg>
+      </div>
+
+      <div id="board"></div>
+      <div class="vignette"></div>
+    </div>
+
+    <script>
+      // Posiciones dispersas (deterministas) y su destino alineado en grilla.
+      const field = document.getElementById("field");
+      const N = 12, tiles = [];
+      for (let i = 0; i < N; i++) {
+        const el = document.createElement("div");
+        el.className = "tile";
+        el.setAttribute("data-layout-allow-overflow", "");
+        const sx = 120 + ((i * 263) % 760) + Math.sin(i * 2.1) * 54;
+        const sy = 250 + ((i * 397) % 820) + Math.cos(i * 1.6) * 46;
+        el.style.left = sx + "px";
+        el.style.top = sy + "px";
+        el.style.transform = "rotate(" + (Math.sin(i * 3.1) * 13).toFixed(2) + "deg)";
+        field.appendChild(el);
+        const col = i % 3, row = (i / 3) | 0;
+        tiles.push({ el, dx: 128 + col * 290 - sx, dy: 330 + row * 190 - sy });
+      }
+
+      // Tablero resuelto: tres candidatos arriba, señales a la vista.
+      const board = document.getElementById("board");
+      const SCORES = [94, 88, 81, 76];
+      SCORES.forEach((s, i) => {
+        const r = document.createElement("div");
+        r.className = "row" + (i === 0 ? " top" : "");
+        r.innerHTML =
+          '<div class="dot"></div><div class="bars"><i style="width:' + (86 - i * 9) +
+          '%"></i><i style="width:' + (62 - i * 7) + '%"></i></div>' +
+          '<div class="meter"><span data-w="' + s + '"></span></div>' +
+          '<div class="score">' + s + "</div>";
+        board.appendChild(r);
+      });
+
+      gsap.set("#core", { xPercent: -50 });
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", { y: 30 }, { y: 0, duration: 4.8, ease: "none" }, 0);
+
+      // TOMA 11 (0 - 2.2): el pulso cruza y, a su paso, las piezas se alinean solas.
+      // La mano que ordena se ve: no se acomodan, ALGO las acomoda.
+      tl.fromTo("#core", { opacity: 0, scale: 0.6 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 0.1);
+      tl.to("#core svg", { rotation: 180, duration: 2.1, ease: "power2.inOut" }, 0.2);
+      tl.fromTo("#pulse", { opacity: 0, x: 0 }, { opacity: 1, duration: 0.2 }, 0.45);
+      tl.to("#pulse", { x: 1420, duration: 1.35, ease: "power1.inOut" }, 0.45);
+      tl.to("#pulse", { opacity: 0, duration: 0.25 }, 1.6);
+
+      tiles.forEach((t, i) => {
+        // cada ficha se ordena justo cuando el pulso la alcanza
+        const at = 0.52 + (parseFloat(t.el.style.left) / 1080) * 0.95;
+        tl.to(t.el, { x: t.dx, y: t.dy, rotation: 0, duration: 0.62, ease: "power3.out" }, at);
+      });
+
+      // TOMA 12 (2.2 - 4.8): primer plano del tablero resuelto
+      tl.to("#field", { opacity: 0, scale: 1.06, duration: 0.45, ease: "power2.in" }, 2.2);
+      tl.to("#core", { y: -150, scale: 0.6, opacity: 0.0, duration: 0.6, ease: "power2.inOut" }, 2.2);
+      tl.fromTo("#board", { opacity: 0, scale: 0.92, y: 40 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "power3.out" }, 2.5);
+      tl.fromTo(".row", { opacity: 0, x: -36 },
+        { opacity: 1, x: 0, duration: 0.42, stagger: 0.1, ease: "power3.out" }, 2.6);
+      document.querySelectorAll(".meter span").forEach((sp, i) => {
+        tl.fromTo(sp, { width: "0%" }, { width: sp.dataset.w + "%", duration: 0.7,
+          ease: "power2.out" }, 2.9 + i * 0.1);
+      });
+      tl.fromTo(".row.top", { boxShadow: "0 0 0 rgba(123,63,242,0)" },
+        { boxShadow: "0 0 44px rgba(123,63,242,0.6)", duration: 0.5, ease: "power2.out" }, 3.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s5-la-ia-ordena"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="../base.css" />
+    <script src="../../vendor/gsap.min.js"></script>
+    <style>
+      .shot { position: absolute; inset: 0; }
+      /* --- toma 5: la marea --- */
+      #tide { transform-origin: 50% 50%; }
+      #tide .cv { width: 112px; height: 150px; padding: 12px 10px; gap: 7px; border-radius: 8px; }
+      #tide .cv::before { width: 24px; height: 24px; }
+      #tide .cv i { height: 6px; }
+      .rgb { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen; }
+      #err {
+        position: absolute; left: 0; right: 0; top: 620px; text-align: center; z-index: 12;
+        font-family: "IBM Plex Mono", monospace; font-size: 44px; font-weight: 500;
+        letter-spacing: 0.14em; color: #ff5470; opacity: 0;
+      }
+      /* --- toma 6: tres CVs idénticos --- */
+      #trio { opacity: 0; display: flex; gap: 34px; align-items: center;
+        justify-content: center; height: 100%; }
+      .big {
+        position: relative; width: 290px; height: 420px; flex: none;
+        background: linear-gradient(160deg, #2a1f4d, #201739);
+        border: 2px solid rgba(180,150,230,0.34); border-radius: 16px;
+        padding: 26px 22px; display: flex; flex-direction: column; gap: 14px;
+      }
+      .big .av { width: 56px; height: 56px; border-radius: 50%;
+        background: rgba(180,150,230,0.30); }
+      .big i { display: block; height: 10px; border-radius: 5px;
+        background: rgba(180,150,230,0.22); }
+      .big .word {
+        font-size: 21px; font-weight: 700; color: #e4d6f7;
+        background: rgba(123,63,242,0.34); border-radius: 6px;
+        padding: 5px 9px; align-self: flex-start;
+      }
+      /* --- toma 7: anónimos --- */
+      #anon { opacity: 0; display: flex; gap: 34px; align-items: center;
+        justify-content: center; height: 100%; }
+      #anon .big { align-items: center; justify-content: center; gap: 0; }
+      #line {
+        position: absolute; left: 0; right: 0; bottom: 196px; text-align: center;
+        z-index: 11; opacity: 0; font-size: 56px; font-weight: 800; color: var(--ink);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="s3-iguales" data-width="1080" data-height="1350">
+      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
+      <div class="glow glow-a" data-layout-allow-overflow></div>
+      <div class="glow glow-b" data-layout-allow-overflow></div>
+
+      <div class="shot" id="tideWrap">
+        <div class="shot" id="tide"></div>
+        <div class="rgb" id="rgbR"></div>
+        <div class="rgb" id="rgbC"></div>
+      </div>
+      <div id="err">ERR · SIN CRITERIO</div>
+
+      <div class="shot" id="trio"></div>
+      <div class="shot" id="anon"></div>
+      <div id="line">dicen poco de la persona</div>
+      <div class="vignette"></div>
+    </div>
+
+    <script>
+      /* ---------- TOMA 5: un CV que se vuelve marea ---------- */
+      const tide = document.getElementById("tide");
+      const COLS = 9, ROWS = 11, CW = 120, CH = 124;
+      const waves = [];
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const el = document.createElement("div");
+          el.className = "cv";
+          el.setAttribute("data-layout-allow-overflow", "");
+          el.innerHTML = '<i class="w90"></i><i class="w70"></i><i class="w90"></i>';
+          el.style.left = -60 + c * CW + "px";
+          el.style.top = -20 + r * CH + "px";
+          tide.appendChild(el);
+          waves.push({ el, d: Math.hypot(c - 4, r - 5) });
+        }
+      }
+      waves.sort((a, b) => a.d - b.d);
+      const tideEls = waves.map((w) => w.el);
+      // copias RGB para el fallo: mismo contenido, desplazado por canal
+      document.getElementById("rgbR").innerHTML =
+        '<div style="position:absolute;inset:0;filter:url(#none);">' + tide.innerHTML + "</div>";
+      document.getElementById("rgbC").innerHTML =
+        '<div style="position:absolute;inset:0;">' + tide.innerHTML + "</div>";
+
+      /* ---------- TOMA 6: tres CVs con las mismas palabras ---------- */
+      const WORDS = ["liderazgo", "proactivo", "orientado a resultados"];
+      const trio = document.getElementById("trio");
+      for (let k = 0; k < 3; k++) {
+        const card = document.createElement("div");
+        card.className = "big";
+        card.innerHTML =
+          '<div class="av"></div><i style="width:86%"></i><i style="width:62%"></i>' +
+          WORDS.map((w) => '<div class="word">' + w + "</div>").join("") +
+          '<i style="width:74%"></i>';
+        trio.appendChild(card);
+      }
+
+      /* ---------- TOMA 7: los mismos, sin identidad ---------- */
+      const ANON =
+        '<svg width="150" height="150" viewBox="0 0 100 100" fill="none">' +
+        '<circle cx="50" cy="56" r="25" fill="#b5a9cc" opacity="0.55"/>' +
+        '<path d="M18 44 H82" stroke="#f6f4fa" stroke-width="7" stroke-linecap="round"/>' +
+        '<path d="M31 44 q19 -22 38 0 z" fill="#f6f4fa"/>' +
+        '<rect x="30" y="52" width="17" height="12" rx="4" fill="#17122b"/>' +
+        '<rect x="53" y="52" width="17" height="12" rx="4" fill="#17122b"/>' +
+        '<path d="M47 57 h6" stroke="#17122b" stroke-width="4"/>' +
+        "</svg>";
+      const anon = document.getElementById("anon");
+      for (let k = 0; k < 3; k++) {
+        const card = document.createElement("div");
+        card.className = "big";
+        card.innerHTML = ANON;
+        anon.appendChild(card);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", { y: 0 }, { y: 44, duration: 5.5, ease: "none" }, 0);
+
+      // la marea crece y la cámara retrocede sin parar
+      tl.set("#tide", { scale: 2.6 });
+      tl.set(tideEls, { opacity: 0, scale: 0.6 });
+      tl.to("#tide", { scale: 0.78, duration: 1.75, ease: "power2.in" }, 0);
+      tl.to(tideEls, { opacity: 1, scale: 1, duration: 0.2, stagger: 0.009, ease: "power1.out" }, 0.08);
+
+      // el sistema no da abasto: fallo RGB, saltos, y corte
+      tl.to("#rgbR", { opacity: 0.85, x: -26, duration: 0.06, ease: "steps(1)" }, 1.62);
+      tl.to("#rgbC", { opacity: 0.85, x: 26, duration: 0.06, ease: "steps(1)" }, 1.62);
+      tl.to("#tideWrap", { x: 16, duration: 0.05, ease: "steps(1)", repeat: 5, yoyo: true }, 1.66);
+      tl.to("#tideWrap", { scaleY: 1.04, duration: 0.05, ease: "steps(1)", repeat: 3, yoyo: true }, 1.72);
+      tl.fromTo("#err", { opacity: 0 }, { opacity: 1, duration: 0.05, ease: "steps(1)",
+        repeat: 5, yoyo: true }, 1.68);
+      tl.to(["#tideWrap", "#err", "#rgbR", "#rgbC"], { opacity: 0, duration: 0.08 }, 1.96);
+
+      // TOMA 6 (2.0 - 3.9): tres CVs, exactamente las mismas palabras
+      tl.fromTo("#trio", { opacity: 0, scale: 1.1 },
+        { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, 2.0);
+      tl.fromTo(".big .word", { opacity: 0, x: -14 },
+        { opacity: 1, x: 0, duration: 0.26, stagger: 0.07, ease: "power2.out" }, 2.3);
+      tl.to(".big .word", { backgroundColor: "rgba(123,63,242,0.72)", duration: 0.3,
+        stagger: 0.04 }, 3.15);
+
+      // TOMA 7 (3.9 - 5.5): se les borra lo que decía y no queda nadie
+      tl.to("#trio", { opacity: 0, duration: 0.42, ease: "power2.in" }, 3.9);
+      tl.fromTo("#anon", { opacity: 0 }, { opacity: 1, duration: 0.42 }, 4.0);
+      tl.fromTo("#anon .big svg", { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.4, stagger: 0.09, ease: "back.out(1.6)" }, 4.15);
+      tl.fromTo("#line", { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 4.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s3-iguales"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

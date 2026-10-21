@@ -34,9 +34,12 @@
        El torso tapa hombro y brazo superior; solo asoman antebrazo y mano.
        Mismo blanco que el cuerpo. -->
   <svg class="abs" style="left:0;top:0" width="1080" height="1350">
-    <path d="M900 476 L874 600 L820 652" stroke="#f6f4fa" stroke-width="40" fill="none"
+    <path d="M900 476 L874 600 L828 644" stroke="#f6f4fa" stroke-width="40" fill="none"
       stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="814" cy="658" r="24" fill="#f6f4fa"/>
+    <!-- la misma mano del diseño original, espejada y girada según el antebrazo -->
+    <!-- mano: manopla ovalada, un poco más ancha que la manga (eso marca la muñeca),
+         con el eje mayor alineado al antebrazo, igual que la mano original -->
+    <ellipse cx="808" cy="664" rx="25" ry="31" transform="rotate(44 808 664)" fill="#f6f4fa"/>
     <!-- une hombro y brazo en una sola curva (sin muesca entre las dos jorobas) -->
     <path d="M914 446 C898 446 884 458 879 484 L904 506 L920 470 Z" fill="#f6f4fa"/>
   </svg>

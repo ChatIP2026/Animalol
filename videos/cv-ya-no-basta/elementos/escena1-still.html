@@ -19,9 +19,7 @@
   <img class="abs" src="personaje/reclutador-sentado-v2-blanco.png" style="left:-49px;top:459px;width:729px">
 
   <!-- pila de CVs sobre el escritorio -->
-  <svg class="abs" style="left:560px;top:640px" width="260" height="190" viewBox="0 0 260 190">
-    <g id="pila"></g>
-  </svg>
+  <img class="abs" src="pila.png" style="left:526px;top:631px;width:332px">
 
   <!-- escritorio: bloque macizo, delante del reclutador -->
   <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
@@ -79,13 +77,4 @@
   <div class="tag" style="left:290px;top:420px">RECLUTADOR</div>
   <div class="tag" style="left:938px;top:226px">POSTULANTE</div>
 </div>
-<script>
-  // hojas apiladas como papel real: claras, con un leve desplazamiento cada una
-  const g=document.getElementById('pila'); let h='';
-  for(let i=0;i<10;i++){
-    const y=172-i*17, x=20+Math.round(Math.sin(i*2.1)*8), r=(Math.sin(i*3.3)*1.4).toFixed(2);
-    h+=`<rect x="${x}" y="${y}" width="200" height="15" rx="2" fill="#efe8fa"
-         stroke="#17122b" stroke-width="2" transform="rotate(${r} 130 ${y+7})"/>`;
-  }
-  g.innerHTML=h;
-</script></body></html>
+</body></html>

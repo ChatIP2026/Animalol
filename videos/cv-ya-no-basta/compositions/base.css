@@ -23,7 +23,7 @@ html, body { width: 1080px; height: 1350px; overflow: hidden; background: #17122
 
 /* --- capa de fondo: malla wireframe + glows --- */
 .mesh {
-  position: absolute; inset: -10%;
+  position: absolute; inset: -10%; z-index: 0;
   background-image:
     linear-gradient(rgba(180, 150, 230, 0.10) 1px, transparent 1px),
     linear-gradient(90deg, rgba(180, 150, 230, 0.10) 1px, transparent 1px);
@@ -32,7 +32,7 @@ html, body { width: 1080px; height: 1350px; overflow: hidden; background: #17122
   transform-origin: 50% 85%;
 }
 .glow {
-  position: absolute; border-radius: 50%;
+  position: absolute; border-radius: 50%; z-index: 1;
   filter: blur(90px); pointer-events: none;
 }
 .glow-a { width: 760px; height: 760px; left: -180px; top: -140px;
@@ -40,7 +40,7 @@ html, body { width: 1080px; height: 1350px; overflow: hidden; background: #17122
 .glow-b { width: 820px; height: 820px; right: -240px; bottom: -200px;
   background: radial-gradient(circle, rgba(133,32,123,0.44), transparent 70%); }
 .vignette {
-  position: absolute; inset: 0; pointer-events: none; z-index: 8;
+  position: absolute; inset: 0; pointer-events: none; z-index: 3;
   background: radial-gradient(ellipse at 50% 45%, transparent 48%, rgba(14,10,28,0.80) 100%);
 }
 

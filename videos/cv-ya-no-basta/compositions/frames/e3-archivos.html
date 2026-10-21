@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="../base.css" />
+    <script src="../../vendor/gsap.min.js"></script>
+    <style>
+      #win {
+        position: absolute; left: 70px; top: 262px; width: 940px; height: 826px;
+        background: #1d1636; border: 2px solid rgba(180,150,230,0.34);
+        border-radius: 18px; overflow: hidden; z-index: 6;
+        box-shadow: 0 40px 90px rgba(0,0,0,0.5);
+      }
+      #bar {
+        height: 62px; background: #251c45; display: flex; align-items: center;
+        gap: 11px; padding: 0 22px; border-bottom: 2px solid rgba(180,150,230,0.2);
+      }
+      #bar .o { width: 15px; height: 15px; border-radius: 50%; background: #6d5f8c; }
+      #bar .path {
+        margin-left: 18px; font-family: "IBM Plex Mono", monospace;
+        font-size: 23px; color: var(--lavender); letter-spacing: 0.06em;
+      }
+      #bar .count {
+        margin-left: auto; font-family: "IBM Plex Mono", monospace;
+        font-size: 23px; color: var(--ink-soft);
+      }
+      #pane { position: absolute; inset: 62px 0 0 0; overflow: hidden; }
+      #grid {
+        position: absolute; left: 0; top: 0; width: 100%;
+        display: grid; grid-template-columns: repeat(5, 1fr);
+        gap: 26px 10px; padding: 32px 22px;
+      }
+      .file { display: flex; flex-direction: column; align-items: center; gap: 9px; opacity: 0; }
+      .file .ico { position: relative; width: 84px; height: 104px; }
+      .file .ico svg { display: block; }
+      .file .nm {
+        font-family: "IBM Plex Mono", monospace; font-size: 17px; font-weight: 500;
+        color: var(--ink-soft); white-space: nowrap;
+      }
+      .file .nm b { color: #b89aff; font-weight: 700; }
+      #same {
+        position: absolute; left: 0; right: 0; bottom: 104px; text-align: center; z-index: 14;
+        opacity: 0; font-size: 60px; font-weight: 800; color: var(--ink);
+      }
+      #same b { color: var(--violet); }
+      #sameBg {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 360px; z-index: 13;
+        background: linear-gradient(to top, #17122b 44%, rgba(23,18,43,0)); opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="e3-archivos" data-width="1080" data-height="1350">
+      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
+      <div class="glow glow-a" data-layout-allow-overflow></div>
+      <div class="glow glow-b" data-layout-allow-overflow></div>
+
+      <div id="win">
+        <div id="bar">
+          <span class="o"></span><span class="o"></span><span class="o"></span>
+          <span class="path">/ postulaciones</span>
+          <span class="count" id="count">0 elementos</span>
+        </div>
+        <div id="pane"><div id="grid"></div></div>
+      </div>
+
+      <div id="sameBg"></div>
+      <div id="same">todos dicen <b>lo mismo</b></div>
+      <div class="vignette"></div>
+    </div>
+
+    <script>
+      // Un ícono de documento, repetido. Son idénticos a propósito: ese es el mensaje.
+      const ICON =
+        '<svg width="84" height="104" viewBox="0 0 84 104">' +
+        '<path d="M8 4 H54 L76 26 V96 a4 4 0 0 1 -4 4 H8 a4 4 0 0 1 -4 -4 V8 a4 4 0 0 1 4 -4 Z" ' +
+        'fill="#e4d6f7"/>' +
+        '<path d="M54 4 L76 26 H58 a4 4 0 0 1 -4 -4 Z" fill="#b5a9cc"/>' +
+        '<g fill="#4a267f"><rect x="16" y="44" width="42" height="6" rx="3"/>' +
+        '<rect x="16" y="58" width="52" height="6" rx="3"/>' +
+        '<rect x="16" y="72" width="30" height="6" rx="3"/></g>' +
+        '<circle cx="26" cy="26" r="9" fill="#b5a9cc"/></svg>';
+
+      const grid = document.getElementById("grid");
+      const TOTAL = 40;
+      const files = [];
+      for (let i = 1; i <= TOTAL; i++) {
+        const d = document.createElement("div");
+        d.className = "file";
+        d.innerHTML = '<div class="ico">' + ICON + "</div>" +
+          '<div class="nm">CV ' + i + " <b>#IA</b></div>";
+        grid.appendChild(d);
+        files.push(d);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", { y: 54 }, { y: 20, duration: 5.5, ease: "none" }, 0);
+
+      // 0.0 - 0.7 · entramos a la pantalla de la laptop de la escena anterior
+      tl.fromTo("#win", { opacity: 0, scale: 0.42, y: 120 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: "power3.out" }, 0);
+
+      // 0.7 - 3.6 · los CVs se acumulan, cada vez más rápido, hasta llenar el panel
+      files.forEach((f, i) => {
+        // la cadencia acelera: empieza a mostrarse uno por uno y termina en ráfaga
+        const t = 0.7 + Math.pow(i / TOTAL, 0.62) * 2.75;
+        tl.fromTo(f, { opacity: 0, scale: 0.55 },
+          { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2)" }, t);
+      });
+
+      const n = { v: 0 };
+      const cEl = document.getElementById("count");
+      tl.to(n, { v: 428, duration: 2.75, ease: "power2.in",
+        onUpdate: () => { cEl.textContent = Math.round(n.v) + " elementos"; } }, 0.7);
+
+      // 3.6 - 4.4 · el panel ya no da abasto: sigue scrolleando y no termina
+      tl.to("#grid", { y: -210, duration: 0.85, ease: "power2.inOut" }, 3.55);
+      tl.to("#count", { color: "#ff5470", duration: 0.3 }, 3.7);
+
+      // 4.4 - 5.5 · el remate: son cientos y son el mismo
+      tl.fromTo("#sameBg", { opacity: 0 }, { opacity: 1, duration: 0.45 }, 4.35);
+      tl.fromTo("#same", { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 4.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["e3-archivos"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

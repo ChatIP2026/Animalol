@@ -30,7 +30,17 @@
   <!-- la hoja en la que escribe -->
   <div class="abs" style="left:318px;top:803px;width:150px;height:10px;border-radius:2px;background:#efe8fa"></div>
   <!-- postulante: de pie, mirando hacia el escritorio -->
-  <img class="abs" src="personaje/postulante-de-pie-blanco.png" style="left:846px;top:286px;height:794px;transform:scaleX(-1)">
+  <!-- coordenadas del recorte original (270x1180), mirando a la derecha; el flip lo da vuelta -->
+  <svg class="abs" viewBox="0 0 270 1180" style="left:846px;top:286px;height:794px;transform:scaleX(-1);overflow:visible">
+    <image href="personaje/postulante-de-pie-blanco.png" width="270" height="1180"/>
+    <!-- sin corbata: se rellena el hueco y queda solo el cuello abierto -->
+    <path d="M139 250 L184 250 L203 512 L171 549 L135 512 Z" fill="#f6f4fa"/>
+    <!-- pelo: volumen arriba y atrás, con flequillo adelante -->
+    <path d="M40 182 C14 112 46 22 132 10 C196 2 246 38 252 88
+             L236 82 L240 104 L220 92 L216 112 L198 96
+             C162 74 104 88 66 156 Z"
+          fill="#f6f4fa" stroke="#17122b" stroke-width="7" stroke-linejoin="round"/>
+  </svg>
 
   <div class="tag" style="left:290px;top:420px">RECLUTADOR</div>
   <div class="tag" style="left:938px;top:226px">POSTULANTE</div>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;
+     background:radial-gradient(ellipse 70% 50% at 50% 47%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  #anillo{left:180px;top:280px;width:720px;height:720px;border-radius:50%;border:2px dashed rgba(196,165,232,.35);opacity:0}
+  #halo{left:290px;top:390px;width:500px;height:500px;border-radius:50%;opacity:0;
+        background:radial-gradient(circle,rgba(123,63,242,.6),rgba(123,63,242,0) 65%);filter:blur(25px)}
+  #app{left:400px;top:500px;width:280px;height:280px;border-radius:62px;box-shadow:0 20px 60px rgba(0,0,0,.45);opacity:0}
+  .item{width:120px;height:120px;border-radius:50%;background:#4a267f;opacity:0;
+        box-shadow:0 0 0 4px rgba(246,244,250,.15);display:flex;align-items:center;justify-content:center}
+  .item.on{background:#7b3ff2}
+  #lupa{left:0;top:0;width:150px;height:150px;opacity:0}
+</style></head><body>
+<div id="root" data-composition-id="e5-ia" data-width="1080" data-height="1350">
+  <div id="anillo" class="abs"></div>
+  <div id="halo" class="abs"></div>
+  <div id="items"></div>
+  <img id="app" class="abs" src="../../elementos/logos/ipartner-app.png">
+  <svg id="lupa" class="abs" viewBox="0 0 150 150">
+    <circle cx="62" cy="62" r="46" fill="rgba(196,165,232,.18)" stroke="#f6f4fa" stroke-width="9"/>
+    <path d="M96 96 L136 136" stroke="#f6f4fa" stroke-width="16" stroke-linecap="round"/>
+    <path d="M38 48 Q46 34 62 32" stroke="#f6f4fa" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+  </svg>
+</div>
+<script>
+  const G = 'fill="none" stroke="#f6f4fa" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"';
+  const ICON = {
+    riesgo:     '<g transform="translate(24 31) scale(1.22) translate(-24 -31)"><path d="M5 34 A19 19 0 0 1 43 34" stroke-width="3.6"/><path d="M10 25 l4 2.5 M24 15 v5 M38 25 l-4 2.5"/><path d="M24 34 L34 19" stroke-width="3.6"/><circle cx="24" cy="34" r="4" fill="#f6f4fa"/></g>',      // nivel de riesgo: velocímetro
+    delictivo:  '<path d="M24 6 L39 12 V23 C39 33 32 39 24 42 C16 39 9 33 9 23 V12 Z"/><path d="M24 16 V27"/><path d="M24 33 v.5"/>',   // riesgo delictivo: escudo
+    crediticio: '<rect x="7" y="13" width="34" height="23" rx="3"/><path d="M7 20 H41"/><path d="M12 30 H20"/>',                     // riesgo crediticio: tarjeta
+    sunedu:     '<path d="M4 19 L24 10 L44 19 L24 28 Z"/><path d="M13 23 V32 C13 36 35 36 35 32 V23"/><path d="M44 19 V30"/>',     // verificación de título: birrete
+    salario:    '<path d="M10 39 V29 M19 39 V23 M28 39 V17"/><circle cx="37" cy="14" r="6"/><path d="M37 11 V17"/>',             // historial salarial: barras + moneda
+    extranjero: '<circle cx="24" cy="24" r="16"/><ellipse cx="24" cy="24" rx="7" ry="16"/><path d="M8 24 H40 M11 16 H37 M11 32 H37"/>', // validación extranjero: globo
+    conducta:   '<path d="M23 10 C17 6 9 10 10 17 C5 19 5 27 9 30 C8 37 16 41 21 37 C22 38 23 38 23 38 Z"/><path d="M25 10 C31 6 39 10 38 17 C43 19 43 27 39 30 C40 37 32 41 27 37 C26 38 25 38 25 38 Z"/><path d="M15 19 c3 0 4 3 4 5 M33 19 c-3 0 -4 3 -4 5"/>' // validación conductual: cerebro
+  };
+  // los mismos 7 servicios de la escena anterior, en anillo alrededor del logo
+  const ORDEN = ["sunedu","salario","extranjero","conducta","riesgo","delictivo","crediticio"];
+  const CX = 540, CY = 640, R = 360, cont = document.getElementById("items"), els = [];
+  ORDEN.forEach((k, i) => {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / ORDEN.length;
+    const x = CX + R * Math.cos(a), y = CY + R * Math.sin(a);
+    const d = document.createElement("div");
+    d.className = "item abs"; d.style.left = (x - 60) + "px"; d.style.top = (y - 60) + "px";
+    d.dataset.cx = x; d.dataset.cy = y;
+    d.innerHTML = '<svg width="66" height="66" viewBox="0 0 48 48" ' + G + '>' + ICON[k] + '</svg>';
+    cont.appendChild(d); els.push(d);
+  });
+  // Marcas de la voz relativas al inicio (escena = 18.05 s del video)
+  const TE_AYUDA = 2.55, FIN = 5.33;
+  const tl = gsap.timeline({ paused: true });
+  // "Y la inteligencia artificial, bien usada," — el logo al centro y los servicios alrededor
+  tl.fromTo("#app", { opacity: 0, scale: 0.5, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.6, ease: "back.out(1.7)" }, 0.05);
+  tl.to("#halo", { opacity: 1, duration: 0.8 }, 0.2);
+  tl.to("#anillo", { opacity: 1, duration: 0.6 }, 0.5);
+  tl.to("#anillo", { rotation: 40, duration: FIN - 0.5, ease: "none" }, 0.5);
+  els.forEach((e, i) => {
+    tl.fromTo(e, { opacity: 0, x: CX - e.dataset.cx, y: CY - e.dataset.cy, scale: 0.3 },
+      { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.4)" }, 0.6 + i * 0.16);
+  });
+  tl.to("#app", { scale: 1.04, duration: 1.0, repeat: 3, yoyo: true, ease: "sine.inOut" }, 0.7);
+  // "te ayuda a verlo todo junto y a tiempo." — la lupa revisa cada servicio, uno por uno
+  const PASO = (FIN - TE_AYUDA - 0.55) / els.length;
+  const lx = e => +e.dataset.cx - 62, ly = e => +e.dataset.cy - 62;   // centro del vidrio sobre el ícono
+  tl.set("#lupa", { x: lx(els[0]), y: ly(els[0]) - 60 }, 0);
+  tl.to("#lupa", { opacity: 1, y: ly(els[0]), duration: 0.3, ease: "power2.out" }, TE_AYUDA);
+  els.forEach((e, i) => {
+    const t = TE_AYUDA + 0.3 + i * PASO;
+    if (i > 0) tl.to("#lupa", { x: lx(e), y: ly(e), duration: PASO * 0.55, ease: "power2.inOut" }, t - PASO * 0.55);
+    tl.to(e, { scale: 1.18, duration: 0.15, ease: "power2.out",
+      onStart: function () { this.targets()[0].classList.add("on"); },
+      onReverseComplete: function () { this.targets()[0].classList.remove("on"); } }, t);
+    tl.to(e, { scale: 1, duration: 0.2 }, t + 0.18);
+  });
+  // al final: todo junto, iluminado
+  tl.to("#lupa", { opacity: 0, scale: 0.7, duration: 0.25 }, FIN - 0.4);
+  tl.to(els, { boxShadow: "0 0 0 4px rgba(246,244,250,.5), 0 0 34px rgba(123,63,242,.9)", duration: 0.3 }, FIN - 0.4);
+  tl.to({}, { duration: 0.01 }, FIN - 0.01);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e5-ia"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

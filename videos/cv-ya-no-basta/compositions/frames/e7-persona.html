@@ -19,17 +19,18 @@
   <div class="abs" style="left:244px;top:900px;width:20px;height:178px;background:#4b4170"></div>
   <div class="abs" style="left:198px;top:1066px;width:112px;height:14px;border-radius:7px;background:#4b4170"></div>
   <!-- lapicero animado, detrás de la mano -->
-  <div id="lapicero" class="abs" style="left:396px;top:708px;width:9px;height:62px;transform-origin:50% 100%">
+  <div id="lapicero" class="abs" style="left:419px;top:740px;width:9px;height:62px;transform-origin:50% 100%">
     <div style="position:absolute;inset:0 0 7px 0;box-sizing:border-box;border:2.5px solid #17122b;border-radius:4px;background:#f6f4fa"></div></div>
   <!-- el reclutador, ahora erguido -->
-  <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-erguido-blanco.png" style="left:-115px;top:362px;width:827px">
+  <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-sentado-v3-blanco.png" style="left:-112px;top:402px;width:827px;transform-origin:230px 480px">
+  <img id="celebra" class="abs" src="../../elementos/personaje/reclutador-celebra-blanco.png" style="left:-154px;top:383px;width:827px;opacity:0;transform-origin:280px 500px">
   <!-- la torre que quedó de la escena 1 -->
   <div id="torre" class="abs" style="left:444px;top:379px;width:491px;transform-origin:50% 433px">
     <img class="abs" src="../../elementos/pila-alta.png" style="left:0;top:0;width:491px">
     <div class="abs" style="left:136px;top:20px;width:201px;height:15px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa"></div>
   </div>
   <!-- alegría: destellos sobre la cabeza (lo opuesto al garabato) -->
-  <svg id="alegria" class="abs" style="left:190px;top:330px;opacity:0" width="180" height="110" viewBox="0 0 180 110">
+  <svg id="alegria" class="abs" style="left:110px;top:400px;opacity:0" width="180" height="110" viewBox="0 0 180 110">
     <g fill="#c4a5e8">
       <path id="d1" d="M40 30 Q43 48 60 52 Q43 56 40 74 Q37 56 20 52 Q37 48 40 30 Z"/>
       <path id="d2" d="M92 6 Q94 18 106 21 Q94 24 92 36 Q90 24 78 21 Q90 18 92 6 Z" fill="#f6f4fa"/>
@@ -37,8 +38,9 @@
     </g>
   </svg>
   <!-- estrés: el mismo garabato de la escena 1, hasta que iPartner aplasta la torre -->
-  <img id="garabato" class="abs" src="../../elementos/garabato-blanco.png" style="left:212px;top:345px;width:130px">
+  <img id="garabato" class="abs" src="../../elementos/garabato-blanco.png" style="left:300px;top:380px;width:130px">
   <div id="halo" class="abs"></div>
+  <div id="flash" class="abs" style="inset:0;background:#f6f4fa;opacity:0"></div>
   <img id="app" class="abs" src="../../elementos/logos/ipartner-app.png" style="left:560px;top:450px;width:260px;opacity:0;border-radius:56px">
   <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
   <div class="abs" style="left:322px;top:836px;width:516px;height:244px;background:#6f6294"></div>
@@ -52,7 +54,7 @@
   tl.fromTo("#cam", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0);
   // respira tranquilo (antes estaba agobiado)
   // escribe todo el tiempo
-  tl.fromTo("#lapicero", { rotation: -32, x: 0 }, { rotation: -22, x: 4, duration: 0.14, repeat: 35, yoyo: true, ease: "sine.inOut" }, 0);
+  tl.fromTo("#lapicero", { rotation: -44, x: 0 }, { rotation: -34, x: 4, duration: 0.14, repeat: 35, yoyo: true, ease: "sine.inOut" }, 0);
   // garabato en constante movimiento
   tl.to("#garabato", { rotation: 14, duration: 0.11, repeat: 23, yoyo: true, ease: "sine.inOut" }, 0);
   tl.to("#garabato", { scale: 1.12, x: 4, duration: 0.17, repeat: 15, yoyo: true, ease: "sine.inOut" }, 0);
@@ -65,13 +67,20 @@
   tl.to("#app", { y: 0, duration: 0.5, ease: "back.out(2)" }, CAMBIO + 1.2);
   tl.to("#halo", { opacity: 1, duration: 0.5 }, CAMBIO + 1.15);
   tl.to("#app", { y: -10, duration: 0.9, repeat: 1, yoyo: true, ease: "sine.inOut" }, CAMBIO + 1.7);
+  // CAMBIO DE POSE: anticipación (se encoge), cambio tapado por el golpe, rebote
+  const T = CAMBIO + 1.05;
+  tl.to("#reclu", { scaleY: 0.95, scaleX: 1.02, duration: 0.3, ease: "power2.in" }, T - 0.3);
+  tl.set(["#reclu", "#lapicero"], { opacity: 0 }, T);
+  tl.fromTo("#flash", { opacity: 0.35 }, { opacity: 0, duration: 0.18, immediateRender: false }, T);
+  tl.fromTo("#celebra", { opacity: 1, scaleY: 1.1, scaleX: 0.95, rotation: -3 },
+    { opacity: 1, scaleY: 1, scaleX: 1, rotation: 0, duration: 0.5, ease: "elastic.out(1, 0.5)", immediateRender: false }, T);
+  tl.to("#celebra", { rotation: -2, duration: 0.45, repeat: 3, yoyo: true, ease: "sine.inOut" }, T + 0.55);
   // la persona se alegra: se va el garabato, llegan los destellos
   tl.to("#garabato", { opacity: 0, scale: 0.2, duration: 0.2, ease: "power2.in" }, CAMBIO + 1.05);
   tl.fromTo("#alegria", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.5)", transformOrigin: "50% 100%" }, CAMBIO + 1.2);
   ["#d1","#d2","#d3"].forEach((d, i) => {
     tl.to(d, { scale: 0.55, opacity: 0.5, duration: 0.22, repeat: 5, yoyo: true, ease: "sine.inOut", transformOrigin: "50% 50%" }, CAMBIO + 1.55 + i * 0.12);
   });
-  tl.to("#reclu", { y: -14, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out" }, CAMBIO + 1.2);
   tl.to({}, { duration: 0.01 }, FIN);
   window.__timelines = window.__timelines || {};
   window.__timelines["e7-persona"] = tl;

@@ -11,6 +11,7 @@
        color:#c4a5e8;white-space:nowrap}
 </style></head><body>
 <div id="root" data-composition-id="e1-oficina" data-width="1080" data-height="1350">
+<div id="cam" style="position:absolute;inset:0;transform-origin:690px 640px">
 
   <!-- piso -->
   <div class="abs" style="left:0;right:0;top:1078px;height:4px;background:#3d3360"></div>
@@ -33,6 +34,13 @@
 
   <!-- la torre: aparece cuando se va el postulante (mismo ancho y base que la pila) -->
   <img id="pilaAlta" class="abs" src="../../elementos/pila-alta.png" style="left:444px;top:379px;width:491px;opacity:0;transform-origin:50% 100%">
+  <!-- tapa plana de la torre (base donde caen las hojas) -->
+  <div id="tapa" class="abs" style="left:580px;top:399px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
+  <!-- las 3 hojas que lanza la IA: mismo ancho y grosor que las de la torre -->
+  <div id="h1" class="abs" style="left:580px;top:386px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
+  <div id="h2" class="abs" style="left:580px;top:373px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
+  <div id="h3" class="abs" style="left:580px;top:360px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
+  <img id="icono" class="abs" src="../../elementos/icono-ia-blanco.png" style="left:782px;top:285px;width:66px;opacity:0">
   <!-- escritorio: bloque macizo, delante del reclutador -->
   <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
   <div class="abs" style="left:322px;top:836px;width:516px;height:244px;background:#6f6294"></div>
@@ -95,13 +103,14 @@
   </div>
   <div id="tagR" class="tag" style="left:290px;top:420px">RECLUTADOR</div>
 </div>
+</div>
 <script>
   const tl = gsap.timeline({ paused: true });
   gsap.set(["#tagR","#tagP"], { xPercent: -50 });
   tl.fromTo("#tagR", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
 
   // LAPICERO: solo él se mueve, como escribiendo (trazos cortos y rápidos)
-  tl.fromTo("#lapicero", { rotation: -44, x: 0 }, { rotation: -34, x: 4, duration: 0.14, repeat: 27, yoyo: true, ease: "sine.inOut" }, 0);
+  tl.fromTo("#lapicero", { rotation: -44, x: 0 }, { rotation: -34, x: 4, duration: 0.14, repeat: 49, yoyo: true, ease: "sine.inOut" }, 0);
   // POSTULANTE: entra deslizándose con el CV
   tl.fromTo(["#applicant","#cv"], { x: 380 }, { x: 0, duration: 0.6, ease: "power2.out" }, 0);
   tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.3);
@@ -124,7 +133,26 @@
     { opacity: 1, scaleY: 1, scaleX: 1, duration: 0.7, ease: "back.out(1.6)" }, 2.1);
   tl.to("#pilaAlta", { rotation: 1.2, duration: 0.12, repeat: 3, yoyo: true, ease: "sine.inOut" }, 2.8);
   tl.to("#pilaAlta", { rotation: 0, duration: 0.1 }, 3.3);
-  tl.to({}, { duration: 0.01 }, 3.99);
+
+  // TOMA 2 — "y más de la mitad arma su CV con IA"
+  tl.set("#tapa", { opacity: 1 }, 2.15);
+  tl.to("#tagR", { opacity: 0, duration: 0.2 }, 3.9);
+  tl.to("#cam", { scale: 1.6, duration: 0.6, ease: "power3.inOut" }, 3.9);
+  tl.fromTo("#icono", { opacity: 0, scale: 0.4, rotation: -60 },
+    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, 4.4);
+  tl.to("#icono", { rotation: 360, duration: 2.6, ease: "none" }, 4.85);
+  // cada hoja sale del ícono, hace un arco y cae EXACTA sobre la anterior
+  ["#h1","#h2","#h3"].forEach((h, i) => {
+    const t0 = 4.9 + i * 0.42;
+    const top = 386 - i * 13;
+    tl.set(h, { opacity: 1, x: 235, y: 318 - top - 7, rotation: -30, scale: 0.5 }, t0);
+    tl.to(h, { keyframes: [
+      { x: 120, y: -40 - i * 4, rotation: 12, scale: 0.85, duration: 0.2, ease: "power1.out" },
+      { x: 0, y: 0, rotation: 0, scale: 1, duration: 0.22, ease: "power2.in" } ] }, t0);
+    tl.to("#pilaAlta", { y: 2, duration: 0.06, yoyo: true, repeat: 1 }, t0 + 0.42);
+  });
+  tl.to({}, { duration: 0.01 }, 6.99);
+
 
   window.__timelines = window.__timelines || {};
   window.__timelines["e1-oficina"] = tl;

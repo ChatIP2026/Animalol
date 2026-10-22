@@ -1,131 +1,106 @@
 <!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1080, height=1350" />
-    <link rel="stylesheet" href="../base.css" />
-    <script src="../../vendor/gsap.min.js"></script>
-    <style>
-      #win {
-        position: absolute; left: 70px; top: 262px; width: 940px; height: 826px;
-        background: #1d1636; border: 2px solid rgba(180,150,230,0.34);
-        border-radius: 18px; overflow: hidden; z-index: 6;
-        box-shadow: 0 40px 90px rgba(0,0,0,0.5);
-      }
-      #bar {
-        height: 62px; background: #251c45; display: flex; align-items: center;
-        gap: 11px; padding: 0 22px; border-bottom: 2px solid rgba(180,150,230,0.2);
-      }
-      #bar .o { width: 15px; height: 15px; border-radius: 50%; background: #6d5f8c; }
-      #bar .path {
-        margin-left: 18px; font-family: "IBM Plex Mono", monospace;
-        font-size: 23px; color: var(--lavender); letter-spacing: 0.06em;
-      }
-      #bar .count {
-        margin-left: auto; font-family: "IBM Plex Mono", monospace;
-        font-size: 23px; color: var(--ink-soft);
-      }
-      #pane { position: absolute; inset: 62px 0 0 0; overflow: hidden; }
-      #grid {
-        position: absolute; left: 0; top: 0; width: 100%;
-        display: grid; grid-template-columns: repeat(5, 1fr);
-        gap: 26px 10px; padding: 32px 22px;
-      }
-      .file { display: flex; flex-direction: column; align-items: center; gap: 9px; opacity: 0; }
-      .file .ico { position: relative; width: 84px; height: 104px; }
-      .file .ico svg { display: block; }
-      .file .nm {
-        font-family: "IBM Plex Mono", monospace; font-size: 17px; font-weight: 500;
-        color: var(--ink-soft); white-space: nowrap;
-      }
-      .file .nm b { color: #b89aff; font-weight: 700; }
-      #same {
-        position: absolute; left: 0; right: 0; bottom: 104px; text-align: center; z-index: 14;
-        opacity: 0; font-size: 60px; font-weight: 800; color: var(--ink);
-      }
-      #same b { color: var(--violet); }
-      #sameBg {
-        position: absolute; left: 0; right: 0; bottom: 0; height: 360px; z-index: 13;
-        background: linear-gradient(to top, #17122b 44%, rgba(23,18,43,0)); opacity: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root" data-composition-id="e3-archivos" data-width="1080" data-height="1350">
-      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
-      <div class="glow glow-a" data-layout-allow-overflow></div>
-      <div class="glow glow-b" data-layout-allow-overflow></div>
-
-      <div id="win">
-        <div id="bar">
-          <span class="o"></span><span class="o"></span><span class="o"></span>
-          <span class="path">/ postulaciones</span>
-          <span class="count" id="count">0 elementos</span>
-        </div>
-        <div id="pane"><div id="grid"></div></div>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:Montserrat,sans-serif;
+     background:radial-gradient(ellipse 70% 50% at 30% 30%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  /* laptop */
+  #pantalla{left:60px;top:250px;width:960px;height:740px;border-radius:30px;background:#2a2440;
+     box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  #base{left:18px;top:988px;width:1044px;height:34px;border-radius:0 0 26px 26px;background:#4b4170}
+  #muesca{left:470px;top:988px;width:140px;height:12px;border-radius:0 0 10px 10px;background:#3d3360}
+  /* ventana del explorador (Finder) */
+  #ventana{left:84px;top:274px;width:912px;height:692px;border-radius:12px;background:#f7f6fa;overflow:hidden}
+  #barra{left:0;top:0;width:912px;height:56px;background:#e9e7ef;border-bottom:1px solid #d6d3de}
+  .luz{top:20px;width:15px;height:15px;border-radius:50%}
+  #titulo{left:0;right:0;top:16px;text-align:center;font-size:20px;font-weight:600;color:#4b4170}
+  #lateral{left:0;top:56px;width:220px;height:636px;background:#efedf4;border-right:1px solid #dcd9e3}
+  .sec{font-size:15px;font-weight:700;color:#8d86a3;letter-spacing:.08em;margin:22px 0 10px 22px}
+  .item{font-size:19px;color:#3d3360;margin:0 0 12px 22px;display:flex;align-items:center;gap:10px}
+  .item i{display:inline-block;width:16px;height:13px;border-radius:3px;background:#9fb9d6}
+  .item.sel{background:#d9d3ec;margin:0 10px 12px 10px;padding:6px 12px;border-radius:8px}
+  #zona{left:220px;top:56px;width:692px;height:636px;overflow:hidden}
+  #grilla{position:absolute;left:18px;top:18px;width:656px;display:grid;grid-template-columns:repeat(5,1fr);gap:18px 6px}
+  .carpeta{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0}
+  .carpeta .nom{font-size:15px;font-weight:600;color:#3d3360;background:#e3e0ea;border-radius:9px;padding:2px 10px}
+  #pie{left:220px;top:660px;width:692px;height:32px;background:#efedf4;border-top:1px solid #dcd9e3;
+       font-size:16px;color:#6b6385;text-align:center;line-height:32px}
+  /* persona + X */
+  #velo{left:84px;top:274px;width:912px;height:692px;border-radius:12px;background:rgba(23,18,43,.78);opacity:0}
+  #persona{left:390px;top:470px;width:300px;opacity:0}
+  #equis{left:390px;top:470px;width:300px;height:300px;opacity:0}
+</style></head><body>
+<div id="root" data-composition-id="e3-archivos" data-width="1080" data-height="1350">
+  <div id="laptop" class="abs" style="inset:0">
+    <div id="pantalla" class="abs"></div>
+    <div id="base" class="abs"></div><div id="muesca" class="abs"></div>
+    <div id="ventana" class="abs">
+      <div id="barra" class="abs">
+        <div class="abs luz" style="left:20px;background:#ff5f57"></div>
+        <div class="abs luz" style="left:44px;background:#febc2e"></div>
+        <div class="abs luz" style="left:68px;background:#28c840"></div>
+        <div id="titulo" class="abs">Postulaciones</div>
       </div>
-
-      <div id="sameBg"></div>
-      <div id="same">todos dicen <b>lo mismo</b></div>
-      <div class="vignette"></div>
+      <div id="lateral" class="abs">
+        <div class="sec">FAVORITOS</div>
+        <div class="item"><i></i>Escritorio</div>
+        <div class="item"><i></i>Documentos</div>
+        <div class="item"><i></i>Descargas</div>
+        <div class="item sel"><i></i>Postulaciones</div>
+        <div class="sec">DISPOSITIVOS</div>
+        <div class="item"><i></i>Disco</div>
+      </div>
+      <div id="zona" class="abs"><div id="grilla"></div></div>
+      <div id="pie" class="abs"><span id="cuenta">0</span> elementos</div>
     </div>
-
-    <script>
-      // Un ícono de documento, repetido. Son idénticos a propósito: ese es el mensaje.
-      const ICON =
-        '<svg width="84" height="104" viewBox="0 0 84 104">' +
-        '<path d="M8 4 H54 L76 26 V96 a4 4 0 0 1 -4 4 H8 a4 4 0 0 1 -4 -4 V8 a4 4 0 0 1 4 -4 Z" ' +
-        'fill="#e4d6f7"/>' +
-        '<path d="M54 4 L76 26 H58 a4 4 0 0 1 -4 -4 Z" fill="#b5a9cc"/>' +
-        '<g fill="#4a267f"><rect x="16" y="44" width="42" height="6" rx="3"/>' +
-        '<rect x="16" y="58" width="52" height="6" rx="3"/>' +
-        '<rect x="16" y="72" width="30" height="6" rx="3"/></g>' +
-        '<circle cx="26" cy="26" r="9" fill="#b5a9cc"/></svg>';
-
-      const grid = document.getElementById("grid");
-      const TOTAL = 40;
-      const files = [];
-      for (let i = 1; i <= TOTAL; i++) {
-        const d = document.createElement("div");
-        d.className = "file";
-        d.innerHTML = '<div class="ico">' + ICON + "</div>" +
-          '<div class="nm">CV ' + i + " <b>#IA</b></div>";
-        grid.appendChild(d);
-        files.push(d);
-      }
-
-      const tl = gsap.timeline({ paused: true });
-      tl.fromTo("#mesh", { y: 54 }, { y: 20, duration: 5.5, ease: "none" }, 0);
-
-      // 0.0 - 0.7 · entramos a la pantalla de la laptop de la escena anterior
-      tl.fromTo("#win", { opacity: 0, scale: 0.42, y: 120 },
-        { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: "power3.out" }, 0);
-
-      // 0.7 - 3.6 · los CVs se acumulan, cada vez más rápido, hasta llenar el panel
-      files.forEach((f, i) => {
-        // la cadencia acelera: empieza a mostrarse uno por uno y termina en ráfaga
-        const t = 0.7 + Math.pow(i / TOTAL, 0.62) * 2.75;
-        tl.fromTo(f, { opacity: 0, scale: 0.55 },
-          { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2)" }, t);
-      });
-
-      const n = { v: 0 };
-      const cEl = document.getElementById("count");
-      tl.to(n, { v: 428, duration: 2.75, ease: "power2.in",
-        onUpdate: () => { cEl.textContent = Math.round(n.v) + " elementos"; } }, 0.7);
-
-      // 3.6 - 4.4 · el panel ya no da abasto: sigue scrolleando y no termina
-      tl.to("#grid", { y: -210, duration: 0.85, ease: "power2.inOut" }, 3.55);
-      tl.to("#count", { color: "#ff5470", duration: 0.3 }, 3.7);
-
-      // 4.4 - 5.5 · el remate: son cientos y son el mismo
-      tl.fromTo("#sameBg", { opacity: 0 }, { opacity: 1, duration: 0.45 }, 4.35);
-      tl.fromTo("#same", { opacity: 0, y: 26 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 4.5);
-
-      window.__timelines = window.__timelines || {};
-      window.__timelines["e3-archivos"] = tl;
-      tl.seek(0);
-    </script>
-  </body>
-</html>
+    <div id="velo" class="abs"></div>
+    <img id="persona" class="abs" src="../../elementos/icono-persona-blanco.png">
+    <svg id="equis" class="abs" viewBox="0 0 300 300">
+      <g stroke="#ff3b4e" stroke-width="30" stroke-linecap="round" style="filter:drop-shadow(0 0 18px rgba(255,59,78,.75))">
+        <path d="M40 40 L260 260"/><path d="M260 40 L40 260"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<script>
+  // Carpetas iguales, numeradas: se van sumando hasta llenar la ventana
+  const FOLDER = '<svg width="92" height="74" viewBox="0 0 92 74">' +
+    '<path d="M4 10 a6 6 0 0 1 6 -6 h24 l8 8 h40 a6 6 0 0 1 6 6 v4 H4 Z" fill="#7fb3dd"/>' +
+    '<rect x="4" y="18" width="84" height="52" rx="6" fill="#9cc8ea"/>' +
+    '<rect x="4" y="18" width="84" height="6" fill="#b8d8f1"/></svg>';
+  const N = 30, grilla = document.getElementById("grilla"), carpetas = [];
+  for (let i = 1; i <= N; i++) {
+    const d = document.createElement("div");
+    d.className = "carpeta";
+    d.innerHTML = FOLDER + '<div class="nom">CV ' + i + "</div>";
+    grilla.appendChild(d); carpetas.push(d);
+  }
+  // Marcas de la voz relativas al inicio de la escena (escena = 7.0 s del video)
+  const RESULT = 0.2, CIENTOS = 1.16, IGUALES_FIN = 3.12, YDICEN = 3.25, POCO = 3.78;
+  const tl = gsap.timeline({ paused: true });
+  // "El resultado:" — entra la laptop
+  tl.fromTo("#laptop", { opacity: 0, scale: 0.88, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "power3.out" }, RESULT);
+  // "cientos de CVs que se ven iguales" — carpetas cada vez más rápido hasta llenar
+  carpetas.forEach((c, i) => {
+    const t = CIENTOS + Math.pow(i / N, 0.6) * (IGUALES_FIN - CIENTOS - 0.2);
+    tl.fromTo(c, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.18, ease: "back.out(2.2)" }, t);
+  });
+  const n = { v: 0 }, cuenta = document.getElementById("cuenta");
+  tl.to(n, { v: 412, duration: IGUALES_FIN - CIENTOS, ease: "power2.in",
+    onUpdate: () => { cuenta.textContent = Math.round(n.v); } }, CIENTOS);
+  // "y dicen…" — se oscurece y aparece la persona
+  tl.to("#velo", { opacity: 1, duration: 0.3 }, YDICEN);
+  tl.to("#ventana .item, #ventana .sec, #titulo, .carpeta .nom, #pie", { opacity: 0, duration: 0.3 }, YDICEN);
+  tl.fromTo("#persona", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, YDICEN + 0.05);
+  // "poco" — la X roja la tacha
+  tl.fromTo("#equis", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.22, ease: "power3.in" }, POCO);
+  tl.to("#persona", { x: 6, duration: 0.05, repeat: 5, yoyo: true }, POCO + 0.22);
+  tl.to({}, { duration: 0.01 }, 5.09);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e3-archivos"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

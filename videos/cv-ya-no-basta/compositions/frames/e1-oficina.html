@@ -29,8 +29,10 @@
   <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-sentado-v3-blanco.png" style="left:-112px;top:402px;width:827px">
 
   <!-- pila de CVs sobre el escritorio -->
-  <img class="abs" src="../../elementos/pila.png" style="left:526px;top:631px;width:332px">
+  <img id="pila" class="abs" src="../../elementos/pila.png" style="left:526px;top:631px;width:332px">
 
+  <!-- la torre: aparece cuando se va el postulante (mismo ancho y base que la pila) -->
+  <img id="pilaAlta" class="abs" src="../../elementos/pila-alta.png" style="left:444px;top:379px;width:491px;opacity:0;transform-origin:50% 100%">
   <!-- escritorio: bloque macizo, delante del reclutador -->
   <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
   <div class="abs" style="left:322px;top:836px;width:516px;height:244px;background:#6f6294"></div>
@@ -113,6 +115,16 @@
   tl.set("#applicant", { scaleX: -1 }, 1.65);
   tl.to("#applicant", { x: 420, duration: 1.2, ease: "power2.in" }, 1.7);
   tl.to("#tagP", { opacity: 0, duration: 0.2 }, 1.65);
+
+
+  // TRANSICIÓN: la pila se dispara hasta ser una torre
+  gsap.set("#pila", { transformOrigin: "50% 100%" });
+  tl.to(["#pila","#cv"], { scaleY: 1.35, opacity: 0, duration: 0.25, ease: "power2.in" }, 2.95);
+  tl.fromTo("#pilaAlta", { opacity: 0, scaleY: 0.3, scaleX: 0.92 },
+    { opacity: 1, scaleY: 1, scaleX: 1, duration: 0.7, ease: "back.out(1.6)" }, 3.0);
+  tl.to("#pilaAlta", { rotation: 1.2, duration: 0.12, repeat: 3, yoyo: true, ease: "sine.inOut" }, 3.7);
+  tl.to("#pilaAlta", { rotation: 0, duration: 0.1 }, 4.2);
+  tl.to({}, { duration: 0.01 }, 4.99);
 
   window.__timelines = window.__timelines || {};
   window.__timelines["e1-oficina"] = tl;

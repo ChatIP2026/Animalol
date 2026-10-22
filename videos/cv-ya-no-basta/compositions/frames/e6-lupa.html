@@ -33,13 +33,10 @@
         <g id="minutero"><path d="M200 200 V70" stroke="#c4a5e8" stroke-width="9" stroke-linecap="round"/></g>
         <circle cx="200" cy="200" r="14" fill="#f6f4fa"/>
       </g>
-      <!-- mango de la lupa (contorno, como el diseño de referencia) -->
-      <g id="mango">
-        <path id="m1" d="M336 336 L492 492" stroke="#f6f4fa" stroke-width="64" stroke-linecap="round"/>
-        <path id="m2" d="M336 336 L492 492" stroke="#17122b" stroke-width="44" stroke-linecap="round"/>
-      </g>
-      <circle cx="200" cy="200" r="180" fill="none" stroke="#f6f4fa" stroke-width="10"/>
+      <circle id="aroReloj" cx="200" cy="200" r="180" fill="none" stroke="#f6f4fa" stroke-width="10"/>
     </svg>
+    <!-- la lupa del usuario, tal cual: su aro coincide con el aro del reloj (escala 0.478) -->
+    <img id="lupaImg" class="abs" src="../../elementos/lupa.png" style="left:268px;top:413px;width:605px;opacity:0">
   </div>
 </div>
 <script>
@@ -79,14 +76,14 @@
   // Marcas de la voz (escena = 23.38 s del video)
   const DUDAS = 2.22, DESPUES = 4.78, FIN = 6.59;
   const tl = gsap.timeline({ paused: true });
-  gsap.set("#m1, #m2", { strokeDasharray: 210, strokeDashoffset: 210 });
   // RELOJ
   tl.fromTo("#instr", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)", transformOrigin: "50% 50%" }, 0.05);
   tl.fromTo("#minutero", { rotation: 0 }, { rotation: 1440, duration: 1.85, ease: "power1.inOut", svgOrigin: "200 200" }, 0.15);
   tl.fromTo("#horario", { rotation: 0 }, { rotation: 120, duration: 1.85, ease: "power1.inOut", svgOrigin: "200 200" }, 0.15);
   // TRANSICIÓN: el reloj se vuelve lupa (se va todo menos el aro, y crece el mango)
   tl.to(["#agujas","#marcas","#fondoReloj"], { opacity: 0, duration: 0.3 }, DUDAS - 0.3);
-  tl.to(["#m1","#m2"], { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, DUDAS - 0.15);
+  tl.to("#lupaImg", { opacity: 1, duration: 0.3 }, DUDAS - 0.2);
+  tl.to("#aroReloj", { opacity: 0, duration: 0.3 }, DUDAS - 0.2);
   tl.to("#lente", { opacity: 1, duration: 0.3 }, DUDAS);
   tl.to("#campo", { opacity: 1, duration: 0.4 }, DUDAS);
   // la cámara recorre el mundo junto a la lupa

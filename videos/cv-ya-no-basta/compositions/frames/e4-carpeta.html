@@ -23,7 +23,7 @@
   // Lo que sale de la carpeta: un ícono por servicio, SIN texto (servicios delicados de nombrar)
   const G = 'fill="none" stroke="#f6f4fa" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"';
   const ICON = {
-    riesgo:     '<path d="M8 33 A16 16 0 0 1 40 33"/><path d="M24 33 L33 21"/><path d="M12 25 l3 2 M24 17 v4 M36 25 l-3 2"/>',      // nivel de riesgo: velocímetro
+    riesgo:     '<g transform="translate(24 31) scale(1.22) translate(-24 -31)"><path d="M5 34 A19 19 0 0 1 43 34" stroke-width="3.6"/><path d="M10 25 l4 2.5 M24 15 v5 M38 25 l-4 2.5"/><path d="M24 34 L34 19" stroke-width="3.6"/><circle cx="24" cy="34" r="4" fill="#f6f4fa"/></g>',      // nivel de riesgo: velocímetro
     delictivo:  '<path d="M24 6 L39 12 V23 C39 33 32 39 24 42 C16 39 9 33 9 23 V12 Z"/><path d="M24 16 V27"/><path d="M24 33 v.5"/>',   // riesgo delictivo: escudo
     crediticio: '<rect x="7" y="13" width="34" height="23" rx="3"/><path d="M7 20 H41"/><path d="M12 30 H20"/>',                     // riesgo crediticio: tarjeta
     sunedu:     '<path d="M4 19 L24 10 L44 19 L24 28 Z"/><path d="M13 23 V32 C13 36 35 36 35 32 V23"/><path d="M44 19 V30"/>',     // verificación de título: birrete
@@ -58,7 +58,8 @@
       { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.65, ease: "back.out(1.4)" }, t);
     tl.to(e, { y: -8, duration: 1.1, repeat: 1, yoyo: true, ease: "sine.inOut" }, t + 0.65);
   });
-  tl.to("#brazo", { y: -6, duration: 1.2, repeat: 1, yoyo: true, ease: "sine.inOut" }, 1.0);
+  // flota apenas termina de centrarse, y sigue hasta el final
+  tl.to("#brazo", { y: -8, duration: 1.2, repeat: 3, yoyo: true, ease: "sine.inOut" }, 0.85);
   tl.to({}, { duration: 0.01 }, 5.94);
   window.__timelines = window.__timelines || {};
   window.__timelines["e4-carpeta"] = tl;

@@ -91,9 +91,6 @@
 <script>
   const tl = gsap.timeline({ paused: true });
   gsap.set(["#tagR","#tagP"], { xPercent: -50 });
-  // RECLUTADOR: escribe sin parar (balanceo leve desde la cadera)
-  gsap.set("#reclu", { transformOrigin: "300px 470px" });
-  tl.to("#reclu", { rotation: 0.8, duration: 0.2, repeat: 15, yoyo: true, ease: "sine.inOut" }, 0);
   tl.fromTo("#tagR", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
 
   // POSTULANTE: entra deslizándose con el CV

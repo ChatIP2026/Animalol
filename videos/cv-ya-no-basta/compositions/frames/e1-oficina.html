@@ -23,6 +23,11 @@
   <!-- reclutador: queda DETRÁS del escritorio -->
   <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-sentado-v3-blanco.png" style="left:-112px;top:402px;width:827px">
 
+  <!-- lapicero nuevo, donde estaba el original; gira desde la punta (apoyada en la mano) -->
+  <div id="lapicero" class="abs" style="left:419px;top:751px;width:10px;height:40px;transform-origin:50% 100%;transform:rotate(-40deg)">
+    <div style="position:absolute;inset:0 0 7px 0;box-sizing:border-box;border:2.5px solid #17122b;border-radius:4px;background:#f6f4fa"></div>
+    <div style="position:absolute;left:1px;bottom:0;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:8px solid #17122b"></div>
+  </div>
   <!-- pila de CVs sobre el escritorio -->
   <img class="abs" src="../../elementos/pila.png" style="left:526px;top:631px;width:332px">
 
@@ -93,6 +98,8 @@
   gsap.set(["#tagR","#tagP"], { xPercent: -50 });
   tl.fromTo("#tagR", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
 
+  // LAPICERO: solo él se mueve, como escribiendo (trazos cortos y rápidos)
+  tl.fromTo("#lapicero", { rotation: -44, x: 0 }, { rotation: -34, x: 4, duration: 0.14, repeat: 21, yoyo: true, ease: "sine.inOut" }, 0);
   // POSTULANTE: entra deslizándose con el CV
   tl.fromTo(["#applicant","#cv"], { x: 380 }, { x: 0, duration: 1.0, ease: "power2.out" }, 0);
   tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.5);

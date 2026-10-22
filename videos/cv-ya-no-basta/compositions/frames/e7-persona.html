@@ -4,55 +4,40 @@
 <script src="../../vendor/gsap.min.js"></script>
 <style>
   html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
-  #root{position:relative;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;
+     background:radial-gradient(ellipse 70% 50% at 30% 30%,#2a1b55 0%,#17122b 70%)}
   .abs{position:absolute}
-  #grilla{left:0;top:0;width:1080px;height:1350px}
-  .p{position:absolute;width:110px;height:150px}
-  /* la luz: un velo del color de fondo con un agujero, que se mueve solo con transforms */
-  #velo{left:0;top:0;width:3240px;height:4050px;
-    background:radial-gradient(circle at 50% 50%, rgba(23,18,43,0) 0px, rgba(23,18,43,0) 120px, rgba(23,18,43,.97) 360px)}
-  #brillo{left:0;top:0;width:3240px;height:4050px;opacity:.5;
-    background:radial-gradient(circle at 50% 50%, rgba(196,165,232,.10) 0px, rgba(196,165,232,0) 260px)}
+  #halo{left:470px;top:300px;width:520px;height:520px;border-radius:50%;opacity:0;
+        background:radial-gradient(circle,rgba(123,63,242,.6),rgba(123,63,242,0) 65%);filter:blur(25px)}
 </style></head><body>
 <div id="root" data-composition-id="e7-persona" data-width="1080" data-height="1350">
-  <div id="grilla" class="abs"></div>
-  <div id="brillo" class="abs"></div>
-  <div id="velo" class="abs"></div>
+ <div id="cam" class="abs" style="inset:0;transform-origin:540px 760px">
+  <!-- la misma oficina de la escena 1, ahora sin la torre -->
+  <div class="abs" style="left:0;right:0;top:1078px;height:4px;background:#3d3360"></div>
+  <div class="abs" style="left:176px;top:700px;width:22px;height:200px;border-radius:11px;background:#4b4170"></div>
+  <div class="abs" style="left:180px;top:880px;width:150px;height:20px;border-radius:8px;background:#4b4170"></div>
+  <div class="abs" style="left:244px;top:900px;width:20px;height:178px;background:#4b4170"></div>
+  <div class="abs" style="left:198px;top:1066px;width:112px;height:14px;border-radius:7px;background:#4b4170"></div>
+  <!-- el reclutador, ahora erguido -->
+  <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-erguido-blanco.png" style="left:-115px;top:362px;width:827px">
+  <div id="halo" class="abs"></div>
+  <img id="app" class="abs" src="../../elementos/logos/ipartner-app.png" style="left:600px;top:450px;width:260px;opacity:0;border-radius:56px">
+  <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
+  <div class="abs" style="left:322px;top:836px;width:516px;height:244px;background:#6f6294"></div>
+  <div class="abs" style="left:318px;top:803px;width:150px;height:10px;border-radius:2px;background:#efe8fa"></div>
+ </div>
 </div>
 <script>
-  // grilla de personas iguales; la del centro (540,640) es la elegida
-  const CW = 135, CH = 175, CX = 540, CY = 640;
-  const P = (fill, id) => '<svg ' + (id ? 'id="' + id + '" ' : '') + 'class="p" viewBox="0 0 110 150">' +
-    '<circle cx="55" cy="30" r="24" fill="' + fill + '"/>' +
-    '<path d="M14 146 V84 C14 64 30 58 55 58 C80 58 96 64 96 84 V146 Z" fill="' + fill + '"/></svg>';
-  const g = document.getElementById("grilla"); let h = "";
-  for (let r = -4; r <= 4; r++) for (let c = -4; c <= 4; c++) {
-    const x = CX + c * CW - 55, y = CY + r * CH - 75, centro = r === 0 && c === 0;
-    h += '<div class="abs" style="left:' + x + 'px;top:' + y + 'px">' +
-         (centro ? P("#6d6390", "base") + '<div id="elegido" class="abs" style="left:0;top:0;opacity:0">' + P("#7b3ff2") + '</div>' : P("#6d6390")) + "</div>";
-  }
-  g.innerHTML = h;
-  const luz = ["#velo", "#brillo"];
-  const pos = (x, y) => ({ x: x - 1620, y: y - 2025 });
-
-  // voz (escena = 29.97 s del video): 1.6 "cambio que trae la inteligencia artificial"
+  // voz (escena = 29.97 s): 1.6 "cambio que trae la inteligencia artificial"
   const CAMBIO = 1.6, FIN = 4.99;
   const tl = gsap.timeline({ paused: true });
-  tl.set(luz, pos(200, 260), 0);
-  // la luz recorre la multitud buscando
-  [[860, 330], [260, 900], [900, 1050], [700, 520]].forEach(([x, y], i) => {
-    tl.to(luz, { ...pos(x, y), duration: 0.38, ease: "power2.inOut" }, i * 0.36);
-  });
-  // "cambio…": se centra en la persona ideal, que se enciende morada y titila
-  tl.to(luz, { ...pos(CX, CY), duration: 0.35, ease: "power3.out" }, CAMBIO - 0.2);
-  tl.to("#elegido", { opacity: 1, duration: 0.25 }, CAMBIO);
-  tl.to("#elegido", { filter: "drop-shadow(0 0 22px rgba(123,63,242,.95)) drop-shadow(0 0 40px rgba(123,63,242,.6))", duration: 0.25 }, CAMBIO);
-  // tintineo irregular
-  [0.35, 0.5, 0.62, 0.9, 1.05, 1.5, 1.62, 2.2, 2.35, 2.9].forEach((d, i) => {
-    tl.to("#elegido", { opacity: i % 2 ? 1 : 0.55, duration: 0.06 }, CAMBIO + d);
-  });
-  tl.to("#elegido", { opacity: 1, duration: 0.1 }, CAMBIO + 3.0);
-  tl.to("#velo", { scale: 1.25, duration: 1.2, ease: "sine.inOut", transformOrigin: "50% 50%" }, CAMBIO + 0.4);
+  tl.fromTo("#cam", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+  // respira tranquilo (antes estaba agobiado)
+  tl.to("#reclu", { y: -4, duration: 1.2, repeat: 3, yoyo: true, ease: "sine.inOut" }, 0.5);
+  // "cambio…": aparece iPartner sobre el escritorio
+  tl.to("#halo", { opacity: 1, duration: 0.6 }, CAMBIO - 0.1);
+  tl.fromTo("#app", { opacity: 0, scale: 0.4, y: 60 }, { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" }, CAMBIO);
+  tl.to("#app", { y: -10, duration: 1.0, repeat: 2, yoyo: true, ease: "sine.inOut" }, CAMBIO + 0.6);
   tl.to({}, { duration: 0.01 }, FIN);
   window.__timelines = window.__timelines || {};
   window.__timelines["e7-persona"] = tl;

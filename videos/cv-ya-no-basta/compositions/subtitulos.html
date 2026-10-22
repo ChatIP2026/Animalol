@@ -7,31 +7,26 @@
   .sub{position:absolute;left:90px;right:90px;top:1150px;text-align:center;opacity:0;
        font-family:Montserrat,sans-serif;font-weight:400;font-size:40px;line-height:1.3;
        letter-spacing:.02em;color:#f6f4fa;text-shadow:0 2px 12px rgba(10,7,22,.85)}
+  .w{display:inline-block;opacity:0}
 </style></head><body>
 <div id="root" data-composition-id="subtitulos" data-width="1080" data-height="1350"></div>
 <script>
-  // [inicio, fin, texto] — medidos en la voz de Juan (assets/audio/voz.mp3)
-  const S = [
-    [0.06, 3.40, "Hoy cada vacante recibe<br>más postulantes que nunca."],
-    [3.55, 7.00, "Y más de la mitad arma su CV<br>con inteligencia artificial."],
-    [7.20, 8.10, "El resultado:"],
-    [8.16, 10.20, "cientos de CVs<br>que se ven iguales"],
-    [10.25, 12.00, "y dicen poco de la persona."],
-    [12.11, 14.90, "Por eso, hoy el CV<br>es solo una parte."],
-    [14.98, 17.95, "Hay mucho más que puedes<br>evaluar antes de decidir."],
-    [18.05, 20.50, "Y la inteligencia artificial,<br>bien usada,"],
-    [20.60, 23.25, "te ayuda a verlo todo<br>junto y a tiempo."],
-    [23.38, 25.50, "Para que pases menos<br>horas revisando,"],
-    [25.60, 28.10, "tengas menos dudas al elegir<br>y menos sorpresas"],
-    [28.16, 29.85, "después de contratar."],
-    [29.97, 34.90, "¿Y tú, ya eres parte del cambio<br>que trae la inteligencia artificial?"]
-  ];
+  // [inicio, fin, líneas[[palabra, segundo en que se dice]]] — tiempos por palabra de la voz de Juan
+  const S = [[0.06, 3.4, [[["Hoy", 0.05], ["cada", 0.25], ["vacante", 0.58], ["recibe", 1.16]], [["más", 1.65], ["postulantes", 1.9], ["que", 2.8], ["nunca.", 3.05]]]], [3.55, 7.0, [[["Y", 3.55], ["más", 3.58], ["de", 3.85], ["la", 3.96], ["mitad", 4.09], ["arma", 4.49], ["su", 4.72], ["CV", 4.92]], [["con", 5.02], ["inteligencia", 5.24], ["artificial.", 6.14]]]], [7.2, 8.1, [[["El", 7.21], ["resultado:", 7.31]]]], [8.16, 10.2, [[["cientos", 8.16], ["de", 8.68], ["CVs", 8.83]], [["que", 9.05], ["se", 9.27], ["ven", 9.42], ["iguales", 9.64]]]], [10.25, 12.0, [[["y", 10.2], ["dicen", 10.28], ["poco", 10.71], ["de", 11.04], ["la", 11.21], ["persona.", 11.3]]]], [12.11, 14.9, [[["Por", 12.09], ["eso,", 12.49], ["hoy", 12.76], ["el", 13.03], ["CV", 13.21]], [["es", 13.39], ["solo", 13.57], ["una", 13.93], ["parte.", 14.28]]]], [14.98, 17.95, [[["Hay", 15.01], ["mucho", 15.18], ["más", 15.55], ["que", 15.77], ["puedes", 15.99]], [["evaluar", 16.44], ["antes", 17.01], ["de", 17.33], ["decidir.", 17.5]]]], [18.05, 20.5, [[["Y", 18], ["la", 18.11], ["inteligencia", 18.29], ["artificial,", 19.12]], [["bien", 19.84], ["usada,", 20.13]]]], [20.6, 23.25, [[["te", 20.49], ["ayuda", 20.63], ["a", 20.99], ["verlo", 21.06], ["todo", 21.79]], [["junto", 21.85], ["y", 22.25], ["a", 22.27], ["tiempo.", 22.35]]]], [23.38, 25.5, [[["Para", 22.82], ["que", 23.14], ["pases", 23.38], ["menos", 23.85]], [["horas", 24.16], ["revisando,", 24.55]]]], [25.6, 28.1, [[["tengas", 25.61], ["menos", 26.01], ["dudas", 26.37], ["al", 26.73], ["elegir", 26.89]], [["y", 27.33], ["menos", 27.41], ["sorpresas", 27.8]]]], [28.16, 29.85, [[["después", 28.52], ["de", 28.78], ["contratar.", 28.96]]]], [29.97, 34.9, [[["¿Y", 29.92], ["tú,", 30.1], ["ya", 30.38], ["eres", 30.52], ["parte", 30.8], ["del", 31.2], ["cambio", 31.36]], [["que", 31.78], ["trae", 31.99], ["la", 32.3], ["inteligencia", 32.51], ["artificial?", 32.96]]]]];
   const root = document.getElementById("root");
   const tl = gsap.timeline({ paused: true });
-  S.forEach(([a, b, t], i) => {
+  S.forEach(([a, b, lineas], i) => {
     const d = document.createElement("div");
-    d.className = "sub"; d.id = "s" + i; d.innerHTML = t; root.appendChild(d);
-    tl.fromTo(d, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.15, ease: "power2.out", immediateRender: false }, a);
+    d.className = "sub"; d.id = "s" + i;
+    // todas las palabras ocupan su lugar desde el inicio (invisibles), así el texto no se corre
+    d.innerHTML = lineas.map(l => l.map(([w]) => '<span class="w">' + w + "</span>").join(" ")).join("<br>");
+    root.appendChild(d);
+    const spans = d.querySelectorAll(".w");
+    tl.set(d, { opacity: 1 }, a - 0.01);
+    let k = 0;
+    lineas.forEach(l => l.forEach(([w, t]) => {
+      tl.fromTo(spans[k++], { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, Math.max(a, t));
+    }));
     tl.to(d, { opacity: 0, duration: 0.12 }, b - 0.12);
   });
   tl.to({}, { duration: 0.01 }, 34.96);

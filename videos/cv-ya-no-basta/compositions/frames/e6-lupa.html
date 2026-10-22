@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:Montserrat,sans-serif;
+     background:radial-gradient(ellipse 70% 50% at 50% 47%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  .capa{position:absolute;left:0;top:0;width:1080px;height:1350px}
+  .circ{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
+        text-align:center;font-weight:700;box-sizing:border-box}
+  #tenue .circ{border:3px solid rgba(196,165,232,.22);color:rgba(196,165,232,.32);filter:blur(1.6px)}
+  #nitida .circ{border:3px solid rgba(246,244,250,.75);color:#f6f4fa}
+  #lente{left:0;top:0;width:320px;height:320px;border-radius:50%;overflow:hidden;
+         background:#17122b}
+  #aro{left:0;top:0;width:320px;height:470px;pointer-events:none}
+  #reloj{left:340px;top:440px;width:400px;height:400px}
+</style></head><body>
+<div id="root" data-composition-id="e6-lupa" data-width="1080" data-height="1350">
+  <div id="campo" class="capa" style="opacity:0">
+    <div id="tenue" class="capa"></div>
+  </div>
+  <div id="lupa" class="abs" style="left:0;top:0;opacity:0">
+    <div id="lente" class="abs"><div id="nitida" class="capa"></div></div>
+    <svg id="aro" class="abs" viewBox="0 0 320 470">
+      <circle cx="160" cy="160" r="156" fill="none" stroke="#f6f4fa" stroke-width="8"/>
+      <rect x="140" y="322" width="40" height="140" rx="20" fill="#17122b" stroke="#f6f4fa" stroke-width="7"
+            transform="rotate(-24 160 316)"/>
+    </svg>
+  </div>
+  <!-- reloj -->
+  <svg id="reloj" class="abs" viewBox="0 0 400 400" style="opacity:0">
+    <circle cx="200" cy="200" r="180" fill="rgba(123,63,242,.18)" stroke="#f6f4fa" stroke-width="12"/>
+    <g stroke="#f6f4fa" stroke-width="8" stroke-linecap="round">
+      <path d="M200 40 v22"/><path d="M200 338 v22"/><path d="M40 200 h22"/><path d="M338 200 h22"/>
+    </g>
+    <g id="horario"><path d="M200 200 V112" stroke="#f6f4fa" stroke-width="14" stroke-linecap="round"/></g>
+    <g id="minutero"><path d="M200 200 V70" stroke="#c4a5e8" stroke-width="9" stroke-linecap="round"/></g>
+    <circle cx="200" cy="200" r="14" fill="#f6f4fa"/>
+  </svg>
+</div>
+<script>
+  // círculos con atributos generales; uno es el objetivo
+  const C = [
+    ["Comportamiento",180,250,150],["Experiencia",520,190,130],["Puntualidad",860,260,150],
+    ["Desempeño",300,520,135],["Actitud",760,520,120],["Liderazgo",120,790,120],
+    ["Trabajo en equipo",920,800,150],["Compromiso",330,1060,140],["Comunicación",760,1080,150],
+    ["Ética",530,1250,105],["Iniciativa",90,1200,115],["Adaptación",1010,1210,120],
+    ["Candidato ideal",540,790,150]
+  ];
+  const OBJ = C.length - 1;
+  function llenar(id) {
+    const capa = document.getElementById(id);
+    C.forEach(([txt, x, y, r], i) => {
+      const d = document.createElement("div");
+      d.className = "circ"; d.style.left = (x - r) + "px"; d.style.top = (y - r) + "px";
+      d.style.width = d.style.height = 2 * r + "px";
+      d.style.fontSize = Math.round(r / 4.4) + "px";
+      d.textContent = txt;
+      if (i === OBJ) d.id = id + "-obj";
+      capa.appendChild(d);
+    });
+  }
+  llenar("tenue"); llenar("nitida");
+
+  // la lupa: el vidrio muestra la capa nítida; todo se mueve solo con transforms
+  const p = { x: 900, y: 1150 };
+  function aplicar() {
+    const ox = p.x - 160, oy = p.y - 160;
+    gsap.set("#lupa", { x: ox, y: oy });
+    gsap.set("#nitida", { x: -ox, y: -oy });
+  }
+  aplicar();
+
+  // Marcas de la voz relativas al inicio (escena = 23.38 s del video)
+  //   0.0 "Para que pases menos horas revisando,"   2.22 "tengas menos dudas…"   4.78 "después de contratar."
+  const DUDAS = 2.22, DESPUES = 4.78, FIN = 6.59;
+  const tl = gsap.timeline({ paused: true });
+  // RELOJ
+  tl.fromTo("#reloj", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 0.05);
+  tl.fromTo("#minutero", { rotation: 0 }, { rotation: 1440, duration: 1.9, ease: "power1.inOut", svgOrigin: "200 200" }, 0.15);
+  tl.fromTo("#horario", { rotation: 0 }, { rotation: 120, duration: 1.9, ease: "power1.inOut", svgOrigin: "200 200" }, 0.15);
+  tl.to("#reloj", { opacity: 0, scale: 0.6, duration: 0.3, ease: "power2.in" }, DUDAS - 0.3);
+  // CÍRCULOS + LUPA buscando
+  tl.to("#campo", { opacity: 1, duration: 0.4 }, DUDAS - 0.2);
+  tl.to("#lupa", { opacity: 1, duration: 0.3 }, DUDAS);
+  const RUTA = [[180,250],[860,260],[300,520],[920,800],[330,1060]];
+  const paso = (DESPUES - DUDAS - 0.1) / RUTA.length;
+  RUTA.forEach(([x, y], i) => {
+    tl.to(p, { x, y, duration: paso * 0.8, ease: "power2.inOut", onUpdate: aplicar }, DUDAS + i * paso);
+  });
+  // "después de contratar." — se posa en el candidato ideal, que se enciende en verde
+  tl.to(p, { x: 540, y: 790, duration: 0.55, ease: "power3.out", onUpdate: aplicar }, DESPUES);
+  tl.to("#nitida-obj", { color: "#3cf2b0", borderColor: "#3cf2b0", duration: 0.3,
+     textShadow: "0 0 18px rgba(60,242,176,.95)", boxShadow: "0 0 40px rgba(60,242,176,.55), inset 0 0 30px rgba(60,242,176,.25)" }, DESPUES + 0.45);
+  tl.to("#lupa", { scale: 1.05, duration: 0.25, yoyo: true, repeat: 1, transformOrigin: "160px 160px" }, DESPUES + 0.5);
+  tl.to({}, { duration: 0.01 }, FIN - 0.01);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e6-lupa"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

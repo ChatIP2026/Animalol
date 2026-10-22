@@ -18,6 +18,9 @@
   <div class="abs" style="left:180px;top:880px;width:150px;height:20px;border-radius:8px;background:#4b4170"></div>
   <div class="abs" style="left:244px;top:900px;width:20px;height:178px;background:#4b4170"></div>
   <div class="abs" style="left:198px;top:1066px;width:112px;height:14px;border-radius:7px;background:#4b4170"></div>
+  <!-- lapicero animado, detrás de la mano -->
+  <div id="lapicero" class="abs" style="left:396px;top:708px;width:9px;height:62px;transform-origin:50% 100%">
+    <div style="position:absolute;inset:0 0 7px 0;box-sizing:border-box;border:2.5px solid #17122b;border-radius:4px;background:#f6f4fa"></div></div>
   <!-- el reclutador, ahora erguido -->
   <img id="reclu" class="abs" src="../../elementos/personaje/reclutador-erguido-blanco.png" style="left:-115px;top:362px;width:827px">
   <!-- la torre que quedó de la escena 1 -->
@@ -33,6 +36,8 @@
       <path id="d3" d="M140 34 Q142 49 157 52 Q142 55 140 70 Q138 55 123 52 Q138 49 140 34 Z"/>
     </g>
   </svg>
+  <!-- estrés: el mismo garabato de la escena 1, hasta que iPartner aplasta la torre -->
+  <img id="garabato" class="abs" src="../../elementos/garabato-blanco.png" style="left:212px;top:345px;width:130px">
   <div id="halo" class="abs"></div>
   <img id="app" class="abs" src="../../elementos/logos/ipartner-app.png" style="left:560px;top:450px;width:260px;opacity:0;border-radius:56px">
   <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
@@ -46,6 +51,11 @@
   const tl = gsap.timeline({ paused: true });
   tl.fromTo("#cam", { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0);
   // respira tranquilo (antes estaba agobiado)
+  // escribe todo el tiempo
+  tl.fromTo("#lapicero", { rotation: -32, x: 0 }, { rotation: -22, x: 4, duration: 0.14, repeat: 35, yoyo: true, ease: "sine.inOut" }, 0);
+  // garabato en constante movimiento
+  tl.to("#garabato", { rotation: 14, duration: 0.11, repeat: 23, yoyo: true, ease: "sine.inOut" }, 0);
+  tl.to("#garabato", { scale: 1.12, x: 4, duration: 0.17, repeat: 15, yoyo: true, ease: "sine.inOut" }, 0);
   // "cambio…": iPartner aparece arriba, baja y APLASTA la torre
   tl.fromTo("#app", { opacity: 0, scale: 0.4, y: -330 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.7)" }, CAMBIO);
   tl.to("#app", { y: 100, duration: 0.45, ease: "power3.in" }, CAMBIO + 0.6);
@@ -55,7 +65,8 @@
   tl.to("#app", { y: 0, duration: 0.5, ease: "back.out(2)" }, CAMBIO + 1.2);
   tl.to("#halo", { opacity: 1, duration: 0.5 }, CAMBIO + 1.15);
   tl.to("#app", { y: -10, duration: 0.9, repeat: 1, yoyo: true, ease: "sine.inOut" }, CAMBIO + 1.7);
-  // la persona se alegra
+  // la persona se alegra: se va el garabato, llegan los destellos
+  tl.to("#garabato", { opacity: 0, scale: 0.2, duration: 0.2, ease: "power2.in" }, CAMBIO + 1.05);
   tl.fromTo("#alegria", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.5)", transformOrigin: "50% 100%" }, CAMBIO + 1.2);
   ["#d1","#d2","#d3"].forEach((d, i) => {
     tl.to(d, { scale: 0.55, opacity: 0.5, duration: 0.22, repeat: 5, yoyo: true, ease: "sine.inOut", transformOrigin: "50% 50%" }, CAMBIO + 1.55 + i * 0.12);

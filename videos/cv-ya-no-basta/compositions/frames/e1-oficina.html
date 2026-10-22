@@ -137,15 +137,15 @@
   tl.to("#pilaAlta", { rotation: 0, duration: 0.1 }, 3.3);
 
   // TOMA 2 — "y más de la mitad arma su CV con IA"
-  tl.set("#tapa", { opacity: 1 }, 2.15);
-  tl.to("#tagR", { opacity: 0, duration: 0.2 }, 3.9);
-  tl.to("#cam", { scale: 1.3, duration: 0.6, ease: "power3.inOut" }, 3.9);
+  tl.set("#tapa", { opacity: 1 }, 2.8);
+  tl.to("#tagR", { opacity: 0, duration: 0.2 }, 3.55);
+  tl.to("#cam", { scale: 1.3, duration: 0.6, ease: "power3.inOut" }, 3.55);
   tl.fromTo("#icono", { opacity: 0, scale: 0.4, rotation: -60 },
-    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, 4.4);
-  tl.to("#icono", { rotation: 360, duration: 2.6, ease: "none" }, 4.85);
+    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, 4.05);
+  tl.to("#icono", { rotation: 360, duration: 2.6, ease: "none" }, 4.5);
   // cada hoja sale del ícono, hace un arco y cae EXACTA sobre la anterior
   ["#h1","#h2","#h3"].forEach((h, i) => {
-    const t0 = 4.9 + i * 0.42;
+    const t0 = 4.55 + i * 0.42;
     const top = 386 - i * 13;
     tl.set(h, { opacity: 1, x: 171, y: 278 - top - 7, rotation: -30, scale: 0.5 }, t0);  // salen del centro del logo
     tl.to(h, { keyframes: [
@@ -155,9 +155,9 @@
   });
 
   // GARABATO: aparece cuando se va "RECLUTADOR" y no para de moverse
-  tl.fromTo("#garabato", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.95);
-  tl.to("#garabato", { rotation: 14, duration: 0.11, repeat: 27, yoyo: true, ease: "sine.inOut" }, 4.25);
-  tl.to("#garabato", { scale: 1.12, x: 4, duration: 0.17, repeat: 17, yoyo: true, ease: "sine.inOut" }, 4.25);
+  tl.fromTo("#garabato", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.6);
+  tl.to("#garabato", { rotation: 14, duration: 0.11, repeat: 27, yoyo: true, ease: "sine.inOut" }, 3.9);
+  tl.to("#garabato", { scale: 1.12, x: 4, duration: 0.17, repeat: 17, yoyo: true, ease: "sine.inOut" }, 3.9);
   tl.to({}, { duration: 0.01 }, 6.99);
 
 

@@ -40,7 +40,7 @@
   <div id="h1" class="abs" style="left:580px;top:386px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
   <div id="h2" class="abs" style="left:580px;top:373px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
   <div id="h3" class="abs" style="left:580px;top:360px;box-sizing:border-box;border:2px solid #17122b;border-radius:2px;background:#efe8fa;width:201px;height:15px;opacity:0"></div>
-  <img id="icono" class="abs" src="../../elementos/icono-ia-blanco.png" style="left:782px;top:209px;width:138px;opacity:0">
+  <img id="icono" class="abs" src="../../elementos/icono-ia-blanco.png" style="left:782px;top:178px;width:138px;opacity:0">
   <!-- garabato de estrés sobre la cabeza del reclutador -->
   <img id="garabato" class="abs" src="../../elementos/garabato-blanco.png" style="left:300px;top:380px;width:130px;opacity:0">
   <!-- escritorio: bloque macizo, delante del reclutador -->
@@ -145,16 +145,16 @@
 
   // ÍCONO: aparece y lanza 3 hojas, más lento; la última cae justo al final
   tl.fromTo("#icono", { opacity: 0, scale: 0.4, rotation: -60 },
-    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, YMAS + 1.15);
-  tl.to("#icono", { rotation: 300, duration: FIN - (YMAS + 1.6), ease: "none" }, YMAS + 1.6);
-  const VUELO = 0.75, PASO = 0.6;
+    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, YMAS + 0.7);
+  tl.to("#icono", { rotation: 300, duration: FIN - (YMAS + 1.15), ease: "none" }, YMAS + 1.15);
+  const VUELO = 0.95, PASO = 0.65;  // vuelo más largo y suave
   ["#h1","#h2","#h3"].forEach((h, i) => {
     const t0 = FIN - VUELO - (2 - i) * PASO - 0.05;
     const top = 386 - i * 13;
-    tl.set(h, { opacity: 1, x: 171, y: 278 - top - 7, rotation: -30, scale: 0.5 }, t0);  // salen del centro del logo
+    tl.set(h, { opacity: 1, x: 171, y: 247 - top - 7, rotation: -30, scale: 0.5 }, t0);  // salen del centro del logo
     tl.to(h, { keyframes: [
-      { x: 90, y: -40 - i * 4, rotation: 12, scale: 0.85, duration: VUELO * 0.47, ease: "power1.out" },
-      { x: 0, y: 0, rotation: 0, scale: 1, duration: VUELO * 0.53, ease: "power2.in" } ] }, t0);
+      { x: 95, y: -55 - i * 4, rotation: 10, scale: 0.85, duration: VUELO * 0.5, ease: "sine.out" },
+      { x: 0, y: 0, rotation: 0, scale: 1, duration: VUELO * 0.5, ease: "sine.inOut" } ] }, t0);
     tl.to("#pilaAlta", { y: 2, duration: 0.05, yoyo: true, repeat: 1 }, t0 + VUELO);
   });
   tl.to({}, { duration: 0.01 }, FIN - 0.01);

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:Montserrat,sans-serif;
+     background:radial-gradient(ellipse 70% 50% at 50% 45%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  #halo{left:240px;top:330px;width:600px;height:600px;border-radius:50%;opacity:0;
+        background:radial-gradient(circle,rgba(123,63,242,.55),rgba(123,63,242,0) 65%);filter:blur(30px)}
+  #brazo{left:-21px;top:434px;width:840px}
+  #etq{left:540px;top:600px;font-size:64px;font-weight:800;color:#17122b;letter-spacing:.06em;opacity:0}
+  .item{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0}
+  .item span{font-family:"IBM Plex Mono",monospace;font-size:20px;font-weight:500;color:#c4a5e8;white-space:nowrap}
+</style></head><body>
+<div id="root" data-composition-id="e4-carpeta" data-width="1080" data-height="1350">
+  <div id="halo" class="abs"></div>
+  <div id="items"></div>
+  <img id="brazo" class="abs" src="../../elementos/mano-carpeta.png">
+  <div id="etq" class="abs">CV</div>
+</div>
+<script>
+  // Lo que sale de la carpeta: todo lo que el CV no muestra
+  const ITEMS = [
+    ["Experiencia", 250, 470, "check"], ["Habilidades", 430, 380, ""], ["Valores", 640, 395, "corazon"],
+    ["Motivación", 830, 470, "estrella"], ["Potencial", 175, 610, ""], ["Cultura", 905, 615, "corazon"],
+    ["Referencias", 330, 250, ""], ["Logros", 545, 225, "estrella"], ["Actitud", 760, 255, "check"]
+  ];
+  const MARCA = {
+    check: '<path d="M14 30 l7 7 l13 -15" stroke="#7b3ff2" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    corazon: '<path d="M24 40 C10 30 12 18 20 19 C23 19 24 22 24 22 C24 22 25 19 28 19 C36 18 38 30 24 40 Z" fill="#7b3ff2"/>',
+    estrella: '<path d="M24 16 l4 9 l9 1 l-7 6 l2 9 l-8 -5 l-8 5 l2 -9 l-7 -6 l9 -1 Z" fill="#7b3ff2"/>',
+    "": '<g fill="#c9bedd"><rect x="12" y="22" width="24" height="3" rx="1.5"/><rect x="12" y="30" width="20" height="3" rx="1.5"/><rect x="12" y="38" width="14" height="3" rx="1.5"/></g>'
+  };
+  const cont = document.getElementById("items"), els = [];
+  ITEMS.forEach(([txt, x, y, m], i) => {
+    const d = document.createElement("div");
+    d.className = "item abs";
+    d.style.left = x + "px"; d.style.top = y + "px";
+    d.innerHTML = '<svg width="48" height="56" viewBox="0 0 48 56"><path d="M4 4 h28 l12 12 v36 h-40 Z" fill="#f6f4fa"/>' +
+      '<path d="M32 4 v12 h12" fill="#d8d0ea"/>' + MARCA[m] + "</svg><span>" + txt + "</span>";
+    d.style.transform = "translateX(-50%)";
+    cont.appendChild(d); els.push(d);
+  });
+  gsap.set(els, { xPercent: -50 });
+  gsap.set("#etq", { xPercent: -50 });
+
+  // Marcas de la voz relativas al inicio (escena = 12.1 s del video)
+  //   0.0 "Por eso, hoy el CV es solo una parte."   2.88 "Hay mucho más que puedes evaluar…"
+  const HAY = 2.88;
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo("#brazo", { x: -700 }, { x: 0, duration: 0.8, ease: "power3.out" }, 0.05);
+  tl.fromTo("#etq", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.8);
+  tl.to("#halo", { opacity: 1, duration: 0.6 }, HAY - 0.3);
+  // las tarjetas salen de la boca de la carpeta (centro ~540,600) y se abren en arco
+  els.forEach((e, i) => {
+    const x = parseFloat(e.style.left), y = parseFloat(e.style.top);
+    const t = HAY + i * 0.17;
+    tl.fromTo(e, { opacity: 0, x: 540 - x, y: 600 - y, scale: 0.3 },
+      { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.65, ease: "back.out(1.4)" }, t);
+    tl.to(e, { y: -8, duration: 1.1, repeat: 1, yoyo: true, ease: "sine.inOut" }, t + 0.65);
+  });
+  tl.to("#brazo", { y: -6, duration: 1.2, repeat: 1, yoyo: true, ease: "sine.inOut" }, 1.0);
+  tl.to({}, { duration: 0.01 }, 5.94);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e4-carpeta"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

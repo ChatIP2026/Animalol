@@ -32,12 +32,10 @@
 
   <!-- la hoja en la que escribe -->
   <div class="abs" style="left:318px;top:803px;width:150px;height:10px;border-radius:2px;background:#efe8fa"></div>
-  <!-- el CV que trae el postulante -->
-  <div id="cv" class="abs" style="left:780px;top:640px;width:54px;height:40px;border-radius:3px;background:#efe8fa;z-index:4">
-    <div style="margin:9px 8px 0;height:4px;width:30px;background:#7a6d9c;border-radius:2px"></div>
-    <div style="margin:5px 8px 0;height:4px;width:36px;background:#7a6d9c;border-radius:2px"></div>
-    <div style="margin:5px 8px 0;height:4px;width:22px;background:#7a6d9c;border-radius:2px"></div>
-  </div>
+  <!-- el CV: una hoja igual a las de la pila (mismo ancho, grosor y contorno),
+       tomada por un extremo; la mano la tapa -->
+  <div id="cv" class="abs" style="left:608px;top:652px;width:210px;height:15px;box-sizing:border-box;
+       border:3px solid #17122b;border-radius:3px;background:#efe8fa;z-index:2"></div>
   <div id="applicant" class="abs" style="left:0;top:0;width:1080px;height:1350px;z-index:3">
   <!-- postulante: de pie, mirando hacia el escritorio -->
   <!-- brazo LEJANO del postulante: va DETRÁS del cuerpo (se pinta antes).
@@ -103,7 +101,7 @@
   tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.5);
 
   // deja el CV arriba de la pila
-  tl.to("#cv", { x: -150, y: 18, rotation: -4, duration: 0.4, ease: "power2.inOut" }, 1.1);
+  tl.to("#cv", { x: -32, y: 25, duration: 0.4, ease: "power2.inOut" }, 1.1);  // cae justo encima de la pila
   tl.to("#applicant", { x: -10, duration: 0.4, ease: "power2.inOut" }, 1.1);
 
   // se da vuelta y se va

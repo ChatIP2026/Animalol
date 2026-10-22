@@ -108,58 +108,56 @@
 </div>
 <script>
   const tl = gsap.timeline({ paused: true });
+  // Marcas de la voz (assets/audio/voz.mp3):
+  //   0.46 "cada vacante…"   3.55 "Y más de la mitad…"   7.0 fin (7.2 empieza la línea 3)
+  const CADA = 0.46, YMAS = 3.55, FIN = 7.0;
   gsap.set(["#tagR","#tagP"], { xPercent: -50 });
   tl.fromTo("#tagR", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
 
-  // LAPICERO: solo él se mueve, como escribiendo (trazos cortos y rápidos)
+  // LAPICERO: solo él se mueve, toda la escena
   tl.fromTo("#lapicero", { rotation: -44, x: 0 }, { rotation: -34, x: 4, duration: 0.14, repeat: 49, yoyo: true, ease: "sine.inOut" }, 0);
-  // POSTULANTE: entra deslizándose con el CV
-  tl.fromTo(["#applicant","#cv"], { x: 380 }, { x: 0, duration: 0.6, ease: "power2.out" }, 0);
-  tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.3);
 
-  // deja el CV arriba de la pila
-  tl.to("#cv", { x: -32, y: 25, duration: 0.35, ease: "power2.inOut" }, 0.65);  // cae justo encima de la pila
-  tl.to("#applicant", { x: -10, duration: 0.35, ease: "power2.inOut" }, 0.65);
-
-  // se da vuelta y se va
+  // POSTULANTE: entra con "cada vacante", deja el CV, se da vuelta y se va
+  tl.fromTo(["#applicant","#cv"], { x: 500 }, { x: 0, duration: 0.6, ease: "power2.out" }, CADA);
+  tl.fromTo("#tagP", { opacity: 0 }, { opacity: 1, duration: 0.25 }, CADA + 0.3);
+  tl.to("#cv", { x: -32, y: 25, duration: 0.35, ease: "power2.inOut" }, CADA + 0.7);  // cae justo encima de la pila
+  tl.to("#applicant", { x: -10, duration: 0.35, ease: "power2.inOut" }, CADA + 0.7);
   gsap.set("#applicant", { transformOrigin: "930px 700px" });
-  tl.set("#applicant", { scaleX: -1 }, 1.1);
-  tl.to("#applicant", { x: 420, duration: 0.9, ease: "power2.in" }, 1.15);
-  tl.to("#tagP", { opacity: 0, duration: 0.2 }, 1.1);
+  tl.set("#applicant", { scaleX: -1 }, CADA + 1.2);
+  tl.to("#tagP", { opacity: 0, duration: 0.2 }, CADA + 1.2);
+  tl.to("#applicant", { x: 420, duration: 0.9, ease: "power2.in" }, CADA + 1.25);
 
-
-  // TRANSICIÓN: la pila se dispara hasta ser una torre
+  // TORRE: crece con "Y más de…"
   gsap.set("#pila", { transformOrigin: "50% 100%" });
-  tl.to(["#pila","#cv"], { scaleY: 1.35, opacity: 0, duration: 0.25, ease: "power2.in" }, 2.05);
+  tl.to(["#pila","#cv"], { scaleY: 1.35, opacity: 0, duration: 0.25, ease: "power2.in" }, YMAS - 0.05);
   tl.fromTo("#pilaAlta", { opacity: 0, scaleY: 0.3, scaleX: 0.92 },
-    { opacity: 1, scaleY: 1, scaleX: 1, duration: 0.7, ease: "back.out(1.6)" }, 2.1);
-  tl.to("#pilaAlta", { rotation: 1.2, duration: 0.12, repeat: 3, yoyo: true, ease: "sine.inOut" }, 2.8);
-  tl.to("#pilaAlta", { rotation: 0, duration: 0.1 }, 3.3);
+    { opacity: 1, scaleY: 1, scaleX: 1, duration: 0.7, ease: "back.out(1.6)" }, YMAS);
+  tl.set("#tapa", { opacity: 1 }, YMAS + 0.7);
+  tl.to("#pilaAlta", { rotation: 1.2, duration: 0.12, repeat: 3, yoyo: true, ease: "sine.inOut" }, YMAS + 0.7);
+  tl.to("#pilaAlta", { rotation: 0, duration: 0.1 }, YMAS + 1.2);
 
-  // TOMA 2 — "y más de la mitad arma su CV con IA"
-  tl.set("#tapa", { opacity: 1 }, 2.8);
-  tl.to("#tagR", { opacity: 0, duration: 0.2 }, 3.55);
-  tl.to("#cam", { scale: 1.3, duration: 0.6, ease: "power3.inOut" }, 3.55);
+  // ZOOM + garabato (se va "RECLUTADOR")
+  tl.to("#tagR", { opacity: 0, duration: 0.2 }, YMAS + 0.75);
+  tl.to("#cam", { scale: 1.3, duration: 0.6, ease: "power3.inOut" }, YMAS + 0.75);
+  tl.fromTo("#garabato", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, YMAS + 0.8);
+  tl.to("#garabato", { rotation: 14, duration: 0.11, repeat: 23, yoyo: true, ease: "sine.inOut" }, YMAS + 1.1);
+  tl.to("#garabato", { scale: 1.12, x: 4, duration: 0.17, repeat: 15, yoyo: true, ease: "sine.inOut" }, YMAS + 1.1);
+
+  // ÍCONO: aparece y lanza 3 hojas, más lento; la última cae justo al final
   tl.fromTo("#icono", { opacity: 0, scale: 0.4, rotation: -60 },
-    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, 4.05);
-  tl.to("#icono", { rotation: 360, duration: 2.6, ease: "none" }, 4.5);
-  // cada hoja sale del ícono, hace un arco y cae EXACTA sobre la anterior
+    { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, YMAS + 1.15);
+  tl.to("#icono", { rotation: 300, duration: FIN - (YMAS + 1.6), ease: "none" }, YMAS + 1.6);
+  const VUELO = 0.75, PASO = 0.6;
   ["#h1","#h2","#h3"].forEach((h, i) => {
-    const t0 = 4.55 + i * 0.42;
+    const t0 = FIN - VUELO - (2 - i) * PASO - 0.05;
     const top = 386 - i * 13;
     tl.set(h, { opacity: 1, x: 171, y: 278 - top - 7, rotation: -30, scale: 0.5 }, t0);  // salen del centro del logo
     tl.to(h, { keyframes: [
-      { x: 90, y: -40 - i * 4, rotation: 12, scale: 0.85, duration: 0.2, ease: "power1.out" },
-      { x: 0, y: 0, rotation: 0, scale: 1, duration: 0.22, ease: "power2.in" } ] }, t0);
-    tl.to("#pilaAlta", { y: 2, duration: 0.06, yoyo: true, repeat: 1 }, t0 + 0.42);
+      { x: 90, y: -40 - i * 4, rotation: 12, scale: 0.85, duration: VUELO * 0.47, ease: "power1.out" },
+      { x: 0, y: 0, rotation: 0, scale: 1, duration: VUELO * 0.53, ease: "power2.in" } ] }, t0);
+    tl.to("#pilaAlta", { y: 2, duration: 0.05, yoyo: true, repeat: 1 }, t0 + VUELO);
   });
-
-  // GARABATO: aparece cuando se va "RECLUTADOR" y no para de moverse
-  tl.fromTo("#garabato", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.6);
-  tl.to("#garabato", { rotation: 14, duration: 0.11, repeat: 27, yoyo: true, ease: "sine.inOut" }, 3.9);
-  tl.to("#garabato", { scale: 1.12, x: 4, duration: 0.17, repeat: 17, yoyo: true, ease: "sine.inOut" }, 3.9);
-  tl.to({}, { duration: 0.01 }, 6.99);
-
+  tl.to({}, { duration: 0.01 }, FIN - 0.01);
 
   window.__timelines = window.__timelines || {};
   window.__timelines["e1-oficina"] = tl;

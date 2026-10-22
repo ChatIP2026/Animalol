@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:Montserrat,sans-serif;
+     background:radial-gradient(ellipse 70% 50% at 50% 45%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  #halo{left:240px;top:330px;width:600px;height:600px;border-radius:50%;opacity:0;
+        background:radial-gradient(circle,rgba(123,63,242,.55),rgba(123,63,242,0) 65%);filter:blur(30px)}
+  #brazo{left:-50px;top:431px;width:839px}
+  .item{width:104px;height:104px;border-radius:50%;background:#7b3ff2;opacity:0;
+        box-shadow:0 0 0 4px rgba(246,244,250,.18),0 10px 30px rgba(123,63,242,.45);
+        display:flex;align-items:center;justify-content:center}
+</style></head><body>
+<div id="root" data-composition-id="e4-carpeta" data-width="1080" data-height="1350">
+  <div id="halo" class="abs"></div>
+  <div id="items"></div>
+  <img id="brazo" class="abs" src="../../elementos/mano-carpeta.png">
+</div>
+<script>
+  // Lo que sale de la carpeta: un ícono por servicio, SIN texto (servicios delicados de nombrar)
+  const G = 'fill="none" stroke="#f6f4fa" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"';
+  const ICON = {
+    riesgo:     '<g transform="translate(24 31) scale(1.22) translate(-24 -31)"><path d="M5 34 A19 19 0 0 1 43 34" stroke-width="3.6"/><path d="M10 25 l4 2.5 M24 15 v5 M38 25 l-4 2.5"/><path d="M24 34 L34 19" stroke-width="3.6"/><circle cx="24" cy="34" r="4" fill="#f6f4fa"/></g>',      // nivel de riesgo: velocímetro
+    delictivo:  '<path d="M24 6 L39 12 V23 C39 33 32 39 24 42 C16 39 9 33 9 23 V12 Z"/><path d="M24 16 V27"/><path d="M24 33 v.5"/>',   // riesgo delictivo: escudo
+    crediticio: '<rect x="7" y="13" width="34" height="23" rx="3"/><path d="M7 20 H41"/><path d="M12 30 H20"/>',                     // riesgo crediticio: tarjeta
+    sunedu:     '<path d="M4 19 L24 10 L44 19 L24 28 Z"/><path d="M13 23 V32 C13 36 35 36 35 32 V23"/><path d="M44 19 V30"/>',     // verificación de título: birrete
+    salario:    '<path d="M10 39 V29 M19 39 V23 M28 39 V17"/><circle cx="37" cy="14" r="6"/><path d="M37 11 V17"/>',             // historial salarial: barras + moneda
+    extranjero: '<circle cx="24" cy="24" r="16"/><ellipse cx="24" cy="24" rx="7" ry="16"/><path d="M8 24 H40 M11 16 H37 M11 32 H37"/>', // validación extranjero: globo
+    conducta:   '<path d="M23 10 C17 6 9 10 10 17 C5 19 5 27 9 30 C8 37 16 41 21 37 C22 38 23 38 23 38 Z"/><path d="M25 10 C31 6 39 10 38 17 C43 19 43 27 39 30 C40 37 32 41 27 37 C26 38 25 38 25 38 Z"/><path d="M15 19 c3 0 4 3 4 5 M33 19 c-3 0 -4 3 -4 5"/>' // validación conductual: cerebro
+  };
+  // arco sobre la carpeta (centros)
+  const ITEMS = [["riesgo",205,560],["delictivo",255,380],["crediticio",390,255],["sunedu",540,210],
+                 ["salario",690,255],["extranjero",825,380],["conducta",875,560]];
+  const cont = document.getElementById("items"), els = [];
+  ITEMS.forEach(([k, x, y]) => {
+    const d = document.createElement("div");
+    d.className = "item abs";
+    d.style.left = (x - 52) + "px"; d.style.top = (y - 52) + "px";
+    d.dataset.cx = x; d.dataset.cy = y;
+    d.innerHTML = '<svg width="58" height="58" viewBox="0 0 48 48" ' + G + '>' + ICON[k] + '</svg>';
+    cont.appendChild(d); els.push(d);
+  });
+
+  // Marcas de la voz relativas al inicio (escena = 12.1 s del video)
+  //   0.0 "Por eso, hoy el CV es solo una parte."   2.88 "Hay mucho más que puedes evaluar…"
+  const HAY = 3.2;
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo("#brazo", { x: -700 }, { x: 0, duration: 0.8, ease: "power3.out" }, 0.05);
+  tl.to("#halo", { opacity: 1, duration: 0.6 }, HAY - 0.3);
+  // las tarjetas salen de la boca de la carpeta (centro ~540,600) y se abren en arco
+  els.forEach((e, i) => {
+    const x = +e.dataset.cx, y = +e.dataset.cy;
+    const t = HAY + i * 0.22;
+    tl.fromTo(e, { opacity: 0, x: 540 - x, y: 560 - y, scale: 0.3 },
+      { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.65, ease: "back.out(1.4)" }, t);
+    tl.to(e, { y: -8, duration: 1.1, repeat: 1, yoyo: true, ease: "sine.inOut" }, t + 0.65);
+  });
+  // flota apenas termina de centrarse, y sigue hasta el final
+  tl.to("#brazo", { y: -8, duration: 1.2, repeat: 3, yoyo: true, ease: "sine.inOut" }, 0.85);
+  tl.to({}, { duration: 0.01 }, 6.49);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e4-carpeta"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

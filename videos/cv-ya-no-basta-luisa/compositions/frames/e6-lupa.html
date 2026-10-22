@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:Montserrat,sans-serif;
+     background:radial-gradient(ellipse 70% 50% at 50% 47%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  .mundo{position:absolute;left:0;top:0;width:1900px;height:2100px}
+  .circ{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;
+        text-align:center;font-weight:700;box-sizing:border-box}
+  /* fuera de la lupa: solo el contorno tenue, sin palabras */
+  #tenue .circ{border:3px solid rgba(196,165,232,.2)}
+  /* dentro de la lupa: nítido */
+  #nitida .circ{border:3px solid rgba(246,244,250,.8);color:#f6f4fa}
+  #lupaG{left:0;top:0;width:1080px;height:1350px;pointer-events:none}
+  #lente{left:362px;top:462px;width:356px;height:356px;border-radius:50%;overflow:hidden;background:#17122b;opacity:0}
+  #instr{left:340px;top:440px;width:400px;height:400px;overflow:visible}
+</style></head><body>
+<div id="root" data-composition-id="e6-lupa" data-width="1080" data-height="1350">
+  <div id="campo" class="abs" style="left:0;top:0;opacity:0"><div id="tenue" class="mundo"></div></div>
+  <div id="lupaG" class="abs">
+    <div id="lente" class="abs"><div id="nitida" class="mundo"></div></div>
+    <!-- el reloj: su aro es el mismo aro de la lupa -->
+    <svg id="instr" class="abs" viewBox="0 0 400 400" style="opacity:0">
+      <circle id="fondoReloj" cx="200" cy="200" r="180" fill="rgba(123,63,242,.18)"/>
+      <g id="marcas" stroke="#f6f4fa" stroke-width="8" stroke-linecap="round">
+        <path d="M200 40 v22"/><path d="M200 338 v22"/><path d="M40 200 h22"/><path d="M338 200 h22"/>
+      </g>
+      <g id="agujas">
+        <g id="horario"><path d="M200 200 V112" stroke="#f6f4fa" stroke-width="14" stroke-linecap="round"/></g>
+        <g id="minutero"><path d="M200 200 V70" stroke="#c4a5e8" stroke-width="9" stroke-linecap="round"/></g>
+        <circle cx="200" cy="200" r="14" fill="#f6f4fa"/>
+      </g>
+      <circle id="aroReloj" cx="200" cy="200" r="180" fill="none" stroke="#f6f4fa" stroke-width="10"/>
+    </svg>
+    <!-- la lupa del usuario, tal cual: su aro coincide con el aro del reloj (escala 0.478) -->
+    <img id="lupaImg" class="abs" src="../../elementos/lupa.png" style="left:268px;top:413px;width:605px;opacity:0">
+  </div>
+</div>
+<script>
+  // mundo de círculos (más grande que la pantalla: la cámara se desplaza sobre él)
+  const C = [
+    ["Comportamiento",380,420,150],["Experiencia",760,330,130],["Puntualidad",1150,440,150],["Iniciativa",1540,380,120],
+    ["Desempeño",560,760,135],["Actitud",960,720,120],["Liderazgo",1350,800,125],["Ética",220,800,110],
+    ["Trabajo en equipo",380,1150,150],["Compromiso",800,1100,140],["Comunicación",1250,1180,150],["Adaptación",1640,1150,125],
+    ["Responsabilidad",580,1520,150],["Confianza",1000,1480,125],["Candidato ideal",1400,1560,150],["Empatía",220,1500,115],
+    ["Disciplina",820,1860,120],["Creatividad",1250,1900,130]
+  ];
+  const OBJ = 14;
+  function llenar(id) {
+    const capa = document.getElementById(id);
+    C.forEach(([txt, x, y, r], i) => {
+      const d = document.createElement("div");
+      d.className = "circ"; d.style.left = (x - r) + "px"; d.style.top = (y - r) + "px";
+      d.style.width = d.style.height = 2 * r + "px"; d.style.fontSize = Math.round(r / 4.3) + "px";
+      if (id === "nitida") d.textContent = txt;   // afuera de la lupa no hay palabras
+      if (i === OBJ) d.id = id + "-obj";
+      capa.appendChild(d);
+    });
+  }
+  llenar("tenue"); llenar("nitida");
+
+  // cámara: (fx,fy) = desplazamiento del mundo; (lx,ly) = leve deriva de la lupa
+  const CX = 540, CY = 640;
+  const cam = { fx: CX - 760, fy: CY - 560, lx: 0, ly: 0 };
+  function aplicar() {
+    gsap.set("#tenue", { x: cam.fx, y: cam.fy });
+    gsap.set("#lupaG", { x: cam.lx, y: cam.ly });
+    gsap.set("#nitida", { x: cam.fx - 362 - cam.lx, y: cam.fy - 462 - cam.ly });
+  }
+  aplicar();
+  const ir = i => ({ fx: CX - C[i][1], fy: CY - C[i][2] });
+
+  // Marcas de la voz (escena = 23.38 s del video)
+  const DUDAS = 2.47, DESPUES = 5.34, FIN = 7.19;
+  const tl = gsap.timeline({ paused: true });
+  // RELOJ
+  tl.fromTo("#instr", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)", transformOrigin: "50% 50%" }, 0.05);
+  tl.fromTo("#minutero", { rotation: 0 }, { rotation: 1440, duration: 1.85, ease: "power1.inOut", svgOrigin: "200 200" }, 0.15);
+  tl.fromTo("#horario", { rotation: 0 }, { rotation: 120, duration: 1.85, ease: "power1.inOut", svgOrigin: "200 200" }, 0.15);
+  // TRANSICIÓN: el reloj se vuelve lupa (se va todo menos el aro, y crece el mango)
+  tl.to(["#agujas","#marcas","#fondoReloj"], { opacity: 0, duration: 0.3 }, DUDAS - 0.3);
+  tl.to("#lupaImg", { opacity: 1, duration: 0.3 }, DUDAS - 0.2);
+  tl.to("#aroReloj", { opacity: 0, duration: 0.3 }, DUDAS - 0.2);
+  tl.to("#lente", { opacity: 1, duration: 0.3 }, DUDAS);
+  tl.to("#campo", { opacity: 1, duration: 0.4 }, DUDAS);
+  // la cámara recorre el mundo junto a la lupa
+  const RUTA = [1, 4, 6, 9, 12];
+  const paso = (DESPUES - DUDAS - 0.1) / RUTA.length;
+  RUTA.forEach((i, k) => {
+    tl.to(cam, { ...ir(i), lx: k % 2 ? 14 : -14, ly: k % 2 ? -10 : 10,
+      duration: paso * 0.85, ease: "power2.inOut", onUpdate: aplicar }, DUDAS + 0.05 + k * paso);
+  });
+  // "después de contratar." — llega al candidato ideal, que se enciende en verde
+  tl.to(cam, { ...ir(OBJ), lx: 0, ly: 0, duration: 0.6, ease: "power3.out", onUpdate: aplicar }, DESPUES);
+  tl.to("#nitida-obj", { color: "#3cf2b0", borderColor: "#3cf2b0", duration: 0.3,
+     textShadow: "0 0 18px rgba(60,242,176,.95)", boxShadow: "0 0 40px rgba(60,242,176,.55), inset 0 0 30px rgba(60,242,176,.25)" }, DESPUES + 0.5);
+  tl.to("#lupaG", { scale: 1.04, duration: 0.25, yoyo: true, repeat: 1, transformOrigin: "540px 640px" }, DESPUES + 0.55);
+  tl.to({}, { duration: 0.01 }, FIN - 0.01);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e6-lupa"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

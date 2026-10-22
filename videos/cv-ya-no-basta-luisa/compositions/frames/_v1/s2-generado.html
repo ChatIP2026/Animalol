@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="../base.css" />
+    <script src="../../vendor/gsap.min.js"></script>
+    <style>
+      #stage { position: absolute; inset: 0; transform-origin: 50% 42%; }
+      #focus { left: 447px; top: 551px; z-index: 6; }
+      #focus i { width: 0; }
+      #caret {
+        position: absolute; width: 4px; height: 16px;
+        background: var(--violet); z-index: 7;
+        box-shadow: 0 0 14px var(--violet);
+      }
+      #tag {
+        position: absolute; left: 0; right: 0; top: 232px; text-align: center;
+        z-index: 10; opacity: 0;
+      }
+      #half {
+        position: absolute; left: 0; right: 0; bottom: 128px; text-align: center;
+        z-index: 10; opacity: 0;
+      }
+      #half .n { font-size: 132px; font-weight: 800; line-height: 1;
+        background: linear-gradient(100deg, #fff 18%, var(--lavender) 82%);
+        -webkit-background-clip: text; background-clip: text; color: transparent; }
+      #half .t { font-size: 34px; font-weight: 700; color: var(--ink); margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="s2-generado" data-width="1080" data-height="1350">
+      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
+      <div class="glow glow-a" data-layout-allow-overflow></div>
+      <div class="glow glow-b" data-layout-allow-overflow></div>
+
+      <div id="stage">
+        <div class="swarm" id="swarm"></div>
+        <div class="cv" id="focus">
+          <i class="w90"></i><i class="w70"></i><i class="w90"></i><i class="w55"></i>
+        </div>
+        <div id="caret"></div>
+      </div>
+
+      <div id="tag" class="eyebrow">generando perfil…</div>
+      <div id="half"><div class="n">1 de cada 2</div><div class="t">lo escribe con IA</div></div>
+      <div class="vignette"></div>
+    </div>
+
+    <script>
+      const swarm = document.getElementById("swarm");
+      const COLS = 5, ROWS = 6, CW = 216, CH = 225;
+      const all = [];
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (r === 2 && c === 2) continue;
+          const el = document.createElement("div");
+          el.className = "cv";
+          el.setAttribute("data-layout-allow-overflow", "");
+          el.innerHTML = '<i class="w90"></i><i class="w70"></i><i class="w90"></i><i class="w55"></i>';
+          el.style.left = 24 + c * CW + Math.sin((r * COLS + c) * 1.7) * 14 + "px";
+          el.style.top = 110 + r * CH + Math.cos((r * COLS + c) * 2.3) * 12 + "px";
+          swarm.appendChild(el);
+          all.push(el);
+        }
+      }
+      // la mitad exacta, elegida de forma determinista (alternando)
+      const aiCards = all.filter((_, i) => i % 2 === 0);
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", { y: 10 }, { y: 50, duration: 4.2, ease: "none" }, 0);
+
+      // TOMA 3 (0 - 1.8): primer plano del CV escribiéndose solo
+      tl.set("#stage", { scale: 2.45 });
+      tl.set("#focus", { opacity: 1 });
+      tl.to("#stage", { scale: 2.3, duration: 1.75, ease: "none" }, 0);
+      tl.fromTo("#tag", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3 }, 0.1);
+
+      // las líneas se "escriben": crecen en ancho, una tras otra
+      const lines = [
+        { sel: "#focus i:nth-of-type(1)", w: "90%" },
+        { sel: "#focus i:nth-of-type(2)", w: "70%" },
+        { sel: "#focus i:nth-of-type(3)", w: "90%" },
+        { sel: "#focus i:nth-of-type(4)", w: "55%" },
+      ];
+      lines.forEach((l, i) => {
+        tl.to(l.sel, { width: l.w, duration: 0.3, ease: "steps(9)" }, 0.18 + i * 0.33);
+      });
+      // el cursor acompaña la línea que se está escribiendo
+      // el cursor se mueve SOLO con transforms (x/y): left/top snapean a pixel entero
+      // y producen stutter bajo el capturador frame a frame.
+      gsap.set("#caret", { left: 463, top: 609 });
+      tl.set("#caret", { opacity: 1 });
+      lines.forEach((l, i) => {
+        tl.to("#caret", { y: i * 20, duration: 0.05, ease: "steps(1)" }, 0.18 + i * 0.33);
+        tl.fromTo("#caret", { x: 0 }, { x: (parseInt(l.w) / 100) * 154,
+          duration: 0.3, ease: "steps(9)" }, 0.18 + i * 0.33);
+      });
+      tl.to("#caret", { opacity: 0, duration: 0.12, repeat: 7, yoyo: true, ease: "steps(1)" }, 0.2);
+
+      // TOMA 4 (1.8 - 4.2): retroceso y la mitad del enjambre vira a morado
+      tl.to("#tag", { opacity: 0, duration: 0.2 }, 1.72);
+      tl.to("#caret", { opacity: 0, duration: 0.15 }, 1.72);
+      tl.to("#stage", { scale: 0.92, duration: 1.15, ease: "power3.inOut" }, 1.8);
+      tl.fromTo(swarm, { opacity: 0 }, { opacity: 1, duration: 0.45 }, 1.85);
+      tl.to(aiCards, {
+        duration: 0.5, ease: "power2.out", stagger: { each: 0.02, from: "center" },
+        onStart: function () { this.targets().forEach((t) => t.classList.add("ai")); },
+      }, 2.35);
+      tl.fromTo("#half", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 2.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s2-generado"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

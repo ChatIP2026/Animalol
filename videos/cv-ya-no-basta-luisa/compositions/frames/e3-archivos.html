@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../../vendor/gsap.min.js"></script>
+<style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:Montserrat,sans-serif;
+     background:radial-gradient(ellipse 70% 50% at 30% 30%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  /* laptop */
+  #pantalla{left:60px;top:250px;width:960px;height:740px;border-radius:30px;background:#2a2440;
+     box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  #base{left:18px;top:988px;width:1044px;height:34px;border-radius:0 0 26px 26px;background:#4b4170}
+  #muesca{left:470px;top:988px;width:140px;height:12px;border-radius:0 0 10px 10px;background:#3d3360}
+  /* ventana del explorador (Finder) */
+  #ventana{left:84px;top:274px;width:912px;height:692px;border-radius:12px;background:#f7f6fa;overflow:hidden}
+  #barra{left:0;top:0;width:912px;height:56px;background:#e9e7ef;border-bottom:1px solid #d6d3de}
+  .luz{top:20px;width:15px;height:15px;border-radius:50%}
+  #titulo{left:0;right:0;top:16px;text-align:center;font-size:20px;font-weight:600;color:#4b4170}
+  #lateral{left:0;top:56px;width:220px;height:636px;background:#efedf4;border-right:1px solid #dcd9e3}
+  .sec{font-size:15px;font-weight:700;color:#8d86a3;letter-spacing:.08em;margin:22px 0 10px 22px}
+  .item{font-size:19px;color:#3d3360;margin:0 0 12px 22px;display:flex;align-items:center;gap:10px}
+  .item i{display:inline-block;width:16px;height:13px;border-radius:3px;background:#9fb9d6}
+  .item.sel{background:#d9d3ec;margin:0 10px 12px 10px;padding:6px 12px;border-radius:8px}
+  #zona{left:220px;top:56px;width:692px;height:636px;overflow:hidden}
+  #grilla{position:absolute;left:18px;top:18px;width:656px;display:grid;grid-template-columns:repeat(5,1fr);gap:18px 6px}
+  .carpeta{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0}
+  .carpeta .nom{font-size:15px;font-weight:600;color:#3d3360;background:#e3e0ea;border-radius:9px;padding:2px 10px}
+  #pie{left:220px;top:660px;width:692px;height:32px;background:#efedf4;border-top:1px solid #dcd9e3;
+       font-size:16px;color:#6b6385;text-align:center;line-height:32px}
+  /* persona + X */
+  #velo{left:84px;top:274px;width:912px;height:692px;border-radius:12px;background:rgba(23,18,43,.78);opacity:0}
+  #persona{left:390px;top:470px;width:300px;opacity:0}
+  #equis{left:390px;top:470px;width:300px;height:300px;opacity:0}
+</style></head><body>
+<div id="root" data-composition-id="e3-archivos" data-width="1080" data-height="1350">
+  <div id="laptop" class="abs" style="inset:0">
+    <div id="pantalla" class="abs"></div>
+    <div id="base" class="abs"></div><div id="muesca" class="abs"></div>
+    <div id="ventana" class="abs">
+      <div id="barra" class="abs">
+        <div class="abs luz" style="left:20px;background:#ff5f57"></div>
+        <div class="abs luz" style="left:44px;background:#febc2e"></div>
+        <div class="abs luz" style="left:68px;background:#28c840"></div>
+        <div id="titulo" class="abs">Postulaciones</div>
+      </div>
+      <div id="lateral" class="abs">
+        <div class="sec">FAVORITOS</div>
+        <div class="item"><i></i>Escritorio</div>
+        <div class="item"><i></i>Documentos</div>
+        <div class="item"><i></i>Descargas</div>
+        <div class="item sel"><i></i>Postulaciones</div>
+        <div class="sec">DISPOSITIVOS</div>
+        <div class="item"><i></i>Disco</div>
+      </div>
+      <div id="zona" class="abs"><div id="grilla"></div></div>
+      <div id="pie" class="abs"><span id="cuenta">0</span> elementos</div>
+    </div>
+    <div id="velo" class="abs"></div>
+    <img id="persona" class="abs" src="../../elementos/icono-persona-blanco.png">
+    <svg id="equis" class="abs" viewBox="0 0 300 300">
+      <g stroke="#ff3b4e" stroke-width="30" stroke-linecap="round" style="filter:drop-shadow(0 0 18px rgba(255,59,78,.75))">
+        <path d="M40 40 L260 260"/><path d="M260 40 L40 260"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<script>
+  // Carpetas iguales, numeradas: se van sumando hasta llenar la ventana
+  const FOLDER = '<svg width="92" height="74" viewBox="0 0 92 74">' +
+    '<path d="M4 10 a6 6 0 0 1 6 -6 h24 l8 8 h40 a6 6 0 0 1 6 6 v4 H4 Z" fill="#7fb3dd"/>' +
+    '<rect x="4" y="18" width="84" height="52" rx="6" fill="#9cc8ea"/>' +
+    '<rect x="4" y="18" width="84" height="6" fill="#b8d8f1"/></svg>';
+  const N = 30, grilla = document.getElementById("grilla"), carpetas = [];
+  for (let i = 1; i <= N; i++) {
+    const d = document.createElement("div");
+    d.className = "carpeta";
+    d.innerHTML = FOLDER + '<div class="nom">CV ' + i + "</div>";
+    grilla.appendChild(d); carpetas.push(d);
+  }
+  // Marcas de la voz relativas al inicio de la escena (escena = 7.0 s del video)
+  const RESULT = 0.05, CIENTOS = 1.13, IGUALES_FIN = 2.88, YDICEN = 2.93, POCO = 3.45;
+  const tl = gsap.timeline({ paused: true });
+  // "El resultado:" — entra la laptop
+  tl.fromTo("#laptop", { opacity: 0, scale: 0.88, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "power3.out" }, RESULT);
+  // "cientos de CVs que se ven iguales" — carpetas cada vez más rápido hasta llenar
+  carpetas.forEach((c, i) => {
+    const t = CIENTOS + Math.pow(i / N, 0.6) * (IGUALES_FIN - CIENTOS - 0.2);
+    tl.fromTo(c, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.18, ease: "back.out(2.2)" }, t);
+  });
+  const n = { v: 0 }, cuenta = document.getElementById("cuenta");
+  tl.to(n, { v: 412, duration: IGUALES_FIN - CIENTOS, ease: "power2.in",
+    onUpdate: () => { cuenta.textContent = Math.round(n.v); } }, CIENTOS);
+  // "y dicen…" — se oscurece y aparece la persona
+  tl.to("#velo", { opacity: 1, duration: 0.3 }, YDICEN);
+  tl.to("#ventana .item, #ventana .sec, #titulo, .carpeta .nom, #pie", { opacity: 0, duration: 0.3 }, YDICEN);
+  tl.fromTo("#persona", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, YDICEN + 0.05);
+  // "poco" — la X roja la tacha
+  tl.fromTo("#equis", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.22, ease: "power3.in" }, POCO);
+  tl.to("#persona", { x: 6, duration: 0.05, repeat: 5, yoyo: true }, POCO + 0.22);
+  tl.to({}, { duration: 0.01 }, 5.39);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["e3-archivos"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

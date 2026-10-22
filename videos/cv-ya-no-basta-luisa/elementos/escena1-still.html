@@ -1,0 +1,80 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  html,body{margin:0;width:1080px;height:1350px;overflow:hidden;background:#17122b}
+  #s{position:relative;width:1080px;height:1350px;overflow:hidden;
+     background:radial-gradient(ellipse 70% 50% at 30% 30%,#2a1b55 0%,#17122b 70%)}
+  .abs{position:absolute}
+  .tag{position:absolute;font:500 24px "IBM Plex Mono",monospace;letter-spacing:.2em;
+       color:#c4a5e8;transform:translateX(-50%);white-space:nowrap}
+</style></head><body><div id="s">
+  <!-- piso -->
+  <div class="abs" style="left:0;right:0;top:1078px;height:4px;background:#3d3360"></div>
+
+  <!-- silla -->
+  <div class="abs" style="left:176px;top:700px;width:22px;height:200px;border-radius:11px;background:#4b4170"></div>
+  <div class="abs" style="left:180px;top:880px;width:150px;height:20px;border-radius:8px;background:#4b4170"></div>
+  <div class="abs" style="left:244px;top:900px;width:20px;height:178px;background:#4b4170"></div>
+  <div class="abs" style="left:198px;top:1066px;width:112px;height:14px;border-radius:7px;background:#4b4170"></div>
+  <!-- reclutador: queda DETRÁS del escritorio -->
+  <img class="abs" src="personaje/reclutador-sentado-v3-blanco.png" style="left:-112px;top:402px;width:827px">
+
+  <!-- pila de CVs sobre el escritorio -->
+  <img class="abs" src="pila.png" style="left:526px;top:631px;width:332px">
+
+  <!-- escritorio: bloque macizo, delante del reclutador -->
+  <div class="abs" style="left:300px;top:812px;width:560px;height:24px;border-radius:6px;background:#c9bedd"></div>
+  <div class="abs" style="left:322px;top:836px;width:516px;height:244px;background:#6f6294"></div>
+
+  <!-- la hoja en la que escribe -->
+  <div class="abs" style="left:318px;top:803px;width:150px;height:10px;border-radius:2px;background:#efe8fa"></div>
+  <!-- postulante: de pie, mirando hacia el escritorio -->
+  <!-- brazo LEJANO del postulante: va DETRÁS del cuerpo (se pinta antes).
+       El torso tapa hombro y brazo superior; solo asoman antebrazo y mano.
+       Mismo blanco que el cuerpo. -->
+  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
+    <path d="M900 476 L874 600 L828 644" stroke="#f6f4fa" stroke-width="40" fill="none"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- la misma mano del diseño original, espejada y girada según el antebrazo -->
+    <!-- mano: manopla ovalada, un poco más ancha que la manga (eso marca la muñeca),
+         con el eje mayor alineado al antebrazo, igual que la mano original -->
+    <ellipse cx="808" cy="664" rx="25" ry="31" transform="rotate(44 808 664)" fill="#f6f4fa"/>
+    <!-- une hombro y brazo en una sola curva (sin muesca entre las dos jorobas) -->
+    <path d="M914 446 C898 446 884 458 879 484 L904 506 L920 470 Z" fill="#f6f4fa"/>
+  </svg>
+  <!-- coordenadas del recorte original (270x1180), mirando a la derecha; el flip lo da vuelta -->
+  <svg class="abs" viewBox="0 0 270 1180" style="left:846px;top:286px;height:794px;transform:scaleX(-1);overflow:visible">
+    <image href="personaje/postulante-de-pie-blanco.png" width="270" height="1180"/>
+    <!-- sin corbata: se rellena el hueco y queda solo el cuello abierto -->
+    <path d="M100 222 L166 236 Q184 242 189 270 L190 300 L203 512 L171 549 L135 512 L104 262 Z" fill="#f6f4fa"/>
+    <!-- cuello redondo: anillo concéntrico a la cabeza -->
+    <path fill="#17122b" fill-rule="evenodd" d="
+      M24 119 a115 121 0 1 0 230 0 a115 121 0 1 0 -230 0 Z
+      M39 119 a100 105 0 1 0 200 0 a100 105 0 1 0 -200 0 Z"/>
+    <!-- pelo: volumen arriba y atrás, con flequillo adelante -->
+    <path d="M40 182 C14 112 46 22 132 10 C196 2 246 38 252 88
+             L236 82 L240 104 L220 92 L216 112 L198 96
+             C162 74 104 88 66 156 Z"
+          fill="#f6f4fa" stroke="#17122b" stroke-width="7" stroke-linejoin="round"/>
+  </svg>
+
+  <!-- cortes oscuros del brazo lejano, como los del brazo original:
+       1) a lo largo del borde delantero del torso (leído de la imagen), donde el brazo pasa por detrás
+       2) en la muñeca -->
+  <svg class="abs" style="left:0;top:0" width="1080" height="1350">
+    <defs><filter id="suave" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.7"/></filter></defs>
+    <!-- 1) a lo largo del borde del torso, hasta que se junta con el hueco de la axila -->
+    <path d="M902 486 C897 501 893 515 890 528 C889 542 887 555 886 569 C885 582 884 596 883.5 624"
+      stroke="#17122b" stroke-width="3.6" fill="none" stroke-linecap="round" filter="url(#suave)"/>
+    <!-- 2) muñecas: un corte que cruza la muñeca, igual en las dos manos -->
+    <g transform="translate(808 664) rotate(44)">
+      <path d="M-19 -21 Q0 -26 20 -23" stroke="#17122b" stroke-width="3.6" fill="none"
+        stroke-linecap="round" filter="url(#suave)"/>
+    </g>
+    <path d="M976 713 Q992 719 1008 714" stroke="#17122b" stroke-width="3.6" fill="none"
+      stroke-linecap="round" filter="url(#suave)"/>
+  </svg>
+  <div class="tag" style="left:290px;top:420px">RECLUTADOR</div>
+  <div class="tag" style="left:938px;top:226px">POSTULANTE</div>
+</div>
+</body></html>

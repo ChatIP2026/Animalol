@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="compositions/base.css" />
+    <script src="vendor/gsap.min.js"></script>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="40.4"
+      data-width="1080"
+      data-height="1350"
+    >
+      <div
+        id="scene-1"
+        class="clip"
+        data-composition-id="scene-1"
+        data-composition-src="compositions/frames/e1-oficina.html"
+        data-start="0"
+        data-duration="7.6"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-2"
+        class="clip"
+        data-composition-id="scene-2"
+        data-composition-src="compositions/frames/e3-archivos.html"
+        data-start="7.6"
+        data-duration="5.4"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-3"
+        class="clip"
+        data-composition-id="scene-3"
+        data-composition-src="compositions/frames/e4-carpeta.html"
+        data-start="13"
+        data-duration="6.5"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-4"
+        class="clip"
+        data-composition-id="scene-4"
+        data-composition-src="compositions/frames/e5-ia.html"
+        data-start="19.5"
+        data-duration="5.7"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-5"
+        class="clip"
+        data-composition-id="scene-5"
+        data-composition-src="compositions/frames/e6-lupa.html"
+        data-start="25.2"
+        data-duration="7.2"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-6"
+        class="clip"
+        data-composition-id="scene-6"
+        data-composition-src="compositions/frames/e7-persona.html"
+        data-start="32.4"
+        data-duration="5"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-7"
+        class="clip"
+        data-composition-id="scene-7"
+        data-composition-src="compositions/frames/e8-cierre.html"
+        data-start="37.4"
+        data-duration="3"
+        data-track-index="0"
+      ></div>
+      <audio
+        id="voz"
+        class="clip"
+        src="assets/audio/voz-luisa.mp3"
+        data-start="0"
+        data-duration="36.6"
+        data-track-index="1"
+      ></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

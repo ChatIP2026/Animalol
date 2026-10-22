@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <link rel="stylesheet" href="../base.css" />
+    <script src="../../vendor/gsap.min.js"></script>
+    <style>
+      #lock {
+        position: absolute; left: 0; right: 0; top: 50%;
+        transform: translateY(-50%); text-align: center; z-index: 6;
+      }
+      /* Lockup provisional: se reemplaza por el SVG de marca cuando llegue. */
+      #word {
+        font-size: 124px; font-weight: 700; letter-spacing: -0.035em;
+        color: var(--ink); line-height: 1; position: relative; display: inline-block;
+      }
+      #dot {
+        position: absolute; width: 20px; height: 20px; border-radius: 50%;
+        background: var(--violet); left: 7px; top: 14px;
+      }
+      #slogan {
+        margin-top: 26px; font-size: 30px; font-weight: 500; letter-spacing: 0.04em;
+        color: var(--ink-soft);
+      }
+      #slogan u { text-decoration: none; border-bottom: 3px solid var(--violet);
+        padding-bottom: 3px; color: var(--ink); }
+      #halo {
+        position: absolute; left: 50%; top: 50%; width: 760px; height: 760px;
+        margin: -380px 0 0 -380px; border-radius: 50%; z-index: 2;
+        background: radial-gradient(circle, rgba(123,63,242,0.42), transparent 66%);
+        filter: blur(60px);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="s8-logo" data-width="1080" data-height="1350">
+      <div class="mesh" id="mesh" data-layout-allow-overflow></div>
+      <div id="halo" data-layout-allow-overflow></div>
+      <div id="lock">
+        <div id="word"><span id="dot"></span>ipartner</div>
+        <div id="slogan">The <u>first</u> AI for HR</div>
+      </div>
+      <div class="vignette"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#mesh", { y: -10 }, { y: 18, duration: 3, ease: "none" }, 0);
+      tl.fromTo("#halo", { opacity: 0, scale: 0.55 },
+        { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out" }, 0);
+      tl.fromTo("#word", { opacity: 0, y: 34, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" }, 0.15);
+      tl.fromTo("#dot", { scale: 0, y: -42 },
+        { scale: 1, y: 0, duration: 0.55, ease: "bounce.out" }, 0.62);
+      tl.fromTo("#slogan", { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.85);
+      tl.to("#halo", { scale: 1.07, duration: 1.8, ease: "sine.inOut" }, 1.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s8-logo"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

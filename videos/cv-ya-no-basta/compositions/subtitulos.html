@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1080, height=1350"/>
+<script src="../vendor/gsap.min.js"></script>
+<style>
+  #root{position:relative;width:1080px;height:1350px;overflow:hidden;background:transparent !important;pointer-events:none}
+  .sub{position:absolute;left:90px;right:90px;top:1150px;text-align:center;opacity:0;
+       font-family:Montserrat,sans-serif;font-weight:400;font-size:40px;line-height:1.3;
+       letter-spacing:.02em;color:#f6f4fa;text-shadow:0 2px 12px rgba(10,7,22,.85)}
+</style></head><body>
+<div id="root" data-composition-id="subtitulos" data-width="1080" data-height="1350"></div>
+<script>
+  // [inicio, fin, texto] — medidos en la voz de Juan (assets/audio/voz.mp3)
+  const S = [
+    [0.06, 3.40, "Hoy cada vacante recibe<br>más postulantes que nunca."],
+    [3.55, 7.00, "Y más de la mitad arma su CV<br>con inteligencia artificial."],
+    [7.20, 8.10, "El resultado:"],
+    [8.16, 10.20, "cientos de CVs<br>que se ven iguales"],
+    [10.25, 12.00, "y dicen poco de la persona."],
+    [12.11, 14.90, "Por eso, hoy el CV<br>es solo una parte."],
+    [14.98, 17.95, "Hay mucho más que puedes<br>evaluar antes de decidir."],
+    [18.05, 20.50, "Y la inteligencia artificial,<br>bien usada,"],
+    [20.60, 23.25, "te ayuda a verlo todo<br>junto y a tiempo."],
+    [23.38, 25.50, "Para que pases menos<br>horas revisando,"],
+    [25.60, 28.10, "tengas menos dudas al elegir<br>y menos sorpresas"],
+    [28.16, 29.85, "después de contratar."],
+    [29.97, 34.90, "¿Y tú, ya eres parte del cambio<br>que trae la inteligencia artificial?"]
+  ];
+  const root = document.getElementById("root");
+  const tl = gsap.timeline({ paused: true });
+  S.forEach(([a, b, t], i) => {
+    const d = document.createElement("div");
+    d.className = "sub"; d.id = "s" + i; d.innerHTML = t; root.appendChild(d);
+    tl.fromTo(d, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.15, ease: "power2.out", immediateRender: false }, a);
+    tl.to(d, { opacity: 0, duration: 0.12 }, b - 0.12);
+  });
+  tl.to({}, { duration: 0.01 }, 34.96);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["subtitulos"] = tl;
+  tl.seek(0);
+</script>
+</body></html>

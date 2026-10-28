@@ -3,12 +3,14 @@
 <meta name="viewport" content="width=1920, height=1080"/>
 <script src="../vendor/gsap.min.js"></script>
 <style>
+  @font-face{font-family:"Maquina";src:url("../vendor/maquina.ttf")}
   #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
   .abs{position:absolute}
   #vel{inset:0;background:radial-gradient(ellipse 55% 32% at 50% 50%,rgba(2,10,4,.9),rgba(2,10,4,0) 100%);opacity:0}
   #k{left:0;right:0;top:340px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:28px;letter-spacing:.5em;color:#3dff7a;opacity:0}
   #jw{left:660px;top:240px;width:600px;height:600px;opacity:0}
-  #sub{left:960px;top:860px;max-width:1500px;width:max-content;padding:10px 28px;border-radius:6px;background:rgba(2,10,4,.82);text-align:center;font-family:"IBM Plex Mono",monospace;font-size:34px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 12px rgba(43,255,106,.7),0 0 3px #000}
+  #sub{left:960px;top:860px;max-width:1500px;width:max-content;padding:10px 28px;border-radius:6px;background:rgba(2,10,4,.82);text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 12px rgba(43,255,106,.7),0 0 3px #000}
+  #cen{left:0;right:0;top:500px;text-align:center;font-family:"Maquina",monospace;font-size:76px;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
   #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
   #glitch{inset:0;background:#3dff7a;mix-blend-mode:screen;opacity:0}
 </style></head><body>
@@ -18,6 +20,7 @@
   <canvas id="titulo" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
   <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
   <div id="sub" class="abs"></div>
+  <div id="cen" class="abs"></div>
   <div id="k" class="abs">ACCESO CONCEDIDO</div>
   <div id="glitch" class="abs"></div>
 </div>
@@ -53,7 +56,7 @@
     if (px[(y * 1920 + x) * 4 + 3] > 128) {
       const r = rnd();
       // llegan de izquierda a derecha, cada número desde su propia altura
-      P.push({ x, y, linea2: y > 565, t0: 18.2 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
+      P.push({ x, y, linea2: y > 565, t0: 20.6 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
     }
   const ct = document.getElementById("titulo").getContext("2d");
   const DUR_CAIDA = 1.0;
@@ -108,26 +111,33 @@
     document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
   }
   // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
+  // modo "abajo": subtítulo bajo Jaina; "centro": frase sola al medio, con corte seco
   const GUION = [
-    [2.8, 10.0, "Hoy, muchos ven la inteligencia artificial como una Matrix: un sistema que decide por nosotros, que nos observa… y que nos controla."],
-    [10.4, 12.6, "Pero nosotros vimos otra cosa. Vimos una puerta."],
-    [12.9, 15.8, "Una forma de trabajar mejor, más rápido y con propósito."],
-    [16.1, 17.2, "¿Lo bueno?"],
-    [18.0, 21.6, "Es que en iPartner hemos desbloqueado la Matrix."],
+    [2.8, 10.0, "Hoy, muchos ven la inteligencia artificial como una Matrix: un sistema que decide por nosotros, que nos observa… y que nos controla.", "abajo"],
+    [10.4, 12.6, "Pero nosotros vimos otra cosa. Vimos una puerta.", "abajo"],
+    [12.9, 15.8, "Una forma de trabajar mejor, más rápido y con propósito.", "abajo"],
+    [17.4, 18.5, "¿Lo bueno?", "centro"],
+    [18.8, 20.3, "Es que en iPartner…", "centro"],
   ];
-  // mientras Jaina habla, la esfera vibra como una onda de voz
+  // la voz sigue mientras se arma el titular ("hemos desbloqueado la Matrix")
+  const VOZ = GUION.map(g => [g[0], g[1]]).concat([[20.6, 23.0]]);
   function habla(t) {
-    const g = GUION.find(([a, b]) => t >= a && t <= b); if (!g) return 0;
+    if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;
     return Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1));
   }
-  const sub = document.getElementById("sub");
-  gsap.set(sub, { xPercent: -50 });
+  const sub = document.getElementById("sub"), cen = document.getElementById("cen");
+  // máquina de escribir: letra por letra a ritmo constante, con cursor que parpadea
+  function maquina(el, g, t) {
+    if (!g) { el.textContent = ""; return; }
+    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    const cursor = n < g[2].length || Math.floor(t * 2.5) % 2 === 0 ? "▌" : "\u00a0";
+    el.textContent = g[2].slice(0, Math.max(0, n)) + cursor;
+  }
   function subtitulo(t) {
-    const g = GUION.find(([a, b]) => t >= a - 0.1 && t <= b + 0.6);
-    if (!g) { sub.textContent = ""; sub.style.opacity = 0; return; }
-    const n = Math.ceil(g[2].length * Math.min(1, (t - g[0]) / ((g[1] - g[0]) * 0.8)));
-    sub.textContent = g[2].slice(0, Math.max(0, n));
-    sub.style.opacity = t > g[1] ? Math.max(0, 1 - (t - g[1]) / 0.6) : 1;
+    const g = GUION.find(([a, b]) => t >= a && t <= b + 0.5);
+    maquina(sub, g && g[3] === "abajo" ? g : null, t);
+    maquina(cen, g && g[3] === "centro" ? g : null, t);
+    sub.style.opacity = g && g[3] === "abajo" ? 1 : 0;
   }
   function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); subtitulo(st.t); }
   const DUR = 40;
@@ -136,11 +146,11 @@
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
   // Jaina aparece al centro, se presenta y se desplaza a la esquina inferior derecha
   tl.set("#jw", { opacity: 1 }, 0.4);
-  tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 17.0);
+  tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 16.0);
   // cuando el título está armado, brilla
-  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 24.9);
-  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 24.9);
-  [25.1, 25.2, 25.3, 25.45, 25.55].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
+  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 27.3);
+  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 27.3);
+  [27.5, 27.6, 27.7, 27.85, 27.95].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
   window.__timelines = window.__timelines || {};
   window.__timelines["m0-apertura"] = tl;
   pintar(); tl.seek(0);

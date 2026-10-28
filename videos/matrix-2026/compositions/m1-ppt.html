@@ -15,7 +15,7 @@
   .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Maquina",monospace;font-size:28px;color:rgba(61,255,122,.5);text-align:center}
   .ph small{font-size:18px;opacity:.7;margin-top:8px}
   .img{position:absolute;inset:10px;background-size:contain;background-position:center;background-repeat:no-repeat}
-  .ico{position:absolute;inset:40px;width:calc(100% - 80px);height:calc(100% - 80px);filter:drop-shadow(0 0 10px rgba(43,255,106,.7))}
+  .ico{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 8px rgba(43,255,106,.6))}
   .tr{stroke-dasharray:1;stroke-dashoffset:1}
   .tapa{inset:0;background:#020a04;transform-origin:50% 100%}
   .scan{left:0;right:0;top:0;height:4px;background:#b9ffd0;box-shadow:0 0 18px 6px rgba(43,255,106,.7);opacity:0}
@@ -24,8 +24,6 @@
   .esq.c{left:-8px;bottom:-8px;border-right:0;border-top:0} .esq.d{right:-8px;bottom:-8px;border-left:0;border-top:0}
   .tit{margin-top:30px;text-align:center;font-family:"Maquina",monospace;font-size:46px;color:#e6ffee;text-shadow:0 0 14px rgba(43,255,106,.8);min-height:56px}
   .sub{margin-top:8px;text-align:center;font-family:"Maquina",monospace;font-size:28px;color:#9fe8b4;min-height:36px}
-  #jw{left:1450px;top:610px;width:600px;height:600px}
-  #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
 </style></head><body>
 <div id="root" data-composition-id="m1-ppt" data-width="1920" data-height="1080">
   <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
@@ -33,27 +31,41 @@
   <div id="mod" class="abs"></div>
   <div id="h" class="abs"></div>
   <div id="c1" class="abs card">
-    <div class="marco"><svg class="ico" viewBox="0 0 400 300">
-      <path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M120 30 H240 L290 80 V270 H120 Z"/><path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M240 30 V80 H290"/>
-      <path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M150 110 H260"/><path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M150 145 H260"/><path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M150 180 H215"/>
-      <circle stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" cx="290" cy="230" r="48"/><path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M270 230 l14 14 l26 -30"/>
-      <path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M150 220 l10 10 l18 -20"/>
+    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
+      <g id="anA" opacity=".55"><circle cx="240" cy="220" r="185" stroke="#3dff7a" stroke-width="2" fill="none" stroke-dasharray="4 14"/></g>
+      <g id="anB" opacity=".4"><circle cx="240" cy="220" r="165" stroke="#3dff7a" stroke-width="6" fill="none" stroke-dasharray="60 20 8 20"/></g>
+      <rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" x="120" y="60" width="240" height="320" rx="10"/>
+      <rect x="120" y="60" width="240" height="44" fill="rgba(61,255,122,.22)" class="fx" data-t="1.9"/>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="18" x="240" y="89" text-anchor="middle" class="fx" data-t="1.9">COTIZACIÓN</text>
+      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 150 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="142" class="fx" data-t="2.0">ÍTEM 01</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="142" text-anchor="end" class="dig" data-t="2.0">S/ 0000</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 188 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="180" class="fx" data-t="2.25">ÍTEM 02</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="180" text-anchor="end" class="dig" data-t="2.25">S/ 0000</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 226 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="218" class="fx" data-t="2.5">ÍTEM 03</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="218" text-anchor="end" class="dig" data-t="2.5">S/ 0000</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 264 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="256" class="fx" data-t="2.75">ÍTEM 04</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="256" text-anchor="end" class="dig" data-t="2.75">S/ 0000</text>
+      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M150 320 H330"/>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="150" y="352" class="fx" data-t="3.1">TOTAL</text>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="330" y="352" text-anchor="end" class="dig" data-t="3.1">S/ 00,000</text>
+      <g class="fx" data-t="2.2">
+        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="450" y="120">VALIDANDO…</text>
+        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="22" x="450" y="175" class="fx" data-t="2.6">✓ PRECIO</text>
+        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="22" x="450" y="220" class="fx" data-t="2.9">✓ ALCANCE</text>
+        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="22" x="450" y="265" class="fx" data-t="3.2">✓ PLAZO</text>
+      </g>
+      <g transform="translate(555 350) rotate(-12)"><g id="sello" opacity="0">
+        <rect x="-115" y="-34" width="230" height="68" rx="8" stroke="#3dff7a" stroke-width="5" fill="rgba(61,255,122,.12)"/>
+        <text font-family="Maquina, monospace" font-size="34" fill="#3dff7a" text-anchor="middle" y="12">APROBADO</text>
+      </g></g>
     </svg><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
     <div class="tit" id="t1"></div>
   </div>
   <div id="c2" class="abs card">
-    <div class="marco"><svg class="ico" viewBox="0 0 400 300">
-      <path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M60 260 H340"/><path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M60 260 V40"/>
-      <path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M80 230 L150 170 L200 200 L290 90"/><path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M250 90 H290 V130"/>
-      <circle stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" cx="300" cy="215" r="30"/>
-      <path stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" d="M300 165 v14 M300 251 v14 M250 215 h14 M336 215 h14 M265 180 l10 10 M325 240 l10 10 M335 180 l-10 10 M265 250 l10 -10"/>
-      <circle stroke="#3dff7a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" cx="300" cy="215" r="10"/>
+    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
+      <g id="anC" opacity=".45"><circle cx="380" cy="215" r="205" stroke="#3dff7a" stroke-width="2" fill="none" stroke-dasharray="3 12"/></g>
+      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L380 72"/><circle class="pul" data-x="380" data-y="72" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="380" cy="72" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="380" y="34" text-anchor="middle" class="fx" data-t="1.6">CLIENTE</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L535 144"/><circle class="pul" data-x="535" data-y="144" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="535" cy="144" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="535" y="106" text-anchor="middle" class="fx" data-t="1.75">DATOS</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L535 286"/><circle class="pul" data-x="535" data-y="286" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="535" cy="286" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="535" y="334" text-anchor="middle" class="fx" data-t="1.9000000000000001">PROPUESTA</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L380 358"/><circle class="pul" data-x="380" data-y="358" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="380" cy="358" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="380" y="406" text-anchor="middle" class="fx" data-t="2.05">PRECIO</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L225 286"/><circle class="pul" data-x="225" data-y="286" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="225" cy="286" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="225" y="334" text-anchor="middle" class="fx" data-t="2.2">MERCADO</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L225 144"/><circle class="pul" data-x="225" data-y="144" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="225" cy="144" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="225" y="106" text-anchor="middle" class="fx" data-t="2.35">CIERRE</text>
+      <circle cx="380" cy="215" r="62" fill="rgba(2,16,6,.95)" stroke="#3dff7a" stroke-width="4"/>
+      <path id="engr" fill="none" stroke="#3dff7a" stroke-width="5" stroke-linejoin="round" d=""/>
+      <circle cx="380" cy="215" r="11" fill="#3dff7a"/>
     </svg><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
     <div class="tit" id="t2"></div>
   </div>
-  <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
 </div>
 <script>
   let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
@@ -76,45 +88,6 @@
       }
     });
   }
-  // --- Jaina: esfera de partículas que se va formando, gira y respira ---
-  let sj = 11; const rj = () => (sj = (sj * 16807) % 2147483647) / 2147483647;
-  const cj = document.getElementById("jaina").getContext("2d"), PJ = [];
-  for (let i = 0; i < 3200; i++) {
-    const u = rj() * 2 - 1, a = rj() * 6.2832, r = Math.sqrt(1 - u * u);
-    // más densidad hacia los polos, como la esfera de referencia
-    const y = Math.sign(u) * Math.pow(Math.abs(u), 0.7), rr = Math.sqrt(1 - y * y);
-    PJ.push({ x: Math.cos(a) * rr, y, z: Math.sin(a) * rr, b: 0.4 + rj() * 1.9, s: 1 + rj() * 1.4, k: 1.5 + rj() * 1.5 });
-  }
-  const forma = () => 1;
-  function jaina(t) {
-    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.04 * br + 0.05 * habla(t)), ry = t * 0.35, c = Math.cos(ry), sn = Math.sin(ry);
-    cj.clearRect(0, 0, 600, 600);
-    const f = forma(t);
-    // fondo oscuro detrás de la esfera: la lluvia nunca se ve a través de Jaina
-    const o = cj.createRadialGradient(300, 300, R * .9, 300, 300, R * 1.12);
-    o.addColorStop(0, `rgba(2,10,4,${.96 * f})`); o.addColorStop(1, "rgba(2,10,4,0)");
-    cj.fillStyle = o; cj.beginPath(); cj.arc(300, 300, R * 1.12, 0, 7); cj.fill();
-    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R * 1.1);
-    g.addColorStop(0, `rgba(43,255,106,${(.10 + .08 * br) * f})`); g.addColorStop(1, "rgba(43,255,106,0)");
-    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R * 1.1, 0, 7); cj.fill();
-    PJ.forEach(p => {
-      const e = 1;
-      const ee = 1 - Math.pow(1 - e, 3), sc = R * (1 + (p.k - 1) * (1 - ee));
-      const X = p.x * c + p.z * sn, Z = -p.x * sn + p.z * c, d = (Z + 1) / 2;
-      cj.fillStyle = `rgba(${(120 + 110 * d) | 0},255,${(150 + 80 * d) | 0},${((.25 + .75 * d) * ee).toFixed(2)})`;
-      cj.fillRect(300 + X * sc, 300 + p.y * sc, p.s, p.s);
-    });
-    // letra J brillante, como el logo de Jaina
-    const u = R / 300;
-    cj.save(); cj.globalAlpha = 1; cj.translate(300, 300); cj.scale(u, u);
-    cj.lineWidth = 13; cj.lineCap = "round"; cj.lineJoin = "round";
-    cj.shadowColor = "#2bff6a"; cj.shadowBlur = 30 + 20 * br; cj.strokeStyle = "#f2fff5";
-    cj.beginPath(); cj.moveTo(-22, -92); cj.lineTo(55, -92); cj.lineTo(55, 32); cj.arc(0, 32, 55, 0, Math.PI * .85); cj.stroke();
-    cj.restore();
-    document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
-  }
-  // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
-  function habla() { return 0; }
   // máquina de escribir: letra por letra a ritmo constante
   function maquina(el, g, t, cursorFijo) {
     if (t < g[0]) { el.textContent = ""; return; }
@@ -129,12 +102,38 @@
     ["t1", [2.6, 3.6, "Frame de Cotización"]],
     ["t2", [4.4, 5.4, "Ingeniería Comercial"]],
   ];
-  gsap.set("#jw", { scale: 0.42 });
   const st = { t: 0 };
   function pintar() {
     const t = st.t;
-    lluvia(t); jaina(t);
+    lluvia(t); hud(t);
     TXT.forEach(([id, g]) => maquina(document.getElementById(id), g, t, false));
+  }
+  // --- HUD: anillos que giran, cifras que se descifran, pulsos por la red, engranaje ---
+  const D10 = "0123456789";
+  const fx = [...document.querySelectorAll(".fx")], cifras = [...document.querySelectorAll(".dig")], pul = [...document.querySelectorAll(".pul")];
+  cifras.forEach(d => d.dataset.base = d.textContent);
+  function engranaje(r1, r2, n, rot) {
+    let d = "";
+    for (let i = 0; i < n * 2; i++) {
+      const a0 = rot + i * Math.PI / n, a1 = a0 + Math.PI / n * .55, r = i % 2 ? r1 : r2;
+      d += (i ? "L" : "M") + (380 + r * Math.cos(a0)).toFixed(1) + " " + (215 + r * Math.sin(a0)).toFixed(1) + "L" + (380 + r * Math.cos(a1)).toFixed(1) + " " + (215 + r * Math.sin(a1)).toFixed(1);
+    }
+    return d + "Z";
+  }
+  function hud(t) {
+    document.getElementById("anA").setAttribute("transform", `rotate(${t * 12} 240 220)`);
+    document.getElementById("anB").setAttribute("transform", `rotate(${-t * 20} 240 220)`);
+    document.getElementById("anC").setAttribute("transform", `rotate(${t * 10} 380 215)`);
+    document.getElementById("engr").setAttribute("d", engranaje(30, 42, 10, t * 0.8));
+    fx.forEach(e => e.style.opacity = t >= +e.dataset.t ? 1 : 0);
+    // las cifras nunca se fijan: se ven "descifrándose" (no son datos reales)
+    cifras.forEach((e, k) => { e.style.opacity = t >= +e.dataset.t ? 1 : 0; e.textContent = e.dataset.base.replace(/0/g, (m, j) => D10[(Math.floor(t * 14) * 7 + j * 3 + k * 5) % 10]); });
+    const on = t > 4.6;
+    pul.forEach((e, k) => {
+      const f = ((t * 0.55 + k / 6) % 1);
+      e.setAttribute("cx", 380 + (e.dataset.x - 380) * f); e.setAttribute("cy", 215 + (e.dataset.y - 215) * f);
+      e.setAttribute("opacity", on ? (Math.sin(f * Math.PI)).toFixed(2) : 0);
+    });
   }
   const DUR = 10;
   const tl = gsap.timeline({ paused: true });
@@ -149,6 +148,7 @@
     tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);
   });
   window.__timelines = window.__timelines || {};
+  tl.fromTo("#sello", { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false, svgOrigin: "0 0" }, 3.7);
   window.__timelines["m1-ppt"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle

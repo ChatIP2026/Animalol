@@ -7,12 +7,15 @@
   .abs{position:absolute}
   #vel{inset:0;background:radial-gradient(ellipse 55% 32% at 50% 50%,rgba(2,10,4,.9),rgba(2,10,4,0) 100%);opacity:0}
   #k{left:0;right:0;top:340px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:28px;letter-spacing:.5em;color:#3dff7a;opacity:0}
+  #jw{left:660px;top:240px;width:600px;height:600px;opacity:0}
+  #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
   #glitch{inset:0;background:#3dff7a;mix-blend-mode:screen;opacity:0}
 </style></head><body>
 <div id="root" data-composition-id="m0-apertura" data-width="1920" data-height="1080">
   <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
   <div id="vel" class="abs"></div>
   <canvas id="titulo" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
   <div id="k" class="abs">ACCESO CONCEDIDO</div>
   <div id="glitch" class="abs"></div>
 </div>
@@ -48,7 +51,7 @@
     if (px[(y * 1920 + x) * 4 + 3] > 128) {
       const r = rnd();
       // llegan de izquierda a derecha, cada número desde su propia altura
-      P.push({ x, y, linea2: y > 565, t0: 1.0 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
+      P.push({ x, y, linea2: y > 565, t0: 4.0 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
     }
   const ct = document.getElementById("titulo").getContext("2d");
   const DUR_CAIDA = 1.0;
@@ -65,15 +68,35 @@
     });
   }
   const st = { t: 0, b: 0.85 };
-  function pintar() { lluvia(st.t); titulo(st.t, st.b); }
-  const DUR = 8.6;
+  // --- Jaina: esfera de caracteres que gira y respira (provisional, hasta tener el PNG oficial) ---
+  const cj = document.getElementById("jaina").getContext("2d"), NJ = 520, PJ = [];
+  for (let i = 0; i < NJ; i++) { const yy = 1 - 2 * (i + .5) / NJ, r = Math.sqrt(1 - yy * yy), a = i * 2.39996; PJ.push([Math.cos(a) * r, yy, Math.sin(a) * r]); }
+  function jaina(t) {
+    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.06 * br), ry = t * 0.5, c = Math.cos(ry), sn = Math.sin(ry);
+    cj.clearRect(0, 0, 600, 600);
+    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R);
+    g.addColorStop(0, `rgba(160,255,190,${.35 + .25 * br})`); g.addColorStop(.55, "rgba(43,255,106,.12)"); g.addColorStop(1, "rgba(43,255,106,0)");
+    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R, 0, 7); cj.fill();
+    cj.font = "bold 15px monospace"; cj.textAlign = "center"; cj.textBaseline = "middle";
+    PJ.forEach(([x, y, z], i) => {
+      const X = x * c + z * sn, Z = -x * sn + z * c, d = (Z + 1) / 2;
+      cj.fillStyle = `rgba(${d > .8 ? 220 : 43},255,${d > .8 ? 230 : 106},${(.12 + .88 * d).toFixed(2)})`;
+      cj.fillText(G[(i * 7 + Math.floor(t * 6 + i)) % G.length], 300 + X * R * (.85 + .15 * d), 300 + y * R * (.85 + .15 * d));
+    });
+    document.getElementById("halo").style.opacity = .4 + .6 * br;
+  }
+  function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); }
+  const DUR = 11.6;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
+  // Jaina aparece al centro, se presenta y se desplaza a la esquina inferior derecha
+  tl.fromTo("#jw", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 1.0, ease: "back.out(1.6)", immediateRender: false }, 0.5);
+  tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 2.7);
   // cuando el título está armado, brilla
-  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 7.7);
-  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 7.7);
-  [7.9, 8.0, 8.1, 8.25, 8.35].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
+  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 10.7);
+  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 10.7);
+  [10.9, 11.0, 11.1, 11.25, 11.35].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
   window.__timelines = window.__timelines || {};
   window.__timelines["m0-apertura"] = tl;
   pintar(); tl.seek(0);

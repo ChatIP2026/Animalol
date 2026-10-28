@@ -83,6 +83,16 @@
       cj.fillStyle = `rgba(${d > .8 ? 220 : 43},255,${d > .8 ? 230 : 106},${(.12 + .88 * d).toFixed(2)})`;
       cj.fillText(G[(i * 7 + Math.floor(t * 6 + i)) % G.length], 300 + X * R * (.85 + .15 * d), 300 + y * R * (.85 + .15 * d));
     });
+    // núcleo oscuro + letra J brillante, como el logo de Jaina
+    const k = cj.createRadialGradient(300, 300, 0, 300, 300, R * .55);
+    k.addColorStop(0, "rgba(2,20,8,.85)"); k.addColorStop(1, "rgba(2,20,8,0)");
+    cj.fillStyle = k; cj.beginPath(); cj.arc(300, 300, R * .55, 0, 7); cj.fill();
+    const u = R / 300;
+    cj.save(); cj.translate(300, 300); cj.scale(u, u);
+    cj.lineWidth = 22; cj.lineCap = "round"; cj.lineJoin = "round";
+    cj.shadowColor = "#2bff6a"; cj.shadowBlur = 30 + 20 * br; cj.strokeStyle = "#f2fff5";
+    cj.beginPath(); cj.moveTo(-58, -118); cj.lineTo(70, -118); cj.lineTo(70, 25); cj.arc(10, 25, 60, 0, Math.PI * .82); cj.stroke();
+    cj.restore();
     document.getElementById("halo").style.opacity = .4 + .6 * br;
   }
   function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); }

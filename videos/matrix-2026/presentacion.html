@@ -15,7 +15,7 @@
   #atras{left:0} #sig{right:60px}
   #num{position:fixed;right:16px;bottom:12px;font:14px monospace;color:#3dff7a;opacity:.4}
 </style></head><body>
-<div id="escena"><div id="zoom"><iframe id="f" allow="autoplay"></iframe></div></div>
+<div id="escena"><div id="zoom"><iframe id="f" allow="autoplay" scrolling="no"></iframe></div></div>
 <canvas id="tunel"></canvas>
 <div id="capa"></div>
 <div id="atras" class="nav">‹</div><div id="sig" class="nav">›</div>
@@ -51,7 +51,10 @@
       i = n; f.src = SLIDES[i]; t0 = performance.now();
       document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
       zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
-      tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => { enTransicion = false; };
+      tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => {
+        // al terminar se quitan los efectos: un filtro fijo sobre el iframe congela su contenido
+        zoom.getAnimations().forEach(a => a.cancel()); enTransicion = false;
+      };
     };
     if (primera) { tunel.style.opacity = 1; entrar(); return; }
     // la slide actual se agranda y se disuelve: nos metemos en ella

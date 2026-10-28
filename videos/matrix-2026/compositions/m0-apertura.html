@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=1920, height=1080"/>
 <script src="../vendor/gsap.min.js"></script>
 <style>
+  html,body{margin:0;overflow:hidden;background:#020a04}
   @font-face{font-family:"Maquina";src:url("../vendor/maquina.ttf")}
   #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
   .abs{position:absolute}
@@ -166,7 +167,9 @@
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
     VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
-    if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
+    // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
+    if (t < DUR) tl.seek(t); else st.t = t;
+    pintar();
   });
 </script>
 </body></html>

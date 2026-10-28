@@ -22,6 +22,22 @@
 <div id="inicio">TOCA PARA COMENZAR</div><div id="num"></div>
 <script>
   // orden de slides: se irán agregando aquí
+  // pasos: cuántos toques "sin transición" tiene la slide antes de pasar a la siguiente
+  const PASOS = { "compositions/m0-apertura.html": 2, "compositions/m6-final.html": 2 };
+  let paso = 0;
+  // música de fondo: suave bajo la voz en la intro, fuerte en el show de las balas, se apaga después
+  const musica = Object.assign(new Audio("assets/musica-balas-show.mp3"), { loop: true, volume: 0 });
+  let volObjetivo = 0;
+  setInterval(() => { musica.volume = Math.max(0, Math.min(1, musica.volume + Math.sign(volObjetivo - musica.volume) * Math.min(.04, Math.abs(volObjetivo - musica.volume)))); if (!volObjetivo && musica.volume === 0 && !musica.paused) musica.pause(); }, 50);
+  function musicaPara(n) {
+    volObjetivo = n === 0 ? 0.18 : n === 1 ? 1 : 0;
+    if (volObjetivo && musica.paused) musica.play().catch(() => {});
+  }
+  // avanzar: primero agota los pasos de la slide actual, luego cambia de slide
+  function avanzar() {
+    if (paso + 1 < (PASOS[SLIDES[i]] || 1) && !document.getElementById("inicio")) { paso++; return; }
+    ir(i + 1);
+  }
   const SLIDES = ["compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-ppt.html", "compositions/m3-ppt.html", "compositions/m4-ppt.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
   let i = 0;
   const f = document.getElementById("f"), esc = document.getElementById("escena");
@@ -48,7 +64,7 @@
     if (n < 0 || n >= SLIDES.length) return;
     enTransicion = true; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
     const entrar = () => {
-      i = n; f.src = SLIDES[i]; t0 = performance.now();
+      i = n; paso = 0; f.src = SLIDES[i]; t0 = performance.now(); musicaPara(i);
       document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
       zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
       tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => {
@@ -64,21 +80,21 @@
   function ajustar() { const k = Math.min(innerWidth / 1920, innerHeight / 1080); esc.style.transform = `translate(-50%,-50%) scale(${k})`; }
   addEventListener("resize", ajustar); ajustar();
   addEventListener("keydown", e => {
-    if (["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(e.key)) ir(i + 1);
+    if (["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(e.key)) avanzar();
     if (["ArrowLeft","ArrowUp","PageUp"].includes(e.key)) ir(i - 1);
     if (e.key === "f") document.documentElement.requestFullscreen?.();
   });
   let x0 = null;
   addEventListener("touchstart", e => x0 = e.touches[0].clientX);
-  addEventListener("touchend", e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 50) { deslizo = true; ir(d < 0 ? i + 1 : i - 1); } x0 = null; });
+  addEventListener("touchend", e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 50) { deslizo = true; d < 0 ? avanzar() : ir(i - 1); } x0 = null; });
   // tocar o hacer clic avanza; los botones ‹ › permiten retroceder y avanzar
   let deslizo = false;
-  document.getElementById("capa").addEventListener("click", () => { if (!deslizo) ir(i + 1); deslizo = false; });
+  document.getElementById("capa").addEventListener("click", () => { if (!deslizo) avanzar(); deslizo = false; });
   document.getElementById("atras").addEventListener("click", e => { e.stopPropagation(); ir(i - 1); });
-  document.getElementById("sig").addEventListener("click", e => { e.stopPropagation(); ir(i + 1); });
+  document.getElementById("sig").addEventListener("click", e => { e.stopPropagation(); avanzar(); });
   // reloj de la presentación: le pasa el tiempo a la slide actual
   let t0 = 0;
-  (function reloj() { f.contentWindow?.postMessage({ t: (performance.now() - t0) / 1000 }, "*"); requestAnimationFrame(reloj); })();
+  (function reloj() { f.contentWindow?.postMessage({ t: (performance.now() - t0) / 1000, paso }, "*"); requestAnimationFrame(reloj); })();
   // el primer toque activa el sonido del navegador y arranca el slide 1
   const ini = document.getElementById("inicio");
   ini.addEventListener("click", () => { ini.remove(); ir(0, true); }, { once: true });

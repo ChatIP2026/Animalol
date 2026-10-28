@@ -135,8 +135,9 @@
     cj.restore();
     document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
   }
-  const VOZ = [[1.0, 21.2], [23.0, 30.6]];
-  function habla(t) { return VOZ.some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
+  // paso 1 (pedido de foto) arranca con un toque; en el render cae a los 23 s
+  const PASO = [0, 22.6];
+  function habla(t) { return [[1.0, 21.2], [PASO[1] + 0.4, PASO[1] + 8.0]].some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
   gsap.set("#jw", { scale: 0.42 });
   const fmt = v => (v >= 1000 ? Math.floor(v / 1000) + "," + String(v % 1000).padStart(3, "0") : String(v)) + "K";
   const barras = [...document.querySelectorAll(".bar")], vals = [...document.querySelectorAll(".val")], proy = [...document.querySelectorAll(".proy")];
@@ -171,9 +172,12 @@
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle
   // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
-  const VOCES = [["../assets/voz/04-cierre.mp3", 1.0], ["../assets/voz/05-foto.mp3", 23.0]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
+  const VOCES = [["../assets/voz/04-cierre.mp3", 1.0], ["../assets/voz/05-foto.mp3", Infinity]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
+  let enVivo = false;
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
+    if (!enVivo) { enVivo = true; PASO[1] = Infinity; }
+    if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; VOCES[1].at = t + 0.4; }
     VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
     // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
     if (t < DUR) tl.seek(t); else st.t = t;

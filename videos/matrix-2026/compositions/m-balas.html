@@ -109,8 +109,6 @@
   // modo presentación: presentacion.html envía el tiempo; las balas siguen en bucle durante el show
   // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
   const VOCES = [["../assets/voz/02-balas.mp3", 1.0]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
-  // música del show: arranca después de "¿estás listo?" y se repite mientras dure el show
-  VOCES.push({ a: Object.assign(new Audio("../assets/musica-balas-show.mp3"), { loop: true }), at: 3.0, ok: false });
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
     VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });

@@ -30,7 +30,9 @@
   let volObjetivo = 0;
   setInterval(() => { musica.volume = Math.max(0, Math.min(1, musica.volume + Math.sign(volObjetivo - musica.volume) * Math.min(.04, Math.abs(volObjetivo - musica.volume)))); if (!volObjetivo && musica.volume === 0 && !musica.paused) musica.pause(); }, 50);
   function musicaPara(n) {
-    volObjetivo = n === 0 ? 0.18 : n === 1 ? 1 : 0;
+    // en las balas la música sigue suave hasta que Jaina termina "Neo… ¿estás listo?" (~2.7 s) y recién ahí sube
+    volObjetivo = n <= 1 ? 0.18 : 0;
+    if (n === 1) setTimeout(() => { if (i === 1) volObjetivo = 1; }, 3000);
     if (volObjetivo && musica.paused) musica.play().catch(() => {});
   }
   // avanzar: primero agota los pasos de la slide actual, luego cambia de slide

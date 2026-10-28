@@ -8,10 +8,14 @@
   iframe{width:1920px;height:1080px;border:0;display:block}
   #capa{position:fixed;inset:0;cursor:pointer}
   #inicio{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#020a04;color:#3dff7a;font:28px monospace;letter-spacing:.4em;cursor:pointer;z-index:5;text-shadow:0 0 12px rgba(43,255,106,.7)}
+  .nav{position:fixed;bottom:0;width:90px;height:90px;display:flex;align-items:center;justify-content:center;font:52px monospace;color:#3dff7a;opacity:.25;cursor:pointer;z-index:4;user-select:none}
+  .nav:hover{opacity:.8}
+  #atras{left:0} #sig{right:60px}
   #num{position:fixed;right:16px;bottom:12px;font:14px monospace;color:#3dff7a;opacity:.4}
 </style></head><body>
 <div id="escena"><iframe id="f"></iframe></div>
 <div id="capa"></div>
+<div id="atras" class="nav">‹</div><div id="sig" class="nav">›</div>
 <div id="inicio">TOCA PARA COMENZAR</div><div id="num"></div>
 <script>
   // orden de slides: se irán agregando aquí
@@ -33,8 +37,12 @@
   });
   let x0 = null;
   addEventListener("touchstart", e => x0 = e.touches[0].clientX);
-  addEventListener("touchend", e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 50) ir(d < 0 ? i + 1 : i - 1); x0 = null; });
-  document.getElementById("capa").addEventListener("click", () => ir(i + 1));
+  addEventListener("touchend", e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 50) { deslizo = true; ir(d < 0 ? i + 1 : i - 1); } x0 = null; });
+  // tocar o hacer clic avanza; los botones ‹ › permiten retroceder y avanzar
+  let deslizo = false;
+  document.getElementById("capa").addEventListener("click", () => { if (!deslizo) ir(i + 1); deslizo = false; });
+  document.getElementById("atras").addEventListener("click", e => { e.stopPropagation(); ir(i - 1); });
+  document.getElementById("sig").addEventListener("click", e => { e.stopPropagation(); ir(i + 1); });
   // reloj de la presentación: le pasa el tiempo a la slide actual
   let t0 = 0;
   (function reloj() { f.contentWindow?.postMessage({ t: (performance.now() - t0) / 1000 }, "*"); requestAnimationFrame(reloj); })();

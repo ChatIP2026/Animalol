@@ -44,13 +44,11 @@
   const off = document.createElement("canvas"); off.width = 1920; off.height = 1080;
   const ox = off.getContext("2d");
   ox.fillStyle = "#fff"; ox.textAlign = "center"; ox.textBaseline = "middle";
-  ox.font = "800 132px 'JetBrains Mono', monospace"; ox.fillText("HEMOS DESBLOQUEADO", 960, 480);
-  ox.font = "800 150px 'JetBrains Mono', monospace"; ox.fillText("LA MATRIX", 960, 650);
+  ox.font = "bold 132px monospace"; ox.fillText("HEMOS DESBLOQUEADO", 960, 480);
+  ox.font = "bold 150px monospace"; ox.fillText("LA MATRIX", 960, 650);
   const px = ox.getImageData(0, 0, 1920, 1080).data, P = [], STEP = 11;
-  const celda = (x0, y0) => { let n = 0; for (let y = y0; y < y0 + STEP; y++) for (let x = x0; x < x0 + STEP; x++) n += px[(y * 1920 + x) * 4 + 3]; return n / (255 * STEP * STEP); };
   for (let y = 0; y < 1080; y += STEP) for (let x = 0; x < 1920; x += STEP)
-    // se mide la cobertura de toda la celda (no un solo píxel) para no perder trazos finos de H, M y L
-    if (celda(x, y) > 0.3) {
+    if (px[(y * 1920 + x) * 4 + 3] > 128) {
       const r = rnd();
       // llegan de izquierda a derecha, cada número desde su propia altura
       P.push({ x, y, linea2: y > 565, t0: 4.0 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });

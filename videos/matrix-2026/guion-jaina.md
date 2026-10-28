@@ -37,14 +37,13 @@ Dejar ~1 s de silencio al inicio y al final de cada archivo.
 > Lo que acaban de ver no es magia.
 > Es código, es equipo… y es decisión.
 >
-> Este año desbloqueamos **[N] de las 10 Matrix**.
-> Solo nos quedan **[M]** por conquistar… y las vamos a desbloquear juntos.
+> Este año ya desbloqueamos **10 de las 12 Matrix**.
+> Solo nos quedan **2** por conquistar: noviembre y diciembre… y las vamos a desbloquear juntos.
 >
 > **Terminemos de conquistar la Matrix 2026.**
 
 ## 05-foto.mp3 — Foto grupal
 
-> Antes de desconectarnos, necesito una prueba de este momento.
-> Todos juntos… una foto grupal.
+> Antes de irnos… todos juntos, vengan para una foto grupal.
 > La guardaré en los servidores del éxito 2027.
 > *(pausa)* Tres… dos… uno.

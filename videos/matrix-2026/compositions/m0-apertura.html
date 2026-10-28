@@ -65,7 +65,7 @@
   }
   const st = { t: 0, b: 0.85 };
   function pintar() { lluvia(st.t); titulo(st.t, st.b); }
-  const DUR = 10.5;
+  const DUR = 8.6;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
@@ -73,12 +73,13 @@
   tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 7.7);
   tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 7.7);
   [7.9, 8.0, 8.1, 8.25, 8.35].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
-  // glitch final = transición
-  tl.to("#titulo", { x: 16, skewX: -8, duration: 0.05, repeat: 5, yoyo: true }, 9.8);
-  tl.fromTo("#glitch", { opacity: 0 }, { opacity: 0.35, duration: 0.05, repeat: 3, yoyo: true, immediateRender: false }, 9.85);
-  tl.to(["#titulo", "#k"], { opacity: 0, duration: 0.15 }, 10.3);
   window.__timelines = window.__timelines || {};
   window.__timelines["m0-apertura"] = tl;
   pintar(); tl.seek(0);
+  // modo presentación: presentacion.html envía el tiempo; tras la entrada, la lluvia sigue en bucle con el título fijo
+  addEventListener("message", e => {
+    const t = e.data && e.data.t; if (typeof t !== "number") return;
+    if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
+  });
 </script>
 </body></html>

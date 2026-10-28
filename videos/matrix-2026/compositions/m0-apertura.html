@@ -5,63 +5,78 @@
 <style>
   #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
   .abs{position:absolute}
-  #lluvia{left:0;top:0}
-  #vel{inset:0;background:radial-gradient(ellipse 55% 30% at 50% 50%,rgba(2,10,4,.93),rgba(2,10,4,0) 100%);opacity:0}
-  #t{left:0;right:0;top:50%;text-align:center;font-family:"IBM Plex Mono",monospace;color:#d9ffe4}
-  #k{font-size:28px;letter-spacing:.5em;color:#3dff7a;opacity:0;margin-bottom:26px}
-  .h{font-size:96px;font-weight:700;letter-spacing:.06em;text-shadow:0 0 18px #2bff6a,0 0 46px rgba(43,255,106,.6);white-space:pre}
-  #h2{color:#3dff7a}
+  #vel{inset:0;background:radial-gradient(ellipse 55% 32% at 50% 50%,rgba(2,10,4,.9),rgba(2,10,4,0) 100%);opacity:0}
+  #k{left:0;right:0;top:340px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:28px;letter-spacing:.5em;color:#3dff7a;opacity:0}
   #glitch{inset:0;background:#3dff7a;mix-blend-mode:screen;opacity:0}
 </style></head><body>
 <div id="root" data-composition-id="m0-apertura" data-width="1920" data-height="1080">
-  <canvas id="lluvia" class="abs" width="1920" height="1080"></canvas>
+  <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
   <div id="vel" class="abs"></div>
-  <div id="t" class="abs"><div id="k">ACCESO CONCEDIDO</div><div id="h1" class="h"></div><div id="h2" class="h"></div></div>
+  <canvas id="titulo" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div id="k" class="abs">ACCESO CONCEDIDO</div>
   <div id="glitch" class="abs"></div>
 </div>
 <script>
-  // --- lluvia de código: todo depende del tiempo t (seek-safe, sin Math.random) ---
   let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
-  const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
+  const D = "0123456789";
+  // --- lluvia de números (función pura del tiempo) ---
   const F = 22, COLS = 1920 / F | 0, ROWS = 1080 / F | 0;
-  const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0), seed: rnd() * 1000 | 0 }));
-  const ctx = document.getElementById("lluvia").getContext("2d");
-  const glyph = (i, j, t) => G[(i * 131 + j * 17 + Math.floor(t * 9 + i)) % G.length];
+  const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0) }));
+  const cx = document.getElementById("lluvia").getContext("2d");
+  const dig = (a, b, t) => D[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % 10];
   function lluvia(t) {
-    ctx.fillStyle = "#020a04"; ctx.fillRect(0, 0, 1920, 1080);
-    ctx.font = F + "px monospace";
+    cx.fillStyle = "#020a04"; cx.fillRect(0, 0, 1920, 1080);
+    cx.font = F + "px monospace";
     col.forEach((c, i) => {
       const head = Math.floor(c.off + t * c.v) % (ROWS + c.len + 10);
       for (let j = 0; j < c.len; j++) {
         const row = head - j; if (row < 0 || row > ROWS) continue;
-        const a = 1 - j / c.len;
-        ctx.fillStyle = j === 0 ? "rgba(220,255,230,.95)" : `rgba(43,255,106,${(a * .85).toFixed(2)})`;
-        ctx.fillText(glyph(i, row, t), i * F, row * F);
+        cx.fillStyle = j === 0 ? "rgba(220,255,230,.9)" : `rgba(43,255,106,${((1 - j / c.len) * .75).toFixed(2)})`;
+        cx.fillText(dig(i, row, t), i * F, row * F);
       }
     });
   }
-  // --- descifrado del título: caracteres al azar que se fijan de izquierda a derecha ---
-  const T1 = "HEMOS DESBLOQUEADO", T2 = "LA MATRIX";
-  function descifrar(txt, p, t) {
-    return [...txt].map((ch, i) => ch === " " ? " " : (i / txt.length < p ? ch : G[(i * 7 + Math.floor(t * 24)) % G.length])).join("");
+  // --- el título como una grilla de números: se muestrean los píxeles del texto ---
+  const off = document.createElement("canvas"); off.width = 1920; off.height = 1080;
+  const ox = off.getContext("2d");
+  ox.fillStyle = "#fff"; ox.textAlign = "center"; ox.textBaseline = "middle";
+  ox.font = "bold 132px monospace"; ox.fillText("HEMOS DESBLOQUEADO", 960, 480);
+  ox.font = "bold 150px monospace"; ox.fillText("LA MATRIX", 960, 650);
+  const px = ox.getImageData(0, 0, 1920, 1080).data, P = [], STEP = 11;
+  for (let y = 0; y < 1080; y += STEP) for (let x = 0; x < 1920; x += STEP)
+    if (px[(y * 1920 + x) * 4 + 3] > 128) {
+      const r = rnd();
+      // llegan de izquierda a derecha, cada número desde su propia altura
+      P.push({ x, y, linea2: y > 565, t0: 1.0 + (x / 1920) * 1.5 + r * 0.45 + (y > 565 ? 0.55 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
+    }
+  const ct = document.getElementById("titulo").getContext("2d");
+  const DUR_CAIDA = 0.55;
+  function titulo(t, brillo) {
+    ct.clearRect(0, 0, 1920, 1080);
+    ct.font = "bold 13px monospace"; ct.textAlign = "center"; ct.textBaseline = "middle";
+    P.forEach(p => {
+      const u = (t - p.t0) / DUR_CAIDA; if (u < 0) return;
+      const e = u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
+      const y = p.y - p.caida * (1 - e);
+      const fijo = u >= 1;
+      ct.fillStyle = fijo ? (p.linea2 ? `rgba(61,255,122,${brillo})` : `rgba(220,255,230,${brillo})`) : "rgba(43,255,106,.8)";
+      ct.fillText(fijo ? D[p.k] : D[(p.k + Math.floor(t * 20)) % 10], p.x, y);
+    });
   }
-  const st = { t: 0, p1: 0, p2: 0 };
-  const h1 = document.getElementById("h1"), h2 = document.getElementById("h2");
-  function pintar() { lluvia(st.t); h1.textContent = st.p1 > 0 ? descifrar(T1, st.p1, st.t) : "\u00a0"; h2.textContent = st.p2 > 0 ? descifrar(T2, st.p2, st.t) : "\u00a0"; }
-
-  gsap.set("#t", { yPercent: -50 });
-  const DUR = 6;
+  const st = { t: 0, b: 0.85 };
+  function pintar() { lluvia(st.t); titulo(st.t, st.b); }
+  const DUR = 6.5;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
-  tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.8);
-  tl.fromTo(st, { p1: 0 }, { p1: 1.05, duration: 1.4, ease: "none", onUpdate: pintar, immediateRender: false }, 1.2);
-  tl.fromTo(st, { p2: 0 }, { p2: 1.15, duration: 0.9, ease: "none", onUpdate: pintar, immediateRender: false }, 2.4);
-  // "ACCESO CONCEDIDO" parpadea como una terminal y queda fijo
-  [3.4, 3.5, 3.6, 3.75, 3.85].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
-  // glitch final = transición a la siguiente slide
-  tl.to("#t", { x: 14, skewX: -8, duration: 0.05, repeat: 5, yoyo: true }, 5.3);
-  tl.fromTo("#glitch", { opacity: 0 }, { opacity: 0.35, duration: 0.05, repeat: 3, yoyo: true, immediateRender: false }, 5.35);
-  tl.to("#t", { opacity: 0, duration: 0.15 }, 5.8);
+  tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
+  // cuando el título está armado, brilla
+  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 3.8);
+  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 3.8);
+  [4.0, 4.1, 4.2, 4.35, 4.45].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
+  // glitch final = transición
+  tl.to("#titulo", { x: 16, skewX: -8, duration: 0.05, repeat: 5, yoyo: true }, 5.8);
+  tl.fromTo("#glitch", { opacity: 0 }, { opacity: 0.35, duration: 0.05, repeat: 3, yoyo: true, immediateRender: false }, 5.85);
+  tl.to(["#titulo", "#k"], { opacity: 0, duration: 0.15 }, 6.3);
   window.__timelines = window.__timelines || {};
   window.__timelines["m0-apertura"] = tl;
   pintar(); tl.seek(0);

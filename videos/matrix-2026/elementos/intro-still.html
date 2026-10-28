@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#020a04}
+canvas{position:absolute;inset:0}
+#t{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-family:"IBM Plex Mono",monospace;color:#d9ffe4}
+#t .k{font-size:28px;letter-spacing:.5em;color:#3dff7a;opacity:.85;margin-bottom:26px}
+#t .h{font-size:96px;font-weight:700;letter-spacing:.06em;text-shadow:0 0 18px #2bff6a,0 0 46px rgba(43,255,106,.6)}
+#t .h b{color:#3dff7a}
+#vel{position:absolute;inset:0;background:radial-gradient(ellipse 55% 30% at 50% 50%,rgba(2,10,4,.92),rgba(2,10,4,0) 100%)}
+</style></head><body>
+<canvas id="c" width="1920" height="1080"></canvas><div id="vel"></div>
+<div id="t"><div class="k">ACCESO CONCEDIDO</div><div class="h">HEMOS DESBLOQUEADO<br><b>LA MATRIX</b></div></div>
+<script>
+// lluvia de código determinista (sin Math.random)
+let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+const G="アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
+const c=document.getElementById("c").getContext("2d"),F=22,W=1920/F|0;
+c.font=F+"px monospace";
+for(let i=0;i<W;i++){const len=8+(r()*30|0),head=(r()*60|0);
+ for(let j=0;j<len;j++){const y=(head-j)*F;if(y<0||y>1080)continue;
+  const a=1-j/len;c.fillStyle=j==0?"rgba(220,255,230,.95)":`rgba(43,255,106,${(a*.85).toFixed(2)})`;
+  c.fillText(G[(r()*G.length)|0],i*F,y);}}
+</script></body></html>

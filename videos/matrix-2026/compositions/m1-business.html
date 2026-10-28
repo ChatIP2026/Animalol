@@ -93,11 +93,8 @@
   // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
 
   // --- guion de Jaina (tiempos provisionales, se ajustarán al audio) ---
-  const GUION = [
-    [0.8, 3.6, "Pero desbloquear la Matrix no es para cualquiera."],
-    [4.0, 9.6, "Detrás de cada proceso había un algoritmo complejo, lleno de variables… y alguien tenía que descifrarlo."],
-  ];
-  const Q1 = [10.4, 11.6, "Neo Mario Méndez:"], Q2 = [11.9, 15.0, "¿cómo pudieron desbloquear la Business Matrix?"], MOD = [0.2, 1.4, "> MÓDULO_01 // BUSINESS_MATRIX"];
+  const GUION = [];
+  const Q1 = [0.8, 2.0, "Neo Mario Méndez:"], Q2 = [2.3, 5.4, "¿cómo pudieron desbloquear la Business Matrix?"], MOD = [0.2, 1.4, "> MÓDULO_01 // BUSINESS_MATRIX"];
   const VOZ = GUION.concat([Q1, Q2]);
   function habla(t) {
     if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;
@@ -122,12 +119,12 @@
     maquina(document.getElementById("q1"), Q1, t, false);
     maquina(document.getElementById("q2"), Q2, t, t > Q2[0]);
   }
-  const DUR = 25;
+  const DUR = 12;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
-  // al llegar la pregunta, las fórmulas bajan para que el texto mande
-  tl.to(st, { foco: 0.45, duration: 1.2, onUpdate: pintar }, 10.0);
-  tl.to("#vel", { opacity: 1, duration: 1.2 }, 10.0);
+  // con la pregunta, las fórmulas bajan para que el texto mande
+  tl.to(st, { foco: 0.45, duration: 1.2, onUpdate: pintar }, 0.4);
+  tl.to("#vel", { opacity: 1, duration: 1.2 }, 0.4);
   window.__timelines = window.__timelines || {};
   window.__timelines["m1-business"] = tl;
   pintar(); tl.seek(0);

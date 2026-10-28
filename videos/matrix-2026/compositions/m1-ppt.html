@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1920, height=1080"/>
+<script src="../vendor/gsap.min.js"></script>
+<style>
+  @font-face{font-family:"Maquina";src:url("../vendor/maquina.ttf")}
+  #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
+  .abs{position:absolute}
+  #vel{inset:0;background:rgba(2,10,4,.72)}
+  #mod{left:80px;top:56px;font-family:"Maquina",monospace;font-size:26px;letter-spacing:.12em;color:#3dff7a;opacity:.8}
+  #h{left:0;right:0;top:92px;text-align:center;font-family:"Maquina",monospace;font-size:78px;letter-spacing:.06em;color:#3dff7a;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
+  .card{top:250px;width:780px}
+  #c1{left:140px} #c2{left:1000px}
+  .marco{position:relative;height:460px;border:2px solid rgba(61,255,122,.55);background:rgba(2,16,6,.9);box-shadow:0 0 30px rgba(43,255,106,.18) inset,0 0 24px rgba(43,255,106,.25);opacity:0}
+  .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Maquina",monospace;font-size:28px;color:rgba(61,255,122,.5);text-align:center}
+  .ph small{font-size:18px;opacity:.7;margin-top:8px}
+  .img{position:absolute;inset:10px;background-size:contain;background-position:center;background-repeat:no-repeat}
+  .tapa{inset:0;background:#020a04;transform-origin:50% 100%}
+  .scan{left:0;right:0;top:0;height:4px;background:#b9ffd0;box-shadow:0 0 18px 6px rgba(43,255,106,.7);opacity:0}
+  .esq{position:absolute;width:34px;height:34px;border:4px solid #3dff7a}
+  .esq.a{left:-8px;top:-8px;border-right:0;border-bottom:0} .esq.b{right:-8px;top:-8px;border-left:0;border-bottom:0}
+  .esq.c{left:-8px;bottom:-8px;border-right:0;border-top:0} .esq.d{right:-8px;bottom:-8px;border-left:0;border-top:0}
+  .tit{margin-top:30px;text-align:center;font-family:"Maquina",monospace;font-size:46px;color:#e6ffee;text-shadow:0 0 14px rgba(43,255,106,.8);min-height:56px}
+  .sub{margin-top:8px;text-align:center;font-family:"Maquina",monospace;font-size:28px;color:#9fe8b4;min-height:36px}
+  #jw{left:1450px;top:610px;width:600px;height:600px}
+  #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
+</style></head><body>
+<div id="root" data-composition-id="m1-ppt" data-width="1920" data-height="1080">
+  <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div id="vel" class="abs"></div>
+  <div id="mod" class="abs"></div>
+  <div id="h" class="abs"></div>
+  <div id="c1" class="abs card">
+    <div class="marco"><div class="ph">IMAGEN PENDIENTE<br/><small>frame-cotizacion.png</small></div><div class="img" style="background-image:url('../assets/business/frame-cotizacion.png')"></div><div class="tapa abs"></div><div class="scan abs"></div>
+      <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
+    <div class="tit" id="t1"></div><div class="sub" id="s1"></div>
+  </div>
+  <div id="c2" class="abs card">
+    <div class="marco"><div class="ph">IMAGEN PENDIENTE<br/><small>ingenieria-comercial.png</small></div><div class="img" style="background-image:url('../assets/business/ingenieria-comercial.png')"></div><div class="tapa abs"></div><div class="scan abs"></div>
+      <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
+    <div class="tit" id="t2"></div><div class="sub" id="s2"></div>
+  </div>
+  <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
+</div>
+<script>
+  let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
+  const D = "0123456789";
+  const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
+  // --- lluvia de números (función pura del tiempo) ---
+  const F = 22, COLS = 1920 / F | 0, ROWS = 1080 / F | 0;
+  const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0) }));
+  const cx = document.getElementById("lluvia").getContext("2d");
+  const dig = (a, b, t) => G[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % G.length];
+  function lluvia(t) {
+    cx.fillStyle = "#020a04"; cx.fillRect(0, 0, 1920, 1080);
+    cx.font = F + "px monospace";
+    col.forEach((c, i) => {
+      const head = Math.floor(c.off + t * c.v) % (ROWS + c.len + 10);
+      for (let j = 0; j < c.len; j++) {
+        const row = head - j; if (row < 0 || row > ROWS) continue;
+        cx.fillStyle = j === 0 ? "rgba(220,255,230,.9)" : `rgba(43,255,106,${((1 - j / c.len) * .75).toFixed(2)})`;
+        cx.fillText(dig(i, row, t), i * F, row * F);
+      }
+    });
+  }
+  // --- Jaina: esfera de partículas que se va formando, gira y respira ---
+  let sj = 11; const rj = () => (sj = (sj * 16807) % 2147483647) / 2147483647;
+  const cj = document.getElementById("jaina").getContext("2d"), PJ = [];
+  for (let i = 0; i < 3200; i++) {
+    const u = rj() * 2 - 1, a = rj() * 6.2832, r = Math.sqrt(1 - u * u);
+    // más densidad hacia los polos, como la esfera de referencia
+    const y = Math.sign(u) * Math.pow(Math.abs(u), 0.7), rr = Math.sqrt(1 - y * y);
+    PJ.push({ x: Math.cos(a) * rr, y, z: Math.sin(a) * rr, b: 0.4 + rj() * 1.9, s: 1 + rj() * 1.4, k: 1.5 + rj() * 1.5 });
+  }
+  const forma = () => 1;
+  function jaina(t) {
+    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.04 * br + 0.05 * habla(t)), ry = t * 0.35, c = Math.cos(ry), sn = Math.sin(ry);
+    cj.clearRect(0, 0, 600, 600);
+    const f = forma(t);
+    // fondo oscuro detrás de la esfera: la lluvia nunca se ve a través de Jaina
+    const o = cj.createRadialGradient(300, 300, R * .9, 300, 300, R * 1.12);
+    o.addColorStop(0, `rgba(2,10,4,${.96 * f})`); o.addColorStop(1, "rgba(2,10,4,0)");
+    cj.fillStyle = o; cj.beginPath(); cj.arc(300, 300, R * 1.12, 0, 7); cj.fill();
+    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R * 1.1);
+    g.addColorStop(0, `rgba(43,255,106,${(.10 + .08 * br) * f})`); g.addColorStop(1, "rgba(43,255,106,0)");
+    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R * 1.1, 0, 7); cj.fill();
+    PJ.forEach(p => {
+      const e = 1;
+      const ee = 1 - Math.pow(1 - e, 3), sc = R * (1 + (p.k - 1) * (1 - ee));
+      const X = p.x * c + p.z * sn, Z = -p.x * sn + p.z * c, d = (Z + 1) / 2;
+      cj.fillStyle = `rgba(${(120 + 110 * d) | 0},255,${(150 + 80 * d) | 0},${((.25 + .75 * d) * ee).toFixed(2)})`;
+      cj.fillRect(300 + X * sc, 300 + p.y * sc, p.s, p.s);
+    });
+    // letra J brillante, como el logo de Jaina
+    const u = R / 300;
+    cj.save(); cj.globalAlpha = 1; cj.translate(300, 300); cj.scale(u, u);
+    cj.lineWidth = 13; cj.lineCap = "round"; cj.lineJoin = "round";
+    cj.shadowColor = "#2bff6a"; cj.shadowBlur = 30 + 20 * br; cj.strokeStyle = "#f2fff5";
+    cj.beginPath(); cj.moveTo(-22, -92); cj.lineTo(55, -92); cj.lineTo(55, 32); cj.arc(0, 32, 55, 0, Math.PI * .85); cj.stroke();
+    cj.restore();
+    document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
+  }
+  // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
+  function habla() { return 0; }
+  // máquina de escribir: letra por letra a ritmo constante
+  function maquina(el, g, t, cursorFijo) {
+    if (t < g[0]) { el.textContent = ""; return; }
+    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    const cur = n < g[2].length || (cursorFijo && Math.floor(t * 2.5) % 2 === 0) ? "▌" : "";
+    el.textContent = g[2].slice(0, n) + cur;
+  }
+  // textos: cada imagen con su título y subtítulo (subtítulos pendientes del equipo)
+  const TXT = [
+    ["mod", [0.2, 1.2, "> MÓDULO_01 // ARCHIVOS DESBLOQUEADOS"]],
+    ["h", [0.4, 1.6, "BUSINESS MATRIX"]],
+    ["t1", [2.6, 3.6, "Frame de Cotización"]],
+    ["s1", [3.7, 4.6, "Subtítulo pendiente"]],
+    ["t2", [4.4, 5.4, "Ingeniería Comercial"]],
+    ["s2", [5.5, 6.4, "Subtítulo pendiente"]],
+  ];
+  gsap.set("#jw", { scale: 0.42 });
+  const st = { t: 0 };
+  function pintar() {
+    const t = st.t;
+    lluvia(t); jaina(t);
+    TXT.forEach(([id, g]) => maquina(document.getElementById(id), g, t, false));
+  }
+  const DUR = 10;
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
+  // cada imagen se "descarga": aparece el marco y una línea de escaneo la revela de arriba hacia abajo
+  [["#c1", 1.2], ["#c2", 3.0]].forEach(([c, d]) => {
+    tl.fromTo(c + " .marco", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, d);
+    tl.fromTo(c + " .tapa", { scaleY: 1 }, { scaleY: 0, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.fromTo(c + " .scan", { y: 0, opacity: 1 }, { y: 456, opacity: 1, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.to(c + " .scan", { opacity: 0, duration: 0.2 }, d + 1.5);
+  });
+  window.__timelines = window.__timelines || {};
+  window.__timelines["m1-ppt"] = tl;
+  pintar(); tl.seek(0);
+  // modo presentación: tras la entrada, la lluvia sigue en bucle
+  addEventListener("message", e => {
+    const t = e.data && e.data.t; if (typeof t !== "number") return;
+    if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
+  });
+</script>
+</body></html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1920, height=1080"/>
+<script src="../vendor/gsap.min.js"></script>
+<style>
+  @font-face{font-family:"Maquina";src:url("../vendor/maquina.ttf")}
+  #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
+  .abs{position:absolute}
+  #vel{inset:0;background:rgba(2,10,4,.72)}
+  #mod{left:80px;top:56px;font-family:"Maquina",monospace;font-size:26px;letter-spacing:.12em;color:#3dff7a;opacity:.8}
+  #h{left:0;right:0;top:150px;text-align:center;font-family:"Maquina",monospace;font-size:78px;letter-spacing:.06em;color:#3dff7a;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
+  .card{top:300px;width:780px}
+  #c1{left:140px} #c2{left:1000px}
+  .marco{position:relative;height:520px;border:2px solid rgba(61,255,122,.55);background:rgba(2,16,6,.9);box-shadow:0 0 30px rgba(43,255,106,.18) inset,0 0 24px rgba(43,255,106,.25);opacity:0}
+  .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Maquina",monospace;font-size:28px;color:rgba(61,255,122,.5);text-align:center}
+  .ph small{font-size:18px;opacity:.7;margin-top:8px}
+  .img{position:absolute;inset:10px;background-size:contain;background-position:center;background-repeat:no-repeat}
+  .ico{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 8px rgba(43,255,106,.6))}
+  .tr{stroke-dasharray:1;stroke-dashoffset:1}
+  .tapa{inset:0;background:#020a04;transform-origin:50% 100%}
+  .scan{left:0;right:0;top:0;height:4px;background:#b9ffd0;box-shadow:0 0 18px 6px rgba(43,255,106,.7);opacity:0}
+  .esq{position:absolute;width:34px;height:34px;border:4px solid #3dff7a}
+  .esq.a{left:-8px;top:-8px;border-right:0;border-bottom:0} .esq.b{right:-8px;top:-8px;border-left:0;border-bottom:0}
+  .esq.c{left:-8px;bottom:-8px;border-right:0;border-top:0} .esq.d{right:-8px;bottom:-8px;border-left:0;border-top:0}
+  .tit{margin-top:30px;text-align:center;font-family:"Maquina",monospace;font-size:46px;color:#e6ffee;text-shadow:0 0 14px rgba(43,255,106,.8);min-height:56px}
+  .sub{margin-top:8px;text-align:center;font-family:"Maquina",monospace;font-size:28px;color:#9fe8b4;min-height:36px}
+</style></head><body>
+<div id="root" data-composition-id="m5-ppt" data-width="1920" data-height="1080">
+  <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div id="vel" class="abs"></div>
+  <div id="mod" class="abs"></div>
+  <div id="h" class="abs"></div>
+  <div id="c1" class="abs card">
+    <div class="marco"><svg class="ico" viewBox="0 0 760 440"><rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="5" x="330" y="60" width="100" height="170" rx="50"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M345 95 H415"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M345 117 H415"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M345 139 H415"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M345 161 H415"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M345 183 H415"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M300 180 Q300 280 380 280 Q460 280 460 180"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M380 280 V330"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M330 335 H430"/><line class="onda" data-on="2.6" x1="60" x2="60" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="84" x2="84" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="108" x2="108" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="132" x2="132" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="156" x2="156" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="180" x2="180" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="204" x2="204" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="228" x2="228" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="252" x2="252" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="276" x2="276" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="484" x2="484" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="508" x2="508" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="532" x2="532" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="556" x2="556" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="580" x2="580" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="604" x2="604" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="628" x2="628" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="652" x2="652" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="676" x2="676" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><line class="onda" data-on="2.6" x1="700" x2="700" y1="200" y2="200" stroke="#3dff7a" stroke-width="10" stroke-linecap="round"/><circle cx="60" cy="48" r="9" fill="#ff4d4d" class="parp" data-t="2.4"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="18" x="78" y="54" class="reloj" data-t="2.4">REC 00:00</text><rect x="560" y="28" width="160" height="38" rx="6" stroke="#3dff7a" stroke-width="2.5" fill="rgba(61,255,122,.15)" class="parp" data-t="2.8"/><text font-family="Maquina, monospace" font-size="18" fill="#3dff7a" x="640" y="53" text-anchor="middle" class="fx" data-t="2.8">ON AIR</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="26" x="380" y="395" text-anchor="middle" class="fx" data-t="3.0">PODCAST IP</text></svg><div class="tapa abs"></div><div class="scan abs"></div>
+      <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
+    <div class="tit" id="t1"></div>
+  </div>
+  <div id="c2" class="abs card">
+    <div class="marco"><svg class="ico" viewBox="0 0 760 440"><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="5" stroke-dasharray="1" d="M80 360 C170 360 180 280 270 280 C370 280 380 190 470 190 C570 190 580 100 670 100"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="80" cy="360" r="22"/><circle cx="80" cy="360" r="12" fill="#3dff7a" class="fx" data-t="3.6"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="17" x="80" y="322" text-anchor="middle" class="fx" data-t="2.2">DÍA 1</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="13" x="80" y="408" text-anchor="middle" class="fx" data-t="2.4">BIENVENIDA</text><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="270" cy="280" r="22"/><circle cx="270" cy="280" r="12" fill="#3dff7a" class="fx" data-t="4.3"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="17" x="270" y="242" text-anchor="middle" class="fx" data-t="2.4000000000000004">SEMANA 1</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="13" x="270" y="328" text-anchor="middle" class="fx" data-t="2.6">INDUCCIÓN</text><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="470" cy="190" r="22"/><circle cx="470" cy="190" r="12" fill="#3dff7a" class="fx" data-t="5.0"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="17" x="470" y="152" text-anchor="middle" class="fx" data-t="2.6">MES 1</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="13" x="470" y="238" text-anchor="middle" class="fx" data-t="2.8">ACOMPAÑAMIENTO</text><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="670" cy="100" r="22"/><circle cx="670" cy="100" r="12" fill="#3dff7a" class="fx" data-t="5.699999999999999"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="17" x="670" y="62" text-anchor="middle" class="fx" data-t="2.8000000000000003">MES 3</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="13" x="670" y="146" text-anchor="middle" class="fx" data-t="3.0">AUTONOMÍA</text><g data-mov="80,360;175,330;270,280;370,240;470,190;570,150;670,100|7|0|3.4" opacity="0"><circle r="9" fill="#e6ffee"/><circle r="18" fill="none" stroke="#b9ffd0" stroke-width="2"/></g><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="16" x="560" y="330" text-anchor="middle" class="fx" data-t="4.0">NUEVO TALENTO</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2" d="M560 312 V250"/></svg><div class="tapa abs"></div><div class="scan abs"></div>
+      <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
+    <div class="tit" id="t2"></div>
+  </div>
+</div>
+<script>
+  let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
+  const D = "0123456789";
+  const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
+  // --- lluvia de números (función pura del tiempo) ---
+  const F = 22, COLS = 1920 / F | 0, ROWS = 1080 / F | 0;
+  const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0) }));
+  const cx = document.getElementById("lluvia").getContext("2d");
+  const dig = (a, b, t) => G[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % G.length];
+  function lluvia(t) {
+    cx.fillStyle = "#020a04"; cx.fillRect(0, 0, 1920, 1080);
+    cx.font = F + "px monospace";
+    col.forEach((c, i) => {
+      const head = Math.floor(c.off + t * c.v) % (ROWS + c.len + 10);
+      for (let j = 0; j < c.len; j++) {
+        const row = head - j; if (row < 0 || row > ROWS) continue;
+        cx.fillStyle = j === 0 ? "rgba(220,255,230,.9)" : `rgba(43,255,106,${((1 - j / c.len) * .75).toFixed(2)})`;
+        cx.fillText(dig(i, row, t), i * F, row * F);
+      }
+    });
+  }
+  // máquina de escribir: letra por letra a ritmo constante
+  function maquina(el, g, t, cursorFijo) {
+    if (t < g[0]) { el.textContent = ""; return; }
+    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    const cur = n < g[2].length || (cursorFijo && Math.floor(t * 2.5) % 2 === 0) ? "▌" : "";
+    el.textContent = g[2].slice(0, n) + cur;
+  }
+  // textos: cada imagen con su subtítulo
+  const TXT = [
+    ["mod", [0.2, 1.2, "> MÓDULO_05 // ARCHIVOS DESBLOQUEADOS"]],
+    ["h", [0.4, 1.6, "ON BOARDING MATRIX"]],
+    ["t1", [2.6, 3.6, "Podcast IP"]],
+    ["t2", [4.4, 5.4, "Plan de On Boarding"]],
+  ];
+  const st = { t: 0 };
+  function pintar() {
+    const t = st.t;
+    lluvia(t); hud(t);
+    TXT.forEach(([id, g]) => maquina(document.getElementById(id), g, t, false));
+  }
+  // --- HUD: anillos que giran, cifras que se descifran, pulsos por la red, engranaje ---
+  const D10 = "0123456789";
+  const fx = [...document.querySelectorAll(".fx")], cifras = [...document.querySelectorAll(".dig")], pul = [...document.querySelectorAll(".pul")];
+  cifras.forEach(d => d.dataset.base = d.textContent);
+  const rots = [...document.querySelectorAll("[data-rot]")], movs = [...document.querySelectorAll("[data-mov]")], ondas = [...document.querySelectorAll(".onda")], parps = [...document.querySelectorAll(".parp")], relojes = [...document.querySelectorAll(".reloj")];
+  // animación continua de los visuales (función pura del tiempo, sirve igual en render y en bucle)
+  function hud(t) {
+    rots.forEach(e => { const [v, x, y] = e.dataset.rot.split(" ").map(Number); e.setAttribute("transform", `rotate(${t * v} ${x} ${y})`); });
+    fx.forEach(e => e.style.opacity = t >= +e.dataset.t ? 1 : 0);
+    // las cifras nunca se fijan: se ven "descifrándose" (no son datos reales)
+    cifras.forEach((e, k) => { e.style.opacity = t >= +e.dataset.t ? 1 : 0; e.textContent = e.dataset.base.replace(/0/g, (m, j) => D10[(Math.floor(t * 14) * 7 + j * 3 + k * 5) % 10]); });
+    pul.forEach((e, k) => {
+      const [x1, y1, x2, y2] = e.dataset.a.split(",").map(Number), f = (t * 0.6 + k * 0.37) % 1;
+      e.setAttribute("cx", x1 + (x2 - x1) * f); e.setAttribute("cy", y1 + (y2 - y1) * f);
+      e.setAttribute("opacity", t > +e.dataset.on ? Math.sin(f * Math.PI).toFixed(2) : 0);
+    });
+    // elementos que recorren una ruta en bucle: data-mov="x,y;x,y;…|periodo|desfase|inicio"
+    movs.forEach(e => {
+      const [ruta, per, off, ini] = e.dataset.mov.split("|"), P = ruta.split(";").map(p => p.split(",").map(Number));
+      if (t < +ini) { e.setAttribute("opacity", 0); return; }
+      const f = ((t - ini) / per + +off) % 1, n = P.length - 1, u = f * n, i = Math.min(n - 1, Math.floor(u)), r = u - i;
+      e.setAttribute("transform", `translate(${(P[i][0] + (P[i + 1][0] - P[i][0]) * r).toFixed(1)} ${(P[i][1] + (P[i + 1][1] - P[i][1]) * r).toFixed(1)})`);
+      e.setAttribute("opacity", Math.min(1, Math.sin(f * Math.PI) * 4).toFixed(2));
+    });
+    ondas.forEach((e, k) => { const h = t > +e.dataset.on ? 6 + Math.abs(Math.sin(t * 5 + k * .9) * Math.sin(t * 2.3 + k * .4)) * 70 : 0; e.setAttribute("y1", 200 - h); e.setAttribute("y2", 200 + h); });
+    parps.forEach(e => e.style.opacity = t < +e.dataset.t ? 0 : Math.floor(t * 2) % 2 ? .2 : 1);
+    relojes.forEach(e => { const s = Math.max(0, Math.floor(t - e.dataset.t)); e.style.opacity = t >= +e.dataset.t ? 1 : 0; e.textContent = "REC " + String(s / 60 | 0).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); });
+  }
+  const DUR = 10;
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
+  // cada imagen se "descarga": aparece el marco y una línea de escaneo la revela de arriba hacia abajo
+  [["#c1", 1.2], ["#c2", 3.0]].forEach(([c, d]) => {
+    tl.fromTo(c + " .marco", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, d);
+    tl.fromTo(c + " .tapa", { scaleY: 1 }, { scaleY: 0, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.fromTo(c + " .scan", { y: 0, opacity: 1 }, { y: 516, opacity: 1, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.to(c + " .scan", { opacity: 0, duration: 0.2 }, d + 1.5);
+    // el ícono se dibuja trazo por trazo
+    tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);
+  });
+  window.__timelines = window.__timelines || {};
+  window.__timelines["m5-ppt"] = tl;
+  pintar(); tl.seek(0);
+  // modo presentación: tras la entrada, la lluvia sigue en bucle
+  addEventListener("message", e => {
+    const t = e.data && e.data.t; if (typeof t !== "number") return;
+    if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
+  });
+</script>
+</body></html>

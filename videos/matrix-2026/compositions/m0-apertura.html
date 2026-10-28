@@ -68,40 +68,50 @@
     });
   }
   const st = { t: 0, b: 0.85 };
-  // --- Jaina: esfera de caracteres que gira y respira (provisional, hasta tener el PNG oficial) ---
-  const cj = document.getElementById("jaina").getContext("2d"), NJ = 520, PJ = [];
-  for (let i = 0; i < NJ; i++) { const yy = 1 - 2 * (i + .5) / NJ, r = Math.sqrt(1 - yy * yy), a = i * 2.39996; PJ.push([Math.cos(a) * r, yy, Math.sin(a) * r]); }
+  // --- Jaina: esfera de partículas que se va formando, gira y respira ---
+  let sj = 11; const rj = () => (sj = (sj * 16807) % 2147483647) / 2147483647;
+  const cj = document.getElementById("jaina").getContext("2d"), PJ = [];
+  for (let i = 0; i < 3200; i++) {
+    const u = rj() * 2 - 1, a = rj() * 6.2832, r = Math.sqrt(1 - u * u);
+    // más densidad hacia los polos, como la esfera de referencia
+    const y = Math.sign(u) * Math.pow(Math.abs(u), 0.7), rr = Math.sqrt(1 - y * y);
+    PJ.push({ x: Math.cos(a) * rr, y, z: Math.sin(a) * rr, b: 0.4 + rj() * 1.9, s: 1 + rj() * 1.4, k: 1.5 + rj() * 1.5 });
+  }
+  const forma = t => Math.min(1, Math.max(0, (t - 0.4) / 2.1));
   function jaina(t) {
-    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.06 * br), ry = t * 0.5, c = Math.cos(ry), sn = Math.sin(ry);
+    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.04 * br), ry = t * 0.35, c = Math.cos(ry), sn = Math.sin(ry);
     cj.clearRect(0, 0, 600, 600);
-    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R);
-    g.addColorStop(0, `rgba(160,255,190,${.35 + .25 * br})`); g.addColorStop(.55, "rgba(43,255,106,.12)"); g.addColorStop(1, "rgba(43,255,106,0)");
-    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R, 0, 7); cj.fill();
-    cj.font = "bold 15px monospace"; cj.textAlign = "center"; cj.textBaseline = "middle";
-    PJ.forEach(([x, y, z], i) => {
-      const X = x * c + z * sn, Z = -x * sn + z * c, d = (Z + 1) / 2;
-      cj.fillStyle = `rgba(${d > .8 ? 220 : 43},255,${d > .8 ? 230 : 106},${(.12 + .88 * d).toFixed(2)})`;
-      cj.fillText(G[(i * 7 + Math.floor(t * 6 + i)) % G.length], 300 + X * R * (.85 + .15 * d), 300 + y * R * (.85 + .15 * d));
+    const f = forma(t);
+    // fondo oscuro detrás de la esfera: la lluvia nunca se ve a través de Jaina
+    const o = cj.createRadialGradient(300, 300, R * .9, 300, 300, R * 1.12);
+    o.addColorStop(0, `rgba(2,10,4,${.96 * f})`); o.addColorStop(1, "rgba(2,10,4,0)");
+    cj.fillStyle = o; cj.beginPath(); cj.arc(300, 300, R * 1.12, 0, 7); cj.fill();
+    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R * 1.1);
+    g.addColorStop(0, `rgba(43,255,106,${(.10 + .08 * br) * f})`); g.addColorStop(1, "rgba(43,255,106,0)");
+    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R * 1.1, 0, 7); cj.fill();
+    PJ.forEach(p => {
+      const e = Math.min(1, Math.max(0, (t - p.b) / 0.8)); if (e <= 0) return;
+      const ee = 1 - Math.pow(1 - e, 3), sc = R * (1 + (p.k - 1) * (1 - ee));
+      const X = p.x * c + p.z * sn, Z = -p.x * sn + p.z * c, d = (Z + 1) / 2;
+      cj.fillStyle = `rgba(${(120 + 110 * d) | 0},255,${(150 + 80 * d) | 0},${((.25 + .75 * d) * ee).toFixed(2)})`;
+      cj.fillRect(300 + X * sc, 300 + p.y * sc, p.s, p.s);
     });
-    // núcleo oscuro + letra J brillante, como el logo de Jaina
-    const k = cj.createRadialGradient(300, 300, 0, 300, 300, R * .55);
-    k.addColorStop(0, "rgba(2,20,8,.85)"); k.addColorStop(1, "rgba(2,20,8,0)");
-    cj.fillStyle = k; cj.beginPath(); cj.arc(300, 300, R * .55, 0, 7); cj.fill();
+    // letra J brillante, como el logo de Jaina
     const u = R / 300;
-    cj.save(); cj.translate(300, 300); cj.scale(u, u);
+    cj.save(); cj.globalAlpha = Math.min(1, Math.max(0, (t - 2.0) / 0.5)); cj.translate(300, 300); cj.scale(u, u);
     cj.lineWidth = 13; cj.lineCap = "round"; cj.lineJoin = "round";
     cj.shadowColor = "#2bff6a"; cj.shadowBlur = 30 + 20 * br; cj.strokeStyle = "#f2fff5";
     cj.beginPath(); cj.moveTo(-22, -92); cj.lineTo(55, -92); cj.lineTo(55, 32); cj.arc(0, 32, 55, 0, Math.PI * .85); cj.stroke();
     cj.restore();
-    document.getElementById("halo").style.opacity = .4 + .6 * br;
+    document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
   }
   function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); }
-  const DUR = 11.6;
+  const DUR = 30;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
   // Jaina aparece al centro, se presenta y se desplaza a la esquina inferior derecha
-  tl.fromTo("#jw", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 1.0, ease: "back.out(1.6)", immediateRender: false }, 0.5);
+  tl.set("#jw", { opacity: 1 }, 0.4);
   tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 2.7);
   // cuando el título está armado, brilla
   tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 10.7);

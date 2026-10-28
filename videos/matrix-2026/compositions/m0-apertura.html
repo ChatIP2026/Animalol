@@ -58,7 +58,7 @@
     if (px[(y * 1920 + x) * 4 + 3] > 128) {
       const r = rnd();
       // llegan de izquierda a derecha, cada número desde su propia altura
-      P.push({ x, y, linea2: y > 565, t0: 20.6 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
+      P.push({ x, y, linea2: y > 565, t0: 23.2 + (x / 1920) * 3.5 + r * 0.8 + (y > 565 ? 1.2 : 0), caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
     }
   const ct = document.getElementById("titulo").getContext("2d");
   const DUR_CAIDA = 1.0;
@@ -114,18 +114,18 @@
   }
   // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
   // modo "abajo": subtítulo bajo Jaina; "centro": frase sola al medio, con corte seco
+  // tiempos medidos sobre el audio real de Jaina (assets/voz/01-intro-sync.mp3)
   const GUION = [
-    [2.8, 10.0, "Hoy, muchos ven la inteligencia artificial como una Matrix: un sistema que decide por nosotros, que nos observa… y que nos controla.", "abajo"],
-    [10.4, 12.6, "Pero nosotros vimos otra cosa. Vimos una puerta.", "abajo"],
-    [12.9, 15.8, "Una forma de trabajar mejor, más rápido y con propósito.", "abajo"],
-    [17.4, 18.5, "¿Lo bueno?", "centro"],
-    [18.8, 20.3, "Es que en iPartner…", "centro"],
-    [28.8, 32.0, "Pero toda Matrix necesita a alguien que la enfrente…", "abajo"],
-    [32.4, 33.3, "Con ustedes:", "abajo"],
+    [2.8, 14.3, "Hoy, muchos ven la inteligencia artificial como una Matrix: un sistema que decide por nosotros, que nos observa… y que nos controla.", "abajo"],
+    [14.9, 17.6, "Pero nosotros vimos otra cosa. Vimos una puerta.", "abajo"],
+    [17.6, 20.3, "Una forma de trabajar mejor, más rápido y con propósito.", "abajo"],
+    [20.85, 21.3, "¿Lo bueno?", "centro"],
+    [21.8, 22.8, "Es que en iPartner…", "centro"],
+    [31.0, 33.8, "Pero toda Matrix necesita a alguien que la enfrente…", "abajo"],
+    [34.3, 35.0, "Con ustedes:", "abajo"],
   ];
-  const NOM = [33.6, 35.0, "NEO MARIO MÉNDEZ"];
-  // la voz sigue mientras se arma el titular ("hemos desbloqueado la Matrix")
-  const VOZ = GUION.map(g => [g[0], g[1]]).concat([[20.6, 23.0], [33.6, 35.0]]);
+  const NOM = [35.4, 36.9, "NEO MARIO MÉNDEZ"];
+  const VOZ = [[2.8, 6.44], [6.97, 10.2], [10.8, 11.75], [12.37, 14.28], [14.92, 15.94], [16.49, 20.33], [20.85, 21.29], [21.82, 22.8], [23.17, 25.0], [31.0, 33.77], [34.31, 35.03], [35.4, 36.9]];
   function habla(t) {
     if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;
     return Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1));
@@ -146,23 +146,26 @@
     maquina(document.getElementById("nom"), t >= NOM[0] ? NOM : null, t);
   }
   function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); subtitulo(st.t); }
-  const DUR = 42;
+  const DUR = 44;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
   // Jaina aparece al centro, se presenta y se desplaza a la esquina inferior derecha
   tl.set("#jw", { opacity: 1 }, 0.4);
-  tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 16.0);
+  tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 19.0);
   // cuando el título está armado, brilla
-  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 27.3);
-  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 27.3);
-  [27.5, 27.6, 27.7, 27.85, 27.95].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
+  tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 29.9);
+  tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 29.9);
+  [30.1, 30.2, 30.3, 30.45, 30.55].forEach((d, i) => tl.to("#k", { opacity: i % 2 ? 0.2 : 1, duration: 0.03 }, d));
   window.__timelines = window.__timelines || {};
   window.__timelines["m0-apertura"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: presentacion.html envía el tiempo; tras la entrada, la lluvia sigue en bucle con el título fijo
+  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
+  const VOCES = [["../assets/voz/01-intro-sync.mp3", 0]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
+    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
     if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
   });
 </script>

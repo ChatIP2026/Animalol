@@ -94,7 +94,7 @@
 
   // --- guion de Jaina (tiempos provisionales, se ajustarán al audio) ---
   const GUION = [];
-  const Q1 = [0.8, 2.0, "Neo Mario Méndez:"], Q2 = [2.3, 5.4, "¿cómo pudieron desbloquear la Business Matrix?"], MOD = [0.2, 1.4, "> MÓDULO_01 // BUSINESS_MATRIX"];
+  const Q1 = [0.5, 1.2, "Neo Mario Méndez:"], Q2 = [1.6, 4.2, "¿cómo pudieron desbloquear la Business Matrix?"], MOD = [0.2, 1.4, "> MÓDULO_01 // BUSINESS_MATRIX"];
   const VOZ = GUION.concat([Q1, Q2]);
   function habla(t) {
     if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;
@@ -129,8 +129,11 @@
   window.__timelines["m1-business"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: presentacion.html envía el tiempo; al terminar, el fondo sigue en bucle
+  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
+  const VOCES = [["../assets/voz/03-pregunta.mp3", 0.6]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
+    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
     if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
   });
 </script>

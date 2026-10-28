@@ -134,7 +134,8 @@
     cj.restore();
     document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
   }
-  function habla() { return 0; }
+  const VOZ = [[1.0, 21.2], [23.0, 30.6]];
+  function habla(t) { return VOZ.some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
   gsap.set("#jw", { scale: 0.42 });
   const fmt = v => (v >= 1000 ? Math.floor(v / 1000) + "," + String(v % 1000).padStart(3, "0") : String(v)) + "K";
   const barras = [...document.querySelectorAll(".bar")], vals = [...document.querySelectorAll(".val")], proy = [...document.querySelectorAll(".proy")];
@@ -144,7 +145,7 @@
       const p = Math.min(1, Math.max(0, (t - b.dataset.t) / 0.9)), e = 1 - Math.pow(1 - p, 3), h = b.dataset.v / 1300 * 430 * e;
       b.style.height = h + "px"; b.style.top = (880 - h) + "px";
       const v = vals[k]; v.textContent = p ? fmt(Math.round(b.dataset.v * e)) : ""; // la cifra nunca toca la línea del promedio (y=529): si chocaría, sube por encima de ella
-      let y = 880 - h - 36; if (y < 529 + 8 && y + 32 > 529 - 8) y = 529 - 44; v.style.top = y + "px";
+      let y = 880 - h - 36; if (y < 535 && y + 30 > 523) y = 529 - 44; v.style.top = y + "px";
       if (b.dataset.curso !== undefined) { const c = document.getElementById("curso"); c.style.opacity = p >= 1 ? (Math.floor(t * 2) % 2 ? .4 : 1) : 0; c.style.left = (parseFloat(b.style.left) - 14) + "px"; c.style.top = Math.min(880 - h - 70, 529 - 36) + "px"; }
     });
     proy.forEach(e => e.style.opacity = t >= +e.dataset.t ? .5 + .5 * Math.abs(Math.sin(t * 2)) : 0);
@@ -152,7 +153,7 @@
     document.getElementById("prom").style.opacity = pr; document.getElementById("promt").style.opacity = pr;
     jaina(t);
   }
-  const DUR = 10;
+  const DUR = 32;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   // cada imagen se "descarga": aparece el marco y una línea de escaneo la revela de arriba hacia abajo
@@ -168,8 +169,11 @@
   window.__timelines["m6-final"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle
+  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
+  const VOCES = [["../assets/voz/04-cierre.mp3", 1.0], ["../assets/voz/05-foto.mp3", 23.0]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
+    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
     if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
   });
 </script>

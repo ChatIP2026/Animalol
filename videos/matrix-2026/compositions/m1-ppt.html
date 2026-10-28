@@ -7,11 +7,11 @@
   #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
   .abs{position:absolute}
   #vel{inset:0;background:rgba(2,10,4,.72)}
-  #mod{left:80px;top:56px;font-family:"Maquina",monospace;font-size:26px;letter-spacing:.12em;color:#3dff7a;opacity:.8}
-  #h{left:0;right:0;top:92px;text-align:center;font-family:"Maquina",monospace;font-size:78px;letter-spacing:.06em;color:#3dff7a;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
-  .card{top:250px;width:780px}
+  #mod{left:80px;top:110px;font-family:"Maquina",monospace;font-size:26px;letter-spacing:.12em;color:#3dff7a;opacity:.8}
+  #h{left:0;right:0;top:150px;text-align:center;font-family:"Maquina",monospace;font-size:78px;letter-spacing:.06em;color:#3dff7a;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
+  .card{top:300px;width:780px}
   #c1{left:140px} #c2{left:1000px}
-  .marco{position:relative;height:460px;border:2px solid rgba(61,255,122,.55);background:rgba(2,16,6,.9);box-shadow:0 0 30px rgba(43,255,106,.18) inset,0 0 24px rgba(43,255,106,.25);opacity:0}
+  .marco{position:relative;height:520px;border:2px solid rgba(61,255,122,.55);background:rgba(2,16,6,.9);box-shadow:0 0 30px rgba(43,255,106,.18) inset,0 0 24px rgba(43,255,106,.25);opacity:0}
   .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Maquina",monospace;font-size:28px;color:rgba(61,255,122,.5);text-align:center}
   .ph small{font-size:18px;opacity:.7;margin-top:8px}
   .img{position:absolute;inset:10px;background-size:contain;background-position:center;background-repeat:no-repeat}
@@ -142,7 +142,7 @@
   [["#c1", 1.2], ["#c2", 3.0]].forEach(([c, d]) => {
     tl.fromTo(c + " .marco", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, d);
     tl.fromTo(c + " .tapa", { scaleY: 1 }, { scaleY: 0, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
-    tl.fromTo(c + " .scan", { y: 0, opacity: 1 }, { y: 456, opacity: 1, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.fromTo(c + " .scan", { y: 0, opacity: 1 }, { y: 516, opacity: 1, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
     tl.to(c + " .scan", { opacity: 0, duration: 0.2 }, d + 1.5);
     // el ícono se dibuja trazo por trazo
     tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);

@@ -9,15 +9,12 @@
   .abs{position:absolute}
   #vel{inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(2,10,4,0),rgba(2,10,4,.85) 100%)}
   #sub{left:200px;right:200px;top:860px;text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6)}
-  #jw{left:1450px;top:610px;width:600px;height:600px}
-  #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
 </style></head><body>
 <div id="root" data-composition-id="m-balas" data-width="1920" data-height="1080">
   <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
   <canvas id="balas" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
   <div id="vel" class="abs"></div>
   <div id="sub" class="abs"></div>
-  <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
 </div>
 <script>
   let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
@@ -80,44 +77,6 @@
     });
     cb.globalAlpha = 1;
   }
-  // --- Jaina: esfera de partículas que se va formando, gira y respira ---
-  let sj = 11; const rj = () => (sj = (sj * 16807) % 2147483647) / 2147483647;
-  const cj = document.getElementById("jaina").getContext("2d"), PJ = [];
-  for (let i = 0; i < 3200; i++) {
-    const u = rj() * 2 - 1, a = rj() * 6.2832, r = Math.sqrt(1 - u * u);
-    // más densidad hacia los polos, como la esfera de referencia
-    const y = Math.sign(u) * Math.pow(Math.abs(u), 0.7), rr = Math.sqrt(1 - y * y);
-    PJ.push({ x: Math.cos(a) * rr, y, z: Math.sin(a) * rr, b: 0.4 + rj() * 1.9, s: 1 + rj() * 1.4, k: 1.5 + rj() * 1.5 });
-  }
-  const forma = () => 1;
-  function jaina(t) {
-    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.04 * br + 0.05 * habla(t)), ry = t * 0.35, c = Math.cos(ry), sn = Math.sin(ry);
-    cj.clearRect(0, 0, 600, 600);
-    const f = forma(t);
-    // fondo oscuro detrás de la esfera: la lluvia nunca se ve a través de Jaina
-    const o = cj.createRadialGradient(300, 300, R * .9, 300, 300, R * 1.12);
-    o.addColorStop(0, `rgba(2,10,4,${.96 * f})`); o.addColorStop(1, "rgba(2,10,4,0)");
-    cj.fillStyle = o; cj.beginPath(); cj.arc(300, 300, R * 1.12, 0, 7); cj.fill();
-    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R * 1.1);
-    g.addColorStop(0, `rgba(43,255,106,${(.10 + .08 * br) * f})`); g.addColorStop(1, "rgba(43,255,106,0)");
-    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R * 1.1, 0, 7); cj.fill();
-    PJ.forEach(p => {
-      const e = 1;
-      const ee = 1 - Math.pow(1 - e, 3), sc = R * (1 + (p.k - 1) * (1 - ee));
-      const X = p.x * c + p.z * sn, Z = -p.x * sn + p.z * c, d = (Z + 1) / 2;
-      cj.fillStyle = `rgba(${(120 + 110 * d) | 0},255,${(150 + 80 * d) | 0},${((.25 + .75 * d) * ee).toFixed(2)})`;
-      cj.fillRect(300 + X * sc, 300 + p.y * sc, p.s, p.s);
-    });
-    // letra J brillante, como el logo de Jaina
-    const u = R / 300;
-    cj.save(); cj.globalAlpha = 1; cj.translate(300, 300); cj.scale(u, u);
-    cj.lineWidth = 13; cj.lineCap = "round"; cj.lineJoin = "round";
-    cj.shadowColor = "#2bff6a"; cj.shadowBlur = 30 + 20 * br; cj.strokeStyle = "#f2fff5";
-    cj.beginPath(); cj.moveTo(-22, -92); cj.lineTo(55, -92); cj.lineTo(55, 32); cj.arc(0, 32, 55, 0, Math.PI * .85); cj.stroke();
-    cj.restore();
-    document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
-  }
-  // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
   const GUION = [[1.0, 2.7, "Neo… ¿estás listo?"]];
   const VOZ = GUION;
   function habla(t) {
@@ -132,13 +91,12 @@
     el.textContent = g[2].slice(0, Math.max(0, n)) + cursor;
   }
   const sub = document.getElementById("sub");
-  gsap.set("#jw", { scale: 0.42 });
   const st = { t: 0, lento: 1 };
   function pintar() {
     const t = st.t;
     // cámara lenta: la lluvia se frena casi por completo cuando empiezan las balas
     lluvia(t < 3 ? t : 3 + (t - 3) * 0.12);
-    balas(t); jaina(t);
+    balas(t);
     const g = GUION.find(([a, b]) => t >= a && t <= b + 0.6);
     maquina(sub, g, t); sub.style.opacity = g ? 1 : 0;
   }

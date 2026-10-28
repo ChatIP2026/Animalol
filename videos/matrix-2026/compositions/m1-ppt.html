@@ -33,12 +33,12 @@
   <div id="c1" class="abs card">
     <div class="marco"><div class="ph">IMAGEN PENDIENTE<br/><small>frame-cotizacion.png</small></div><div class="img" style="background-image:url('../assets/business/frame-cotizacion.png')"></div><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
-    <div class="tit" id="t1"></div><div class="sub" id="s1"></div>
+    <div class="tit" id="t1"></div>
   </div>
   <div id="c2" class="abs card">
     <div class="marco"><div class="ph">IMAGEN PENDIENTE<br/><small>ingenieria-comercial.png</small></div><div class="img" style="background-image:url('../assets/business/ingenieria-comercial.png')"></div><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
-    <div class="tit" id="t2"></div><div class="sub" id="s2"></div>
+    <div class="tit" id="t2"></div>
   </div>
   <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
 </div>
@@ -109,14 +109,12 @@
     const cur = n < g[2].length || (cursorFijo && Math.floor(t * 2.5) % 2 === 0) ? "▌" : "";
     el.textContent = g[2].slice(0, n) + cur;
   }
-  // textos: cada imagen con su título y subtítulo (subtítulos pendientes del equipo)
+  // textos: cada imagen con su subtítulo
   const TXT = [
     ["mod", [0.2, 1.2, "> MÓDULO_01 // ARCHIVOS DESBLOQUEADOS"]],
     ["h", [0.4, 1.6, "BUSINESS MATRIX"]],
     ["t1", [2.6, 3.6, "Frame de Cotización"]],
-    ["s1", [3.7, 4.6, "Subtítulo pendiente"]],
     ["t2", [4.4, 5.4, "Ingeniería Comercial"]],
-    ["s2", [5.5, 6.4, "Subtítulo pendiente"]],
   ];
   gsap.set("#jw", { scale: 0.42 });
   const st = { t: 0 };

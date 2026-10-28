@@ -19,11 +19,12 @@
 <script>
   let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
   const D = "0123456789";
+  const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
   // --- lluvia de números (función pura del tiempo) ---
   const F = 22, COLS = 1920 / F | 0, ROWS = 1080 / F | 0;
   const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0) }));
   const cx = document.getElementById("lluvia").getContext("2d");
-  const dig = (a, b, t) => D[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % 10];
+  const dig = (a, b, t) => G[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % G.length];
   function lluvia(t) {
     cx.fillStyle = "#020a04"; cx.fillRect(0, 0, 1920, 1080);
     cx.font = F + "px monospace";

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1920, height=1080"/>
+<script src="../vendor/gsap.min.js"></script>
+<style>
+  @font-face{font-family:"Maquina";src:url("../vendor/maquina.ttf")}
+  #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
+  .abs{position:absolute}
+  #vel{inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(2,10,4,0),rgba(2,10,4,.85) 100%)}
+  #sub{left:200px;right:200px;top:860px;text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6)}
+  #jw{left:1450px;top:610px;width:600px;height:600px}
+  #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
+</style></head><body>
+<div id="root" data-composition-id="m-balas" data-width="1920" data-height="1080">
+  <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <canvas id="balas" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div id="vel" class="abs"></div>
+  <div id="sub" class="abs"></div>
+  <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
+</div>
+<script>
+  let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
+  const D = "0123456789";
+  const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
+  // --- lluvia de números (función pura del tiempo) ---
+  const F = 22, COLS = 1920 / F | 0, ROWS = 1080 / F | 0;
+  const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0) }));
+  const cx = document.getElementById("lluvia").getContext("2d");
+  const dig = (a, b, t) => G[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % G.length];
+  function lluvia(t) {
+    cx.fillStyle = "#020a04"; cx.fillRect(0, 0, 1920, 1080);
+    cx.font = F + "px monospace";
+    col.forEach((c, i) => {
+      const head = Math.floor(c.off + t * c.v) % (ROWS + c.len + 10);
+      for (let j = 0; j < c.len; j++) {
+        const row = head - j; if (row < 0 || row > ROWS) continue;
+        cx.fillStyle = j === 0 ? "rgba(220,255,230,.9)" : `rgba(43,255,106,${((1 - j / c.len) * .75).toFixed(2)})`;
+        cx.fillText(dig(i, row, t), i * F, row * F);
+      }
+    });
+  }
+  // --- balas en cámara lenta, con estela y ondas de aire (función pura del tiempo) ---
+  const B = [];
+  for (let i = 0; i < 9; i++) {
+    const s = 0.45 + rnd() * 1.15;  // profundidad: chicas lejos, grandes cerca
+    B.push({ y: 140 + ((i * 4) % 9) * 100 + rnd() * 30, s, v: (90 + rnd() * 110) * s, dir: i % 2 ? -1 : 1, off: rnd() * 2600, inicio: 3.2 + i * 0.55 });
+  }
+  B.sort((a, b) => a.s - b.s);
+  const cb = document.getElementById("balas").getContext("2d");
+  function bala(x, y, s, dir, t) {
+    const L = 110 * s, r = 15 * s;
+    cb.save(); cb.translate(x, y); cb.scale(dir, 1);
+    // estela
+    const e = cb.createLinearGradient(-L * 7, 0, -L / 2, 0);
+    e.addColorStop(0, "rgba(43,255,106,0)"); e.addColorStop(1, "rgba(43,255,106,.35)");
+    cb.fillStyle = e; cb.fillRect(-L * 7, -r * .7, L * 6.5, r * 1.4);
+    // ondas de aire que se abren detrás de la bala
+    for (let k = 0; k < 6; k++) {
+      const f = ((t * 1.6 + k / 6) % 1), d = L * .3 + f * L * 5;
+      cb.strokeStyle = `rgba(160,255,190,${((1 - f) * .55).toFixed(3)})`; cb.lineWidth = 2.2 * s;
+      cb.beginPath(); cb.ellipse(-d, 0, r * (.5 + f * 1.2), r * (1.3 + f * 3.2), 0, 0, 7); cb.stroke();
+    }
+    // cuerpo
+    const g = cb.createLinearGradient(0, -r, 0, r);
+    g.addColorStop(0, "#effff3"); g.addColorStop(.35, "#7dffa6"); g.addColorStop(1, "#0b5a25");
+    cb.fillStyle = g; cb.shadowColor = "#2bff6a"; cb.shadowBlur = 25 * s;
+    cb.beginPath(); cb.moveTo(-L / 2, -r); cb.lineTo(L * .15, -r);
+    cb.quadraticCurveTo(L * .5, -r * .9, L * .62, 0); cb.quadraticCurveTo(L * .5, r * .9, L * .15, r);
+    cb.lineTo(-L / 2, r); cb.closePath(); cb.fill();
+    cb.restore();
+  }
+  function balas(t) {
+    cb.clearRect(0, 0, 1920, 1080);
+    B.forEach(b => {
+      if (t < b.inicio) return;
+      const x = ((b.off + (t - b.inicio) * b.v) % 2600) - 340, X = b.dir > 0 ? x : 1920 - x;
+      cb.globalAlpha = Math.min(1, (t - b.inicio) / 0.6) * (.45 + .55 * Math.min(1, b.s));
+      bala(X, b.y, b.s, b.dir, t);
+    });
+    cb.globalAlpha = 1;
+  }
+  // --- Jaina: esfera de partículas que se va formando, gira y respira ---
+  let sj = 11; const rj = () => (sj = (sj * 16807) % 2147483647) / 2147483647;
+  const cj = document.getElementById("jaina").getContext("2d"), PJ = [];
+  for (let i = 0; i < 3200; i++) {
+    const u = rj() * 2 - 1, a = rj() * 6.2832, r = Math.sqrt(1 - u * u);
+    // más densidad hacia los polos, como la esfera de referencia
+    const y = Math.sign(u) * Math.pow(Math.abs(u), 0.7), rr = Math.sqrt(1 - y * y);
+    PJ.push({ x: Math.cos(a) * rr, y, z: Math.sin(a) * rr, b: 0.4 + rj() * 1.9, s: 1 + rj() * 1.4, k: 1.5 + rj() * 1.5 });
+  }
+  const forma = () => 1;
+  function jaina(t) {
+    const br = Math.pow(0.5 + 0.5 * Math.sin(t * 1.35), 1.6), R = 230 * (1 + 0.04 * br + 0.05 * habla(t)), ry = t * 0.35, c = Math.cos(ry), sn = Math.sin(ry);
+    cj.clearRect(0, 0, 600, 600);
+    const f = forma(t);
+    // fondo oscuro detrás de la esfera: la lluvia nunca se ve a través de Jaina
+    const o = cj.createRadialGradient(300, 300, R * .9, 300, 300, R * 1.12);
+    o.addColorStop(0, `rgba(2,10,4,${.96 * f})`); o.addColorStop(1, "rgba(2,10,4,0)");
+    cj.fillStyle = o; cj.beginPath(); cj.arc(300, 300, R * 1.12, 0, 7); cj.fill();
+    const g = cj.createRadialGradient(300, 300, 0, 300, 300, R * 1.1);
+    g.addColorStop(0, `rgba(43,255,106,${(.10 + .08 * br) * f})`); g.addColorStop(1, "rgba(43,255,106,0)");
+    cj.fillStyle = g; cj.beginPath(); cj.arc(300, 300, R * 1.1, 0, 7); cj.fill();
+    PJ.forEach(p => {
+      const e = 1;
+      const ee = 1 - Math.pow(1 - e, 3), sc = R * (1 + (p.k - 1) * (1 - ee));
+      const X = p.x * c + p.z * sn, Z = -p.x * sn + p.z * c, d = (Z + 1) / 2;
+      cj.fillStyle = `rgba(${(120 + 110 * d) | 0},255,${(150 + 80 * d) | 0},${((.25 + .75 * d) * ee).toFixed(2)})`;
+      cj.fillRect(300 + X * sc, 300 + p.y * sc, p.s, p.s);
+    });
+    // letra J brillante, como el logo de Jaina
+    const u = R / 300;
+    cj.save(); cj.globalAlpha = 1; cj.translate(300, 300); cj.scale(u, u);
+    cj.lineWidth = 13; cj.lineCap = "round"; cj.lineJoin = "round";
+    cj.shadowColor = "#2bff6a"; cj.shadowBlur = 30 + 20 * br; cj.strokeStyle = "#f2fff5";
+    cj.beginPath(); cj.moveTo(-22, -92); cj.lineTo(55, -92); cj.lineTo(55, 32); cj.arc(0, 32, 55, 0, Math.PI * .85); cj.stroke();
+    cj.restore();
+    document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
+  }
+  // --- guion de Jaina: [inicio, fin, texto]. Los tiempos se ajustarán al audio real ---
+  const GUION = [[1.0, 2.8, "Neo… ¿estás listo?"]];
+  const VOZ = GUION;
+  function habla(t) {
+    if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;
+    return Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1));
+  }
+  // máquina de escribir: letra por letra a ritmo constante, con cursor que parpadea
+  function maquina(el, g, t) {
+    if (!g) { el.textContent = ""; return; }
+    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    const cursor = n < g[2].length || Math.floor(t * 2.5) % 2 === 0 ? "▌" : " ";
+    el.textContent = g[2].slice(0, Math.max(0, n)) + cursor;
+  }
+  const sub = document.getElementById("sub");
+  gsap.set("#jw", { scale: 0.42 });
+  const st = { t: 0, lento: 1 };
+  function pintar() {
+    const t = st.t;
+    // cámara lenta: la lluvia se frena casi por completo cuando empiezan las balas
+    lluvia(t < 3 ? t : 3 + (t - 3) * 0.12);
+    balas(t); jaina(t);
+    const g = GUION.find(([a, b]) => t >= a && t <= b + 0.6);
+    maquina(sub, g, t); sub.style.opacity = g ? 1 : 0;
+  }
+  const DUR = 16;
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["m-balas"] = tl;
+  pintar(); tl.seek(0);
+  // modo presentación: presentacion.html envía el tiempo; las balas siguen en bucle durante el show
+  addEventListener("message", e => {
+    const t = e.data && e.data.t; if (typeof t !== "number") return;
+    if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
+  });
+</script>
+</body></html>

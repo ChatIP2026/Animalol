@@ -11,6 +11,7 @@
   #jw{left:660px;top:240px;width:600px;height:600px;opacity:0}
   #sub{left:200px;right:200px;top:860px;text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6)}
   #cen{left:0;right:0;top:500px;text-align:center;font-family:"Maquina",monospace;font-size:76px;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
+  #nom{left:0;right:0;top:760px;text-align:center;font-family:"Maquina",monospace;font-size:64px;letter-spacing:.08em;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.9),0 0 4px #000}
   #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
   #glitch{inset:0;background:#3dff7a;mix-blend-mode:screen;opacity:0}
 </style></head><body>
@@ -21,6 +22,7 @@
   <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
   <div id="sub" class="abs"></div>
   <div id="cen" class="abs"></div>
+  <div id="nom" class="abs"></div>
   <div id="k" class="abs">ACCESO CONCEDIDO</div>
   <div id="glitch" class="abs"></div>
 </div>
@@ -118,9 +120,12 @@
     [12.9, 15.8, "Una forma de trabajar mejor, más rápido y con propósito.", "abajo"],
     [17.4, 18.5, "¿Lo bueno?", "centro"],
     [18.8, 20.3, "Es que en iPartner…", "centro"],
+    [28.8, 32.0, "Pero toda Matrix necesita a alguien que la enfrente…", "abajo"],
+    [32.4, 33.3, "Con ustedes:", "abajo"],
   ];
+  const NOM = [33.6, 35.0, "NEO MARIO MÉNDEZ"];
   // la voz sigue mientras se arma el titular ("hemos desbloqueado la Matrix")
-  const VOZ = GUION.map(g => [g[0], g[1]]).concat([[20.6, 23.0]]);
+  const VOZ = GUION.map(g => [g[0], g[1]]).concat([[20.6, 23.0], [33.6, 35.0]]);
   function habla(t) {
     if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;
     return Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1));
@@ -138,9 +143,10 @@
     maquina(sub, g && g[3] === "abajo" ? g : null, t);
     maquina(cen, g && g[3] === "centro" ? g : null, t);
     sub.style.opacity = g && g[3] === "abajo" ? 1 : 0;
+    maquina(document.getElementById("nom"), t >= NOM[0] ? NOM : null, t);
   }
   function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); subtitulo(st.t); }
-  const DUR = 40;
+  const DUR = 42;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=1920, height=1080"/>
+<script src="../vendor/gsap.min.js"></script>
+<style>
+  @font-face{font-family:"Maquina";src:url("../vendor/maquina.ttf")}
+  #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
+  .abs{position:absolute}
+  #vel{inset:0;background:rgba(2,10,4,.72)}
+  #mod{left:80px;top:56px;font-family:"Maquina",monospace;font-size:26px;letter-spacing:.12em;color:#3dff7a;opacity:.8}
+  #h{left:0;right:0;top:150px;text-align:center;font-family:"Maquina",monospace;font-size:78px;letter-spacing:.06em;color:#3dff7a;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
+  .card{top:300px;width:780px}
+  #c1{left:140px} #c2{left:1000px}
+  .marco{position:relative;height:520px;border:2px solid rgba(61,255,122,.55);background:rgba(2,16,6,.9);box-shadow:0 0 30px rgba(43,255,106,.18) inset,0 0 24px rgba(43,255,106,.25);opacity:0}
+  .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Maquina",monospace;font-size:28px;color:rgba(61,255,122,.5);text-align:center}
+  .ph small{font-size:18px;opacity:.7;margin-top:8px}
+  .img{position:absolute;inset:10px;background-size:contain;background-position:center;background-repeat:no-repeat}
+  .ico{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 8px rgba(43,255,106,.6))}
+  .tr{stroke-dasharray:1;stroke-dashoffset:1}
+  .tapa{inset:0;background:#020a04;transform-origin:50% 100%}
+  .scan{left:0;right:0;top:0;height:4px;background:#b9ffd0;box-shadow:0 0 18px 6px rgba(43,255,106,.7);opacity:0}
+  .esq{position:absolute;width:34px;height:34px;border:4px solid #3dff7a}
+  .esq.a{left:-8px;top:-8px;border-right:0;border-bottom:0} .esq.b{right:-8px;top:-8px;border-left:0;border-bottom:0}
+  .esq.c{left:-8px;bottom:-8px;border-right:0;border-top:0} .esq.d{right:-8px;bottom:-8px;border-left:0;border-top:0}
+  .tit{margin-top:30px;text-align:center;font-family:"Maquina",monospace;font-size:46px;color:#e6ffee;text-shadow:0 0 14px rgba(43,255,106,.8);min-height:56px}
+  .sub{margin-top:8px;text-align:center;font-family:"Maquina",monospace;font-size:28px;color:#9fe8b4;min-height:36px}
+</style></head><body>
+<div id="root" data-composition-id="m2-ppt" data-width="1920" data-height="1080">
+  <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <div id="vel" class="abs"></div>
+  <div id="mod" class="abs"></div>
+  <div id="h" class="abs"></div>
+  <div id="c1" class="abs card">
+    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
+      <g id="anA" opacity=".5"><circle cx="580" cy="170" r="118" stroke="#3dff7a" stroke-width="2" fill="none" stroke-dasharray="4 12"/></g>
+      <circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="180" cy="170" r="85"/>
+      <circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="180" cy="145" r="30"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M125 225 Q180 165 235 225"/>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="16" x="180" y="282" text-anchor="middle" class="fx" data-t="1.8">EQUIPO</text>
+      <rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" x="505" y="92" width="150" height="156" rx="14"/>
+      <rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" x="530" y="117" width="100" height="106" rx="8"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M520 92 v-16 M520 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M550 92 v-16 M550 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M580 92 v-16 M580 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M610 92 v-16 M610 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M640 92 v-16 M640 248 v16"/>
+      <text font-family="Maquina, monospace" font-size="44" fill="#3dff7a" x="580" y="186" text-anchor="middle" class="fx" data-t="1.9">IA</text>
+      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M275 150 H490"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M490 192 H275"/>
+      <circle class="pul" data-a="275,150,490,150" r="6" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="275,150,490,150" r="6" fill="#b9ffd0" opacity="0"/>
+      <circle class="pul" data-a="490,192,275,192" r="6" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="490,192,275,192" r="6" fill="#b9ffd0" opacity="0"/>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="110" y="330" class="fx" data-t="2.4">▸ ANALIZAR CARTERA</text><text font-family="Maquina, monospace" font-size="24" fill="#3dff7a" x="650" y="330" class="fx" data-t="2.8">✓</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="110" y="368" class="fx" data-t="2.75">▸ PREPARAR RENOVACIONES</text><text font-family="Maquina, monospace" font-size="24" fill="#3dff7a" x="650" y="368" class="fx" data-t="3.15">✓</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="110" y="406" class="fx" data-t="3.0999999999999996">▸ SEGUIMIENTO A CLIENTES</text><text font-family="Maquina, monospace" font-size="24" fill="#3dff7a" x="650" y="406" class="fx" data-t="3.5">✓</text>
+    </svg><div class="tapa abs"></div><div class="scan abs"></div>
+      <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
+    <div class="tit" id="t1"></div>
+  </div>
+  <div id="c2" class="abs card">
+    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
+      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 110 L320 80"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 110 L320 145"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 110 L320 210"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 110 L320 275"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 110 L320 340"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 180 L320 80"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 180 L320 145"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 180 L320 210"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 180 L320 275"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 180 L320 340"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 250 L320 80"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 250 L320 145"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 250 L320 210"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 250 L320 275"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 250 L320 340"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 320 L320 80"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 320 L320 145"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 320 L320 210"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 320 L320 275"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M150 320 L320 340"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 80 L490 150"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 80 L490 280"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 145 L490 150"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 145 L490 280"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 210 L490 150"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 210 L490 280"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 275 L490 150"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 275 L490 280"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 340 L490 150"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="1.6" opacity=".55" d="M320 340 L490 280"/><circle class="pul" data-a="150,110,320,80" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,110,320,210" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,110,320,340" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,180,320,145" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,180,320,275" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,250,320,80" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,250,320,210" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,250,320,340" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,320,320,145" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="150,320,320,275" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="320,80,490,150" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="320,145,490,280" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="320,210,490,150" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="320,275,490,280" r="5" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="320,340,490,150" r="5" fill="#b9ffd0" opacity="0"/><circle class="nodo" cx="150" cy="110" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="150" cy="180" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="150" cy="250" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="150" cy="320" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="320" cy="80" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="320" cy="145" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="320" cy="210" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="320" cy="275" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="320" cy="340" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="490" cy="150" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/><circle class="nodo" cx="490" cy="280" r="16" fill="#03200d" stroke="#3dff7a" stroke-width="3.5"/>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="525" y="157" class="fx" data-t="4.6">RENUEVA</text>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="525" y="287" class="fx" data-t="4.8">EN RIESGO</text>
+      <rect x="525" y="168" width="180" height="10" fill="rgba(61,255,122,.15)" class="fx" data-t="4.6"/><rect id="bar1" x="525" y="168" width="0" height="10" fill="#3dff7a"/>
+      <rect x="525" y="298" width="180" height="10" fill="rgba(61,255,122,.15)" class="fx" data-t="4.8"/><rect id="bar2" x="525" y="298" width="0" height="10" fill="#3dff7a"/>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="18" x="150" y="405" class="fx" data-t="3.8">ENTRENANDO MODELO…</text>
+      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="18" x="610" y="405" text-anchor="end" class="dig" data-t="3.8">ÉPOCA 0000</text>
+    </svg><div class="tapa abs"></div><div class="scan abs"></div>
+      <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
+    <div class="tit" id="t2"></div>
+  </div>
+</div>
+<script>
+  let s0 = 7; const rnd = () => (s0 = (s0 * 16807) % 2147483647) / 2147483647;
+  const D = "0123456789";
+  const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>";
+  // --- lluvia de números (función pura del tiempo) ---
+  const F = 22, COLS = 1920 / F | 0, ROWS = 1080 / F | 0;
+  const col = [...Array(COLS)].map(() => ({ v: 7 + rnd() * 14, off: rnd() * 60, len: 10 + (rnd() * 26 | 0) }));
+  const cx = document.getElementById("lluvia").getContext("2d");
+  const dig = (a, b, t) => G[(a * 131 + b * 17 + Math.floor(t * 9 + a)) % G.length];
+  function lluvia(t) {
+    cx.fillStyle = "#020a04"; cx.fillRect(0, 0, 1920, 1080);
+    cx.font = F + "px monospace";
+    col.forEach((c, i) => {
+      const head = Math.floor(c.off + t * c.v) % (ROWS + c.len + 10);
+      for (let j = 0; j < c.len; j++) {
+        const row = head - j; if (row < 0 || row > ROWS) continue;
+        cx.fillStyle = j === 0 ? "rgba(220,255,230,.9)" : `rgba(43,255,106,${((1 - j / c.len) * .75).toFixed(2)})`;
+        cx.fillText(dig(i, row, t), i * F, row * F);
+      }
+    });
+  }
+  // máquina de escribir: letra por letra a ritmo constante
+  function maquina(el, g, t, cursorFijo) {
+    if (t < g[0]) { el.textContent = ""; return; }
+    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    const cur = n < g[2].length || (cursorFijo && Math.floor(t * 2.5) % 2 === 0) ? "▌" : "";
+    el.textContent = g[2].slice(0, n) + cur;
+  }
+  // textos: cada imagen con su subtítulo
+  const TXT = [
+    ["mod", [0.2, 1.2, "> MÓDULO_02 // ARCHIVOS DESBLOQUEADOS"]],
+    ["h", [0.4, 1.6, "RENEWAL MATRIX"]],
+    ["t1", [2.6, 3.6, "Cowork de Claude"]],
+    ["t2", [4.4, 5.4, "Machine Learning"]],
+  ];
+  const st = { t: 0 };
+  function pintar() {
+    const t = st.t;
+    lluvia(t); hud(t);
+    TXT.forEach(([id, g]) => maquina(document.getElementById(id), g, t, false));
+  }
+  // --- HUD: anillos que giran, cifras que se descifran, pulsos por la red, engranaje ---
+  const D10 = "0123456789";
+  const fx = [...document.querySelectorAll(".fx")], cifras = [...document.querySelectorAll(".dig")], pul = [...document.querySelectorAll(".pul")];
+  cifras.forEach(d => d.dataset.base = d.textContent);
+  const nodos = [...document.querySelectorAll(".nodo")];
+  function hud(t) {
+    document.getElementById("anA").setAttribute("transform", `rotate(${t * 14} 580 170)`);
+    fx.forEach(e => e.style.opacity = t >= +e.dataset.t ? 1 : 0);
+    // las cifras nunca se fijan: se ven "descifrándose" (no son datos reales)
+    cifras.forEach((e, k) => { e.style.opacity = t >= +e.dataset.t ? 1 : 0; e.textContent = e.dataset.base.replace(/0/g, (m, j) => D10[(Math.floor(t * 14) * 7 + j * 3 + k * 5) % 10]); });
+    // pulsos que viajan por las conexiones (equipo ⇄ IA, y dentro de la red neuronal)
+    pul.forEach((e, k) => {
+      const [x1, y1, x2, y2] = e.dataset.a.split(",").map(Number), on = t > (x1 < 400 && y1 < 200 && x2 === 490 ? 3.0 : 4.4);
+      const f = ((t * 0.6 + k * 0.37) % 1);
+      e.setAttribute("cx", x1 + (x2 - x1) * f); e.setAttribute("cy", y1 + (y2 - y1) * f);
+      e.setAttribute("opacity", on ? Math.sin(f * Math.PI).toFixed(2) : 0);
+    });
+    // las neuronas se encienden y apagan; las barras de predicción oscilan
+    nodos.forEach((n, k) => n.setAttribute("fill", t > 4.4 && Math.sin(t * 3 + k * 1.7) > .55 ? "#3dff7a" : "#03200d"));
+    const on = Math.min(1, Math.max(0, (t - 4.8) / 0.8));
+    document.getElementById("bar1").setAttribute("width", (on * (130 + 30 * Math.sin(t * 1.3))).toFixed(1));
+    document.getElementById("bar2").setAttribute("width", (on * (45 + 20 * Math.sin(t * 1.7 + 1))).toFixed(1));
+  }
+  const DUR = 10;
+  const tl = gsap.timeline({ paused: true });
+  tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
+  // cada imagen se "descarga": aparece el marco y una línea de escaneo la revela de arriba hacia abajo
+  [["#c1", 1.2], ["#c2", 3.0]].forEach(([c, d]) => {
+    tl.fromTo(c + " .marco", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out", immediateRender: false }, d);
+    tl.fromTo(c + " .tapa", { scaleY: 1 }, { scaleY: 0, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.fromTo(c + " .scan", { y: 0, opacity: 1 }, { y: 516, opacity: 1, duration: 1.2, ease: "none", immediateRender: false }, d + 0.3);
+    tl.to(c + " .scan", { opacity: 0, duration: 0.2 }, d + 1.5);
+    // el ícono se dibuja trazo por trazo
+    tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);
+  });
+  window.__timelines = window.__timelines || {};
+  window.__timelines["m2-ppt"] = tl;
+  pintar(); tl.seek(0);
+  // modo presentación: tras la entrada, la lluvia sigue en bucle
+  addEventListener("message", e => {
+    const t = e.data && e.data.t; if (typeof t !== "number") return;
+    if (t < DUR) tl.seek(t); else { st.t = t; pintar(); }
+  });
+</script>
+</body></html>

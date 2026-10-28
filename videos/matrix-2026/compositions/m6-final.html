@@ -143,8 +143,9 @@
     barras.forEach((b, k) => {
       const p = Math.min(1, Math.max(0, (t - b.dataset.t) / 0.9)), e = 1 - Math.pow(1 - p, 3), h = b.dataset.v / 1300 * 430 * e;
       b.style.height = h + "px"; b.style.top = (880 - h) + "px";
-      const v = vals[k]; v.textContent = p ? fmt(Math.round(b.dataset.v * e)) : ""; v.style.top = (880 - h - 36) + "px";
-      if (b.dataset.curso !== undefined) { const c = document.getElementById("curso"); c.style.opacity = p >= 1 ? (Math.floor(t * 2) % 2 ? .4 : 1) : 0; c.style.left = (parseFloat(b.style.left) - 14) + "px"; c.style.top = (880 - h - 70) + "px"; }
+      const v = vals[k]; v.textContent = p ? fmt(Math.round(b.dataset.v * e)) : ""; // la cifra nunca toca la línea del promedio (y=529): si chocaría, sube por encima de ella
+      let y = 880 - h - 36; if (y < 529 + 8 && y + 32 > 529 - 8) y = 529 - 44; v.style.top = y + "px";
+      if (b.dataset.curso !== undefined) { const c = document.getElementById("curso"); c.style.opacity = p >= 1 ? (Math.floor(t * 2) % 2 ? .4 : 1) : 0; c.style.left = (parseFloat(b.style.left) - 14) + "px"; c.style.top = Math.min(880 - h - 70, 529 - 36) + "px"; }
     });
     proy.forEach(e => e.style.opacity = t >= +e.dataset.t ? .5 + .5 * Math.abs(Math.sin(t * 2)) : 0);
     const pr = t >= 4.2 ? 1 : 0;

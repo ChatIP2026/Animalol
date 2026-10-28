@@ -6,6 +6,8 @@
   html,body{margin:0;height:100%;background:#000;overflow:hidden}
   #escena{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
   iframe{width:1920px;height:1080px;border:0;display:block}
+  #zoom{width:1920px;height:1080px;transform-origin:50% 50%}
+  #tunel{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;z-index:3}
   #capa{position:fixed;inset:0;cursor:pointer}
   #inicio{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#020a04;color:#3dff7a;font:28px monospace;letter-spacing:.4em;cursor:pointer;z-index:5;text-shadow:0 0 12px rgba(43,255,106,.7)}
   .nav{position:fixed;bottom:0;width:90px;height:90px;display:flex;align-items:center;justify-content:center;font:52px monospace;color:#3dff7a;opacity:.25;cursor:pointer;z-index:4;user-select:none}
@@ -13,7 +15,8 @@
   #atras{left:0} #sig{right:60px}
   #num{position:fixed;right:16px;bottom:12px;font:14px monospace;color:#3dff7a;opacity:.4}
 </style></head><body>
-<div id="escena"><iframe id="f"></iframe></div>
+<div id="escena"><div id="zoom"><iframe id="f"></iframe></div></div>
+<canvas id="tunel"></canvas>
 <div id="capa"></div>
 <div id="atras" class="nav">‹</div><div id="sig" class="nav">›</div>
 <div id="inicio">TOCA PARA COMENZAR</div><div id="num"></div>
@@ -22,11 +25,38 @@
   const SLIDES = ["compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-ppt.html", "compositions/m3-ppt.html", "compositions/m4-ppt.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
   let i = 0;
   const f = document.getElementById("f"), esc = document.getElementById("escena");
-  function ir(n) {
-    if (document.getElementById("inicio")) return;
+  // --- transición: zoom hacia adentro de la Matrix (túnel de código) ---
+  const zoom = document.getElementById("zoom"), tunel = document.getElementById("tunel"), ct = tunel.getContext("2d");
+  const GL = "アイウエオカキクケコサシスセソタチツテト0123456789", PART = [];
+  for (let k = 0; k < 420; k++) PART.push({ a: Math.random() * 6.283, z: Math.random(), g: GL[k % GL.length] });
+  let enTransicion = false, tt0 = 0;
+  function dibujarTunel(now) {
+    const W = tunel.width = innerWidth, H = tunel.height = innerHeight, e = (now - tt0) / 1000;
+    ct.fillStyle = "rgba(2,10,4,.35)"; ct.fillRect(0, 0, W, H);
+    ct.font = "bold 20px monospace"; ct.textAlign = "center";
+    PART.forEach(p => {
+      p.z -= 0.022 + e * 0.03; if (p.z <= 0.02) p.z += 1;
+      const r = 40 / p.z, x = W / 2 + Math.cos(p.a) * r, y = H / 2 + Math.sin(p.a) * r, r2 = 40 / (p.z + 0.06);
+      ct.strokeStyle = `rgba(43,255,106,${Math.min(1, .15 / p.z).toFixed(2)})`; ct.lineWidth = Math.min(4, .4 / p.z);
+      ct.beginPath(); ct.moveTo(W / 2 + Math.cos(p.a) * r2, H / 2 + Math.sin(p.a) * r2); ct.lineTo(x, y); ct.stroke();
+      ct.fillStyle = `rgba(200,255,215,${Math.min(1, .2 / p.z).toFixed(2)})`; ct.fillText(p.g, x, y);
+    });
+    if (enTransicion) requestAnimationFrame(dibujarTunel);
+  }
+  function ir(n, primera) {
+    if (document.getElementById("inicio") || enTransicion) return;
     if (n < 0 || n >= SLIDES.length) return;
-    i = n; f.src = SLIDES[i]; t0 = performance.now();
-    document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
+    enTransicion = true; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
+    const entrar = () => {
+      i = n; f.src = SLIDES[i]; t0 = performance.now();
+      document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
+      zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
+      tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => { enTransicion = false; };
+    };
+    if (primera) { tunel.style.opacity = 1; entrar(); return; }
+    // la slide actual se agranda y se disuelve: nos metemos en ella
+    zoom.animate([{ transform: "scale(1)", opacity: 1, filter: "blur(0)" }, { transform: "scale(3.2)", opacity: 0, filter: "blur(12px)" }], { duration: 550, easing: "cubic-bezier(.6,0,.9,.4)", fill: "forwards" });
+    tunel.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, fill: "forwards" }).onfinish = entrar;
   }
   function ajustar() { const k = Math.min(innerWidth / 1920, innerHeight / 1080); esc.style.transform = `translate(-50%,-50%) scale(${k})`; }
   addEventListener("resize", ajustar); ajustar();
@@ -48,6 +78,6 @@
   (function reloj() { f.contentWindow?.postMessage({ t: (performance.now() - t0) / 1000 }, "*"); requestAnimationFrame(reloj); })();
   // el primer toque activa el sonido del navegador y arranca el slide 1
   const ini = document.getElementById("inicio");
-  ini.addEventListener("click", () => { ini.remove(); ir(0); }, { once: true });
+  ini.addEventListener("click", () => { ini.remove(); ir(0, true); }, { once: true });
 </script>
 </body></html>

@@ -9,7 +9,10 @@
   #zoom{width:1920px;height:1080px;transform-origin:50% 50%}
   #tunel{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;z-index:3}
   #capa{position:fixed;inset:0;cursor:pointer}
-  #inicio{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#020a04;color:#3dff7a;font:28px monospace;letter-spacing:.4em;cursor:pointer;z-index:5;text-shadow:0 0 12px rgba(43,255,106,.7)}
+  @font-face{font-family:"Maquina";src:url("vendor/maquina.ttf")}
+  #inicio{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#020a04;cursor:pointer;z-index:5}
+  #lluviaIni{position:absolute;inset:0;width:100%;height:100%}
+  #frase{position:relative;padding:18px 40px;background:radial-gradient(ellipse at center,rgba(2,10,4,.92) 40%,rgba(2,10,4,0) 75%);font-family:"Maquina",monospace;font-size:clamp(28px,4.2vw,76px);color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.9),0 0 4px #000}
   .nav{position:fixed;bottom:0;width:90px;height:90px;display:flex;align-items:center;justify-content:center;font:52px monospace;color:#3dff7a;opacity:.25;cursor:pointer;z-index:4;user-select:none}
   .nav:hover{opacity:.8}
   #atras{left:0} #sig{right:60px}
@@ -19,7 +22,7 @@
 <canvas id="tunel"></canvas>
 <div id="capa"></div>
 <div id="atras" class="nav">‹</div><div id="sig" class="nav">›</div>
-<div id="inicio">TOCA PARA COMENZAR</div><div id="num"></div>
+<div id="inicio"><canvas id="lluviaIni"></canvas><div id="frase"></div></div><div id="num"></div>
 <script>
   // orden de slides: se irán agregando aquí
   // GitHub Pages guarda los archivos 10 min en caché: con esto siempre se carga la última versión
@@ -119,6 +122,29 @@
   (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) revisarVoces(t); f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();
   // el primer toque activa el sonido del navegador y arranca el slide 1
   const ini = document.getElementById("inicio");
+  // pantalla inicial: lluvia de código en movimiento y la pregunta escribiéndose
+  (function () {
+    const cv = document.getElementById("lluviaIni"), cx = cv.getContext("2d"), fr = document.getElementById("frase");
+    const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>", F = 22, TXT = "¿Quieres romper la Matrix?";
+    let cols = [], t0i = performance.now();
+    function medir() { cv.width = innerWidth; cv.height = innerHeight; cols = [...Array(Math.ceil(innerWidth / F))].map(() => ({ y: Math.random() * -50, v: .25 + Math.random() * .55, len: 10 + Math.random() * 25 | 0 })); }
+    addEventListener("resize", medir); medir();
+    (function cuadro(now) {
+      if (!document.getElementById("inicio")) return;
+      cx.fillStyle = "#020a04"; cx.fillRect(0, 0, cv.width, cv.height); cx.font = F + "px monospace";
+      cols.forEach((c, k) => {
+        c.y += c.v; if ((c.y - c.len) * F > cv.height) c.y = Math.random() * -20;
+        for (let j = 0; j < c.len; j++) {
+          const row = Math.floor(c.y) - j; if (row < 0) continue;
+          cx.fillStyle = j === 0 ? "rgba(220,255,230,.95)" : `rgba(43,255,106,${((1 - j / c.len) * .75).toFixed(2)})`;
+          cx.fillText(G[(k * 31 + row * 7 + (now / 120 | 0)) % G.length], k * F, row * F);
+        }
+      });
+      const e = (now - t0i) / 1000, n = Math.min(TXT.length, Math.max(0, Math.floor((e - .8) * 14)));
+      fr.textContent = TXT.slice(0, n) + (n < TXT.length || Math.floor(e * 2) % 2 ? "▌" : "\u00a0");
+      requestAnimationFrame(cuadro);
+    })(performance.now());
+  })();
   ini.addEventListener("click", () => { ini.remove(); ir(0, true); }, { once: true });
 </script>
 </body></html>

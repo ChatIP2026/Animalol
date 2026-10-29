@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="es"><head><meta charset="UTF-8"/>
 <meta name="viewport" content="width=1920, height=1080"/>
+<link rel="preload" href="../vendor/maquina.ttf" as="font" type="font/ttf" crossorigin/>
 <script src="../vendor/gsap.min.js"></script>
 <style>
   html,body{margin:0;overflow:hidden;background:#020a04}
@@ -10,8 +11,8 @@
   #vel{inset:0;background:radial-gradient(ellipse 55% 32% at 50% 50%,rgba(2,10,4,.9),rgba(2,10,4,0) 100%);opacity:0}
   #k{left:0;right:0;top:340px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:28px;letter-spacing:.5em;color:#3dff7a;opacity:0}
   #jw{left:660px;top:240px;width:600px;height:600px;opacity:0}
-  #sub{left:200px;right:200px;top:860px;text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6)}
-  #cen{left:0;right:0;top:500px;text-align:center;font-family:"Maquina",monospace;font-size:76px;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
+  #sub{left:160px;right:160px;top:820px;text-align:center;font-family:"Maquina",monospace;font-size:48px;line-height:1.35;color:#e6ffee;text-shadow:0 0 4px #000,0 0 10px #000,0 0 16px rgba(43,255,106,.7)}
+  #cen{left:160px;right:160px;top:500px;text-align:center;font-family:"Maquina",monospace;font-size:48px;line-height:1.35;color:#e6ffee;text-shadow:0 0 4px #000,0 0 10px #000,0 0 16px rgba(43,255,106,.7)}
   #nom{left:0;right:0;top:760px;text-align:center;font-family:"Maquina",monospace;font-size:64px;letter-spacing:.08em;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.9),0 0 4px #000}
   #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
   #glitch{inset:0;background:#3dff7a;mix-blend-mode:screen;opacity:0}

@@ -32,27 +32,7 @@
   <div id="mod" class="abs"></div>
   <div id="h" class="abs"></div>
   <div id="c1" class="abs card">
-    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
-      <g id="anA" opacity=".55"><circle cx="240" cy="220" r="185" stroke="#3dff7a" stroke-width="2" fill="none" stroke-dasharray="4 14"/></g>
-      <g id="anB" opacity=".4"><circle cx="240" cy="220" r="165" stroke="#3dff7a" stroke-width="6" fill="none" stroke-dasharray="60 20 8 20"/></g>
-      <rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" x="120" y="60" width="240" height="320" rx="10"/>
-      <rect x="120" y="60" width="240" height="44" fill="rgba(61,255,122,.22)" class="fx" data-t="1.9"/>
-      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="18" x="240" y="89" text-anchor="middle" class="fx" data-t="1.9">COTIZACIÓN</text>
-      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 150 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="142" class="fx" data-t="2.0">ÍTEM 01</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="142" text-anchor="end" class="dig" data-t="2.0">S/ 0000</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 188 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="180" class="fx" data-t="2.25">ÍTEM 02</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="180" text-anchor="end" class="dig" data-t="2.25">S/ 0000</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 226 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="218" class="fx" data-t="2.5">ÍTEM 03</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="218" text-anchor="end" class="dig" data-t="2.5">S/ 0000</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M150 264 H330"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="150" y="256" class="fx" data-t="2.75">ÍTEM 04</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="330" y="256" text-anchor="end" class="dig" data-t="2.75">S/ 0000</text>
-      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M150 320 H330"/>
-      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="150" y="352" class="fx" data-t="3.1">TOTAL</text>
-      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="330" y="352" text-anchor="end" class="dig" data-t="3.1">S/ 00,000</text>
-      <g class="fx" data-t="2.2">
-        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="450" y="120">VALIDANDO…</text>
-        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="22" x="450" y="175" class="fx" data-t="2.6">✓ PRECIO</text>
-        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="22" x="450" y="220" class="fx" data-t="2.9">✓ ALCANCE</text>
-        <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="22" x="450" y="265" class="fx" data-t="3.2">✓ PLAZO</text>
-      </g>
-      <g transform="translate(555 350) rotate(-12)"><g id="sello" opacity="0">
-        <rect x="-115" y="-34" width="230" height="68" rx="8" stroke="#3dff7a" stroke-width="5" fill="rgba(61,255,122,.12)"/>
-        <text font-family="Maquina, monospace" font-size="34" fill="#3dff7a" text-anchor="middle" y="12">APROBADO</text>
-      </g></g>
-    </svg><div class="tapa abs"></div><div class="scan abs"></div>
+    <div class="marco"><img class="ico" src="../assets/iconos/cotizacion.png" style="object-fit:contain;padding:18px;box-sizing:border-box" alt="Frame de Cotización"/><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
     <div class="tit" id="t1"></div>
   </div>
@@ -122,8 +102,6 @@
     return d + "Z";
   }
   function hud(t) {
-    document.getElementById("anA").setAttribute("transform", `rotate(${t * 12} 240 220)`);
-    document.getElementById("anB").setAttribute("transform", `rotate(${-t * 20} 240 220)`);
     document.getElementById("anC").setAttribute("transform", `rotate(${t * 10} 380 215)`);
     document.getElementById("engr").setAttribute("d", engranaje(30, 42, 10, t * 0.8));
     fx.forEach(e => e.style.opacity = t >= +e.dataset.t ? 1 : 0);
@@ -149,7 +127,8 @@
     tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);
   });
   window.__timelines = window.__timelines || {};
-  tl.fromTo("#sello", { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)", immediateRender: false, svgOrigin: "0 0" }, 3.7);
+  // la imagen de la cotización "flota" suavemente
+  tl.fromTo("#c1 .ico", { y: 0 }, { y: -10, duration: 1.6, ease: "sine.inOut", repeat: 5, yoyo: true, immediateRender: false }, 2.0);
   window.__timelines["m1-ppt"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle

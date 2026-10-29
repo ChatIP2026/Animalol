@@ -6,6 +6,7 @@
   html,body{margin:0;height:100%;background:#000;overflow:hidden}
   #escena{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
   iframe{width:1920px;height:1080px;border:0;display:block}
+  #vid{position:absolute;inset:0;width:1920px;height:1080px;background:#000;object-fit:contain;display:none}
   #zoom{width:1920px;height:1080px;transform-origin:50% 50%}
   #tunel{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;z-index:3}
   #capa{position:fixed;inset:0;cursor:pointer}
@@ -18,7 +19,7 @@
   #atras{left:0} #sig{right:60px}
   #num{position:fixed;right:16px;bottom:12px;font:14px monospace;color:#3dff7a;opacity:.4}
 </style></head><body>
-<div id="escena"><div id="zoom"><iframe id="f" allow="autoplay" scrolling="no"></iframe></div></div>
+<div id="escena"><div id="zoom"><iframe id="f" allow="autoplay" scrolling="no"></iframe><video id="vid" playsinline preload="auto"></video></div></div>
 <canvas id="tunel"></canvas>
 <div id="capa"></div>
 <div id="atras" class="nav">‹</div><div id="sig" class="nav">›</div>
@@ -36,17 +37,18 @@
   setInterval(() => { musica.volume = Math.max(0, Math.min(1, musica.volume + Math.sign(volObjetivo - musica.volume) * Math.min(.04, Math.abs(volObjetivo - musica.volume)))); if (!volObjetivo && musica.volume === 0 && !musica.paused) musica.pause(); }, 50);
   function musicaPara(n) {
     // en las balas la música sigue suave hasta que Jaina termina "Neo… ¿estás listo?" (~2.7 s) y recién ahí sube
-    volObjetivo = n <= 1 ? 0.18 : 0;
-    if (n === 1) setTimeout(() => { if (i === 1) volObjetivo = 1; }, 3000);
+    // 0 = video (sin música), 1 = intro (suave), 2 = balas (suave y luego fuerte)
+    volObjetivo = n === 1 || n === 2 ? 0.18 : 0;
+    if (n === 2) setTimeout(() => { if (i === 2) volObjetivo = 1; }, 3000);
     if (volObjetivo && musica.paused) musica.play().catch(() => {});
   }
   // voces de Jaina: las reproduce la presentación (no la slide) para que el navegador nunca las bloquee.
   // [archivo, segundos, paso]: paso 0 cuenta desde que entra la slide; paso 1, desde el toque.
   const VOCES = {
-    0: [["01a-intro", 2.8, 0], ["01b-mario", 0.4, 1]],
-    1: [["02-balas", 1.0, 0]],
-    2: [["03-pregunta", 0.6, 0]],
-    8: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
+    1: [["01a-intro", 2.8, 0], ["01b-mario", 0.4, 1]],
+    2: [["02-balas", 1.0, 0]],
+    3: [["03-pregunta", 0.6, 0]],
+    9: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
   };
   const audios = {};
   Object.values(VOCES).flat().forEach(([n]) => { audios[n] = new Audio(`assets/voz/${n}.mp3${VER}`); audios[n].preload = "auto"; });
@@ -63,7 +65,8 @@
     if (paso + 1 < (PASOS[SLIDES[i]] || 1) && !document.getElementById("inicio")) { paso++; tPaso = (performance.now() - t0) / 1000; return; }
     ir(i + 1);
   }
-  const SLIDES = ["compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-ppt.html", "compositions/m3-ppt.html", "compositions/m4-ppt.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
+  // "VIDEO" = video a pantalla completa (assets/video-inicio.mp4); al terminar queda en el último cuadro
+  const SLIDES = ["VIDEO", "compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-ppt.html", "compositions/m3-ppt.html", "compositions/m4-ppt.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
   let i = 0;
   const f = document.getElementById("f"), esc = document.getElementById("escena");
   // --- transición: zoom hacia adentro de la Matrix (túnel de código) ---
@@ -89,7 +92,11 @@
     if (n < 0 || n >= SLIDES.length) return;
     enTransicion = true; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
     const entrar = () => {
-      detenerVoces(); i = n; paso = 0; f.src = SLIDES[i] + VER; t0 = performance.now(); musicaPara(i);
+      detenerVoces(); i = n; paso = 0; t0 = performance.now(); musicaPara(i);
+      const vid = document.getElementById("vid"), esVideo = SLIDES[i] === "VIDEO";
+      vid.style.display = esVideo ? "block" : "none"; f.style.visibility = esVideo ? "hidden" : "visible";
+      if (esVideo) { f.src = "about:blank"; if (!vid.src) vid.src = "assets/video-inicio.mp4"; vid.currentTime = 0; vid.play().catch(() => {}); }
+      else { vid.pause(); f.src = SLIDES[i] + VER; }
       document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
       zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
       tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => {

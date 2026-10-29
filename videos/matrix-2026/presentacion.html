@@ -38,7 +38,8 @@
   function musicaPara(n) {
     // en las balas la música sigue suave hasta que Jaina termina "Neo… ¿estás listo?" (~2.7 s) y recién ahí sube
     // 0 = video (sin música), 1 = intro (suave), 2 = balas (suave y luego fuerte)
-    volObjetivo = n === 1 || n === 2 ? 0.18 : 0;
+    // después de las balas la música sigue de fondo, muy bajita
+    volObjetivo = n === 1 || n === 2 ? 0.18 : n >= 3 ? 0.05 : 0;
     if (n === 2) setTimeout(() => { if (i === 2) volObjetivo = 1; }, 3000);
     if (volObjetivo && musica.paused) musica.play().catch(() => {});
   }
@@ -48,7 +49,7 @@
     1: [["01a-intro", 2.8, 0], ["01b-mario", 0.4, 1]],
     2: [["02-balas", 1.0, 0]],
     3: [["03-pregunta", 0.6, 0]],
-    9: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
+    13: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
   };
   const audios = {};
   Object.values(VOCES).flat().forEach(([n]) => { audios[n] = new Audio(`assets/voz/${n}.mp3${VER}`); audios[n].preload = "auto"; });
@@ -66,7 +67,7 @@
     ir(i + 1);
   }
   // "VIDEO" = video a pantalla completa (assets/video-inicio.mp4); al terminar queda en el último cuadro
-  const SLIDES = ["VIDEO", "compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-ppt.html", "compositions/m3-ppt.html", "compositions/m4-ppt.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
+  const SLIDES = ["VIDEO", "compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-pregunta.html", "compositions/m2-ppt.html", "compositions/m3-pregunta.html", "compositions/m3-ppt.html", "compositions/m4-pregunta.html", "compositions/m4-ppt.html", "compositions/m5-pregunta.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
   let i = 0;
   const f = document.getElementById("f"), esc = document.getElementById("escena");
   // --- transición: zoom hacia adentro de la Matrix (túnel de código) ---

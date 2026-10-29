@@ -54,12 +54,12 @@
   const P = [];
   for (const [x, y] of PTS) {
       const r = rnd();
-      // sincronizado con la voz: "hemos desbloqueado" (22.9–24.3 s) arma la línea 1, "la Matrix" (24.5–25.4 s) la línea 2
+      // sincronizado con la voz: cada letra aterriza cuando Jaina la dice ("hemos desbloqueado" 22.9–24.3 s, "la" 24.5 s, "Matrix" 25.0 s)
       const l2 = y > 565;
-      P.push({ x, y, linea2: l2, t0: l2 ? 24.5 + ((x - 480) / 970) * 0.7 + r * 0.25 : 22.9 + ((x - 115) / 1695) * 1.1 + r * 0.3, caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
+      P.push({ x, y, linea2: l2, t0: l2 ? 24.15 + ((x - 480) / 970) * 0.55 + r * 0.15 : 22.5 + ((x - 115) / 1695) * 1.1 + r * 0.2, caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
     }
   const ct = document.getElementById("titulo").getContext("2d");
-  const DUR_CAIDA = 0.6;
+  const DUR_CAIDA = 0.45;
   function titulo(t, brillo) {
     ct.clearRect(0, 0, 1920, 1080);
     ct.font = "bold 11px monospace"; ct.textAlign = "center"; ct.textBaseline = "middle";

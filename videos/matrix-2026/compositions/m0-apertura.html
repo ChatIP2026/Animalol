@@ -14,6 +14,8 @@
   #sub{left:200px;right:200px;top:860px;text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6)}
   #cen{left:0;right:0;top:500px;text-align:center;font-family:"Maquina",monospace;font-size:76px;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.8),0 0 4px #000}
   #nom{left:0;right:0;top:760px;text-align:center;font-family:"Maquina",monospace;font-size:64px;letter-spacing:.08em;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.9),0 0 4px #000}
+  #mujerw{left:0;top:0;width:1920px;height:1080px;opacity:0}
+  #mujer{position:absolute;left:0;top:0;width:1920px;height:1080px}
   #halo{inset:-90px;border-radius:50%;background:radial-gradient(closest-side,rgba(43,255,106,.38),rgba(43,255,106,0) 72%)}
   #glitch{inset:0;background:#3dff7a;mix-blend-mode:screen;opacity:0}
 </style></head><body>
@@ -21,6 +23,8 @@
   <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
   <div id="vel" class="abs"></div>
   <canvas id="titulo" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
+  <!-- Jaina "real": video recortado (sin fondo) que habla del inicio hasta "propósito" -->
+  <div id="mujerw" class="abs"><video id="mujer" class="clip" src="../assets/jaina-real/jaina-habla.webm" data-start="2.8" data-duration="18" data-track-index="3" muted playsinline preload="auto"></video></div>
   <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
   <div id="sub" class="abs"></div>
   <div id="cen" class="abs"></div>
@@ -159,7 +163,12 @@
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
   // Jaina aparece al centro, se presenta y se desplaza a la esquina inferior derecha
   tl.set("#jw", { opacity: 1 }, 0.4);
-  tl.to("#jw", { x: 790, y: 370, scale: 0.42, duration: 1.2, ease: "power3.inOut" }, 19.6);
+  // la esfera se apaga y aparece Jaina "real" hablando; al terminar "propósito" vuelve la esfera ya en la esquina
+  tl.to("#jw", { opacity: 0, scale: 0.6, duration: 0.4 }, 2.3);
+  tl.fromTo("#mujerw", { opacity: 0 }, { opacity: 1, duration: 0.5, immediateRender: false }, 2.5);
+  tl.to("#mujerw", { opacity: 0, duration: 0.5 }, 20.4);
+  tl.set("#jw", { x: 790, y: 370, scale: 0.42 }, 20.4);
+  tl.to("#jw", { opacity: 1, duration: 0.5 }, 20.5);
   // cuando el título está armado, brilla
   tl.to(st, { b: 1, duration: 0.3, onUpdate: pintar }, 26.0);
   tl.to("#titulo", { filter: "drop-shadow(0 0 10px #2bff6a) drop-shadow(0 0 26px rgba(43,255,106,.6))", duration: 0.4 }, 26.0);

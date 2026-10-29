@@ -131,7 +131,17 @@
   document.getElementById("sig").addEventListener("click", e => { e.stopPropagation(); avanzar(); });
   // reloj de la presentación: le pasa el tiempo a la slide actual
   let t0 = 0;
-  (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) revisarVoces(t); f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();
+  // en vivo, los videos dentro de una slide (data-start/duration) los reproduce la presentación
+  function revisarVideosSlide(t) {
+    let doc; try { doc = f.contentDocument; } catch (e) { return; }
+    if (!doc) return;
+    doc.querySelectorAll("video[data-start]").forEach(v => {
+      const mt = t - parseFloat(v.dataset.start);
+      if (mt >= 0 && mt < parseFloat(v.dataset.duration)) { if (v.paused) v.play().catch(() => {}); if (Math.abs(v.currentTime - mt) > 0.3) v.currentTime = mt; }
+      else if (!v.paused) v.pause();
+    });
+  }
+  (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) { revisarVoces(t); revisarVideosSlide(t); } f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();
   // el primer toque activa el sonido del navegador y arranca el slide 1
   const ini = document.getElementById("inicio");
   // pantalla inicial: lluvia de código en movimiento y la pregunta escribiéndose

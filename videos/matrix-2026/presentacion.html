@@ -29,7 +29,7 @@
   // GitHub Pages guarda los archivos 10 min en caché: con esto siempre se carga la última versión
   const VER = "?v=" + Date.now();
   // pasos: cuántos toques "sin transición" tiene la slide antes de pasar a la siguiente
-  const PASOS = { "compositions/m0-apertura.html": 2, "compositions/m6-final.html": 2 };
+  const PASOS = { "compositions/m0-apertura.html": 2, "compositions/m6-final.html": 3 };
   let paso = 0;
   // música de fondo: suave bajo la voz en la intro, fuerte en el show de las balas, se apaga después
   const musica = Object.assign(new Audio("assets/musica-balas-show.mp3"), { loop: true, volume: 0 });
@@ -53,7 +53,7 @@
     7: [["07-pregunta-reports", 0.6, 0]],
     9: [["08-pregunta-finance", 0.6, 0]],
     11: [["09-pregunta-onboarding", 0.6, 0]],
-    13: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
+    13: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1], ["10-adios", 0.6, 2]],
   };
   const audios = {};
   Object.values(VOCES).flat().forEach(([n]) => { audios[n] = new Audio(`assets/voz/${n}.mp3${VER}`); audios[n].preload = "auto"; });

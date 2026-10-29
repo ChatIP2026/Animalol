@@ -30,6 +30,13 @@
   #eje{left:190px;width:1540px;top:880px;height:3px;background:#3dff7a;box-shadow:0 0 12px #2bff6a}
   .bar{background:linear-gradient(#b9ffd0,#2bff6a 30%,#0b6a2c);box-shadow:0 0 18px rgba(43,255,106,.45)}
   .bar[data-curso]{background:repeating-linear-gradient(45deg,#2bff6a 0 10px,#0b6a2c 10px 20px)}
+  /* meses que no llegan al millón: en gris */
+  .bar.gris{background:linear-gradient(#d9d9d9,#8a8a8a 30%,#3a3a3a);box-shadow:0 0 14px rgba(200,200,200,.25)}
+  .bar.gris[data-curso]{background:repeating-linear-gradient(45deg,#9a9a9a 0 10px,#3a3a3a 10px 20px)}
+  .val.gris{color:#cfcfcf;text-shadow:0 0 8px rgba(0,0,0,.9)}
+  #linmm{left:190px;width:1540px;height:0;border-top:4px solid #ff3b3b;box-shadow:0 0 12px rgba(255,59,59,.8);opacity:0}
+  #linmmt{left:60px;width:120px;text-align:right;font-family:"Maquina",monospace;font-size:24px;color:#ff5b5b;opacity:0}
+  #adios{inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 160px;background:rgba(2,10,4,.88);font-family:"Maquina",monospace;font-size:64px;line-height:1.4;color:#e6ffee;text-shadow:0 0 18px rgba(43,255,106,.9),0 0 4px #000;opacity:0}
   .val{text-align:center;font-family:"Maquina",monospace;font-size:24px;color:#e6ffee;text-shadow:0 0 10px rgba(43,255,106,.8)}
   .mes{text-align:center;font-family:"Maquina",monospace;font-size:24px;color:#9fe8b4}
   .proy{border:3px dashed rgba(61,255,122,.7);display:flex;align-items:center;justify-content:center;font-family:"Maquina",monospace;font-size:54px;color:#3dff7a;opacity:0}
@@ -47,11 +54,14 @@
   <div id="h" class="abs"></div>
   <div id="sub2" class="abs"></div>
   <div id="eje" class="abs"></div>
-<div class="bar abs" data-v="1225" data-t="2.0" style="left:232px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1225" data-t="2.0" style="left:212px;width:120px"></div><div class="mes abs" style="left:212px;width:120px;top:894px">ENE</div><div class="bar abs" data-v="1007" data-t="2.18" style="left:358px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1007" data-t="2.18" style="left:338px;width:120px"></div><div class="mes abs" style="left:338px;width:120px;top:894px">FEB</div><div class="bar abs" data-v="1243" data-t="2.36" style="left:482px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1243" data-t="2.36" style="left:462px;width:120px"></div><div class="mes abs" style="left:462px;width:120px;top:894px">MAR</div><div class="bar abs" data-v="1029" data-t="2.54" style="left:608px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1029" data-t="2.54" style="left:588px;width:120px"></div><div class="mes abs" style="left:588px;width:120px;top:894px">ABR</div><div class="bar abs" data-v="1012" data-t="2.7199999999999998" style="left:732px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1012" data-t="2.7199999999999998" style="left:712px;width:120px"></div><div class="mes abs" style="left:712px;width:120px;top:894px">MAY</div><div class="bar abs" data-v="1006" data-t="2.9" style="left:858px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1006" data-t="2.9" style="left:838px;width:120px"></div><div class="mes abs" style="left:838px;width:120px;top:894px">JUN</div><div class="bar abs" data-v="824" data-t="3.08" style="left:982px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="824" data-t="3.08" style="left:962px;width:120px"></div><div class="mes abs" style="left:962px;width:120px;top:894px">JUL</div><div class="bar abs" data-v="1234" data-t="3.26" style="left:1108px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1234" data-t="3.26" style="left:1088px;width:120px"></div><div class="mes abs" style="left:1088px;width:120px;top:894px">AGO</div><div class="bar abs" data-v="1092" data-t="3.44" style="left:1232px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1092" data-t="3.44" style="left:1212px;width:120px"></div><div class="mes abs" style="left:1212px;width:120px;top:894px">SET</div><div class="bar abs" data-v="932" data-t="3.62" style="left:1358px;width:80px;top:880px;height:0" data-curso=1></div><div class="val abs" data-v="932" data-t="3.62" style="left:1338px;width:120px"></div><div class="mes abs" style="left:1338px;width:120px;top:894px">OCT</div><div class="proy abs" data-t="4.4" style="left:1482px;width:80px;top:529px;height:351px">?</div><div class="mes abs" style="left:1462px;width:120px;top:894px">NOV</div><div class="proy abs" data-t="4.65" style="left:1608px;width:80px;top:529px;height:351px">?</div><div class="mes abs" style="left:1588px;width:120px;top:894px">DIC</div>
+<div class="bar abs" data-v="1225" data-t="2.0" style="left:232px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1225" data-t="2.0" style="left:212px;width:120px"></div><div class="mes abs" style="left:212px;width:120px;top:894px">ENE</div><div class="bar abs" data-v="1007" data-t="2.18" style="left:358px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1007" data-t="2.18" style="left:338px;width:120px"></div><div class="mes abs" style="left:338px;width:120px;top:894px">FEB</div><div class="bar abs" data-v="1243" data-t="2.36" style="left:482px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1243" data-t="2.36" style="left:462px;width:120px"></div><div class="mes abs" style="left:462px;width:120px;top:894px">MAR</div><div class="bar abs" data-v="1029" data-t="2.54" style="left:608px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1029" data-t="2.54" style="left:588px;width:120px"></div><div class="mes abs" style="left:588px;width:120px;top:894px">ABR</div><div class="bar abs" data-v="1012" data-t="2.7199999999999998" style="left:732px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1012" data-t="2.7199999999999998" style="left:712px;width:120px"></div><div class="mes abs" style="left:712px;width:120px;top:894px">MAY</div><div class="bar abs" data-v="1006" data-t="2.9" style="left:858px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1006" data-t="2.9" style="left:838px;width:120px"></div><div class="mes abs" style="left:838px;width:120px;top:894px">JUN</div><div class="bar abs gris" data-v="824" data-t="3.08" style="left:982px;width:80px;top:880px;height:0"></div><div class="val abs gris" data-v="824" data-t="3.08" style="left:962px;width:120px"></div><div class="mes abs" style="left:962px;width:120px;top:894px">JUL</div><div class="bar abs" data-v="1234" data-t="3.26" style="left:1108px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1234" data-t="3.26" style="left:1088px;width:120px"></div><div class="mes abs" style="left:1088px;width:120px;top:894px">AGO</div><div class="bar abs" data-v="1092" data-t="3.44" style="left:1232px;width:80px;top:880px;height:0"></div><div class="val abs" data-v="1092" data-t="3.44" style="left:1212px;width:120px"></div><div class="mes abs" style="left:1212px;width:120px;top:894px">SET</div><div class="bar abs gris" data-v="932" data-t="3.62" style="left:1358px;width:80px;top:880px;height:0" data-curso=1></div><div class="val abs gris" data-v="932" data-t="3.62" style="left:1338px;width:120px"></div><div class="mes abs" style="left:1338px;width:120px;top:894px">OCT</div><div class="proy abs" data-t="4.4" style="left:1482px;width:80px;top:529px;height:351px">?</div><div class="mes abs" style="left:1462px;width:120px;top:894px">NOV</div><div class="proy abs" data-t="4.65" style="left:1608px;width:80px;top:529px;height:351px">?</div><div class="mes abs" style="left:1588px;width:120px;top:894px">DIC</div>
   <div id="prom" class="abs" style="top:529px"></div>
-  <div id="promt" class="abs" style="top:489px">PROMEDIO 1,060K</div>
+  <div id="promt" class="abs" style="top:489px">PROMEDIO 1.06 MM</div>
+  <div id="linmm" class="abs" style="top:549px"></div>
+  <div id="linmmt" class="abs" style="top:535px">1 MM</div>
   <div id="curso" class="abs">EN CURSO</div>
-  <div id="ley" class="abs">Facturación mensual 2026 · miles de soles · NOV–DIC: perspectivas de cierre</div>
+  <div id="ley" class="abs">Facturación mensual 2026 · millones de soles (MM) · línea roja: 1 MM · NOV–DIC: perspectivas de cierre</div>
+  <div id="adios" class="abs"></div>
   <div id="jw" class="abs"><div id="halo" class="abs"></div><canvas id="jaina" class="abs" width="600" height="600" style="left:0;top:0"></canvas></div>
 </div>
 <script>
@@ -136,10 +146,10 @@
     document.getElementById("halo").style.opacity = (.4 + .6 * br) * f;
   }
   // paso 1 (pedido de foto) arranca con un toque; en el render cae a los 23 s
-  const PASO = [0, 22.6];
-  function habla(t) { return [[1.0, 21.2], [PASO[1] + 0.4, PASO[1] + 8.0]].some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
+  const PASO = [0, 22.6, 31.0];
+  function habla(t) { return [[1.0, 21.2], [PASO[1] + 0.4, PASO[1] + 8.0], [PASO[2] + 0.6, PASO[2] + 6.0]].some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
   gsap.set("#jw", { scale: 0.42 });
-  const fmt = v => (v >= 1000 ? Math.floor(v / 1000) + "," + String(v % 1000).padStart(3, "0") : String(v)) + "K";
+  const fmt = v => (v / 1000).toFixed(2) + " MM";
   const barras = [...document.querySelectorAll(".bar")], vals = [...document.querySelectorAll(".val")], proy = [...document.querySelectorAll(".proy")];
   // barras que crecen y cifras que cuentan hasta el dato real
   function hud(t) {
@@ -147,15 +157,21 @@
       const p = Math.min(1, Math.max(0, (t - b.dataset.t) / 0.9)), e = 1 - Math.pow(1 - p, 3), h = b.dataset.v / 1300 * 430 * e;
       b.style.height = h + "px"; b.style.top = (880 - h) + "px";
       const v = vals[k]; v.textContent = p ? fmt(Math.round(b.dataset.v * e)) : ""; // la cifra nunca toca la línea del promedio (y=529): si chocaría, sube por encima de ella
-      let y = 880 - h - 36; if (y < 535 && y + 30 > 523) y = 529 - 44; v.style.top = y + "px";
-      if (b.dataset.curso !== undefined) { const c = document.getElementById("curso"); c.style.opacity = p >= 1 ? (Math.floor(t * 2) % 2 ? .4 : 1) : 0; c.style.left = (parseFloat(b.style.left) - 14) + "px"; c.style.top = Math.min(880 - h - 70, 529 - 36) + "px"; }
+      // la cifra nunca toca la línea del promedio (529) ni la roja del millón (549)
+      let y = 880 - h - 36; if (y < 557 && y + 30 > 521) y = 529 - 44; v.style.top = y + "px";
+      if (b.dataset.curso !== undefined) { const c = document.getElementById("curso"); c.style.opacity = p >= 1 ? (Math.floor(t * 2) % 2 ? .4 : 1) : 0; c.style.left = (parseFloat(b.style.left) - 14) + "px"; c.style.top = (y - 30) + "px"; }
     });
     proy.forEach(e => e.style.opacity = t >= +e.dataset.t ? .5 + .5 * Math.abs(Math.sin(t * 2)) : 0);
     const pr = t >= 4.2 ? 1 : 0;
     document.getElementById("prom").style.opacity = pr; document.getElementById("promt").style.opacity = pr;
+    const rj = t >= 4.6 ? 1 : 0; document.getElementById("linmm").style.opacity = rj; document.getElementById("linmmt").style.opacity = rj;
+    // tercer toque: despedida a pantalla completa, escrita a máquina
+    const ad = document.getElementById("adios"), TA = "Adiós iPartner. Neo Mario se retira… Cambio y fuera.", e = t - PASO[2];
+    ad.style.opacity = e > 0 ? Math.min(1, e / 0.6) : 0;
+    ad.textContent = e > 0.4 ? TA.slice(0, Math.min(TA.length, Math.floor((e - 0.4) * 16))) + (Math.floor(t * 2.5) % 2 ? "▌" : "\u00a0") : "";
     jaina(t);
   }
-  const DUR = 32;
+  const DUR = 38;
   const tl = gsap.timeline({ paused: true });
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   // cada imagen se "descarga": aparece el marco y una línea de escaneo la revela de arriba hacia abajo
@@ -174,8 +190,9 @@
   let enVivo = false;
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
-    if (!enVivo) { enVivo = true; PASO[1] = Infinity; }
+    if (!enVivo) { enVivo = true; PASO[1] = Infinity; PASO[2] = Infinity; }
     if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; }
+    if (e.data.paso >= 2 && PASO[2] === Infinity) { PASO[2] = t; }
     // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
     if (t < DUR) tl.seek(t); else st.t = t;
     pintar();

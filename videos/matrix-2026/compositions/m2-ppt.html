@@ -32,19 +32,7 @@
   <div id="mod" class="abs"></div>
   <div id="h" class="abs"></div>
   <div id="c1" class="abs card">
-    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
-      <g id="anA" opacity=".5"><circle cx="580" cy="170" r="118" stroke="#3dff7a" stroke-width="2" fill="none" stroke-dasharray="4 12"/></g>
-      <circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="180" cy="170" r="85"/>
-      <circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="180" cy="145" r="30"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" d="M125 225 Q180 165 235 225"/>
-      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="16" x="180" y="282" text-anchor="middle" class="fx" data-t="1.8">EQUIPO</text>
-      <rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" x="505" y="92" width="150" height="156" rx="14"/>
-      <rect stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" x="530" y="117" width="100" height="106" rx="8"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M520 92 v-16 M520 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M550 92 v-16 M550 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M580 92 v-16 M580 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M610 92 v-16 M610 248 v16"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M640 92 v-16 M640 248 v16"/>
-      <text font-family="Maquina, monospace" font-size="44" fill="#3dff7a" x="580" y="186" text-anchor="middle" class="fx" data-t="1.9">IA</text>
-      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M275 150 H490"/><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="3" d="M490 192 H275"/>
-      <circle class="pul" data-a="275,150,490,150" r="6" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="275,150,490,150" r="6" fill="#b9ffd0" opacity="0"/>
-      <circle class="pul" data-a="490,192,275,192" r="6" fill="#b9ffd0" opacity="0"/><circle class="pul" data-a="490,192,275,192" r="6" fill="#b9ffd0" opacity="0"/>
-      <text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="110" y="330" class="fx" data-t="2.4">▸ ANALIZAR CARTERA</text><text font-family="Maquina, monospace" font-size="24" fill="#3dff7a" x="650" y="330" class="fx" data-t="2.8">✓</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="110" y="368" class="fx" data-t="2.75">▸ PREPARAR RENOVACIONES</text><text font-family="Maquina, monospace" font-size="24" fill="#3dff7a" x="650" y="368" class="fx" data-t="3.15">✓</text><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="20" x="110" y="406" class="fx" data-t="3.0999999999999996">▸ SEGUIMIENTO A CLIENTES</text><text font-family="Maquina, monospace" font-size="24" fill="#3dff7a" x="650" y="406" class="fx" data-t="3.5">✓</text>
-    </svg><div class="tapa abs"></div><div class="scan abs"></div>
+    <div class="marco"><img class="ico" src="../assets/iconos/cowork.png" style="object-fit:contain;padding:18px;box-sizing:border-box" alt="Cowork de Claude"/><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
     <div class="tit" id="t1"></div>
   </div>
@@ -109,7 +97,6 @@
   cifras.forEach(d => d.dataset.base = d.textContent);
   const nodos = [...document.querySelectorAll(".nodo")];
   function hud(t) {
-    document.getElementById("anA").setAttribute("transform", `rotate(${t * 14} 580 170)`);
     fx.forEach(e => e.style.opacity = t >= +e.dataset.t ? 1 : 0);
     // las cifras nunca se fijan: se ven "descifrándose" (no son datos reales)
     cifras.forEach((e, k) => { e.style.opacity = t >= +e.dataset.t ? 1 : 0; e.textContent = e.dataset.base.replace(/0/g, (m, j) => D10[(Math.floor(t * 14) * 7 + j * 3 + k * 5) % 10]); });
@@ -139,6 +126,7 @@
     tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);
   });
   window.__timelines = window.__timelines || {};
+  tl.fromTo("#c1 .ico", { y: 0 }, { y: -10, duration: 1.6, ease: "sine.inOut", repeat: 5, yoyo: true, immediateRender: false }, 2.0);
   window.__timelines["m2-ppt"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle

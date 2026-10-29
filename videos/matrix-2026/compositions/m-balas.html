@@ -9,7 +9,7 @@
   #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#020a04}
   .abs{position:absolute}
   #vel{inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(2,10,4,0),rgba(2,10,4,.85) 100%)}
-  #sub{left:160px;right:160px;top:820px;text-align:center;font-family:"Maquina",monospace;font-size:48px;line-height:1.35;color:#e6ffee;text-shadow:0 0 4px #000,0 0 10px #000,0 0 16px rgba(43,255,106,.7)}
+  #sub{left:200px;right:200px;top:860px;text-align:center;font-family:"Maquina",monospace;font-size:36px;line-height:1.4;color:#c8ffd8;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6)}
 </style></head><body>
 <div id="root" data-composition-id="m-balas" data-width="1920" data-height="1080">
   <canvas id="lluvia" class="abs" width="1920" height="1080" style="left:0;top:0"></canvas>
@@ -87,8 +87,8 @@
   // máquina de escribir: letra por letra a ritmo constante, con cursor que parpadea
   function maquina(el, g, t) {
     if (!g) { el.textContent = ""; return; }
-    // el texto se adelanta un poco a la voz y se escribe más rápido que ella
-    const n = Math.min(g[2].length, Math.floor((t - g[0] + 0.35) / ((g[1] - g[0]) * 0.6) * g[2].length));
+    // el texto se adelanta un poco a la voz y se escribe a su ritmo
+    const n = Math.min(g[2].length, Math.floor((t - g[0] + 0.35) / ((g[1] - g[0]) * 0.8) * g[2].length));
     const cursor = n < g[2].length || Math.floor(t * 2.5) % 2 === 0 ? "▌" : " ";
     el.textContent = g[2].slice(0, Math.max(0, n)) + cursor;
   }

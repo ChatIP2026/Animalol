@@ -86,7 +86,8 @@
   // máquina de escribir: letra por letra a ritmo constante, con cursor que parpadea
   function maquina(el, g, t) {
     if (!g) { el.textContent = ""; return; }
-    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    // el texto se adelanta un poco a la voz y se escribe más rápido que ella
+    const n = Math.min(g[2].length, Math.floor((t - g[0] + 0.35) / ((g[1] - g[0]) * 0.6) * g[2].length));
     const cursor = n < g[2].length || Math.floor(t * 2.5) % 2 === 0 ? "▌" : " ";
     el.textContent = g[2].slice(0, Math.max(0, n)) + cursor;
   }
@@ -97,7 +98,7 @@
     // cámara lenta: la lluvia se frena casi por completo cuando empiezan las balas
     lluvia(t < 3 ? t : 3 + (t - 3) * 0.12);
     balas(t);
-    const g = GUION.find(([a, b]) => t >= a && t <= b + 0.6);
+    const g = GUION.find(([a, b]) => t >= a - 0.35 && t <= b + 0.6);
     maquina(sub, g, t); sub.style.opacity = g ? 1 : 0;
   }
   const DUR = 16;
@@ -107,11 +108,8 @@
   window.__timelines["m-balas"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: presentacion.html envía el tiempo; las balas siguen en bucle durante el show
-  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
-  const VOCES = [["../assets/voz/02-balas.mp3", 1.0]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
-    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
     // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
     if (t < DUR) tl.seek(t); else st.t = t;
     pintar();

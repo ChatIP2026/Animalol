@@ -35,9 +35,27 @@
     if (n === 1) setTimeout(() => { if (i === 1) volObjetivo = 1; }, 3000);
     if (volObjetivo && musica.paused) musica.play().catch(() => {});
   }
+  // voces de Jaina: las reproduce la presentación (no la slide) para que el navegador nunca las bloquee.
+  // [archivo, segundos, paso]: paso 0 cuenta desde que entra la slide; paso 1, desde el toque.
+  const VOCES = {
+    0: [["01a-intro", 2.8, 0], ["01b-mario", 0.4, 1]],
+    1: [["02-balas", 1.0, 0]],
+    2: [["03-pregunta", 0.6, 0]],
+    8: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
+  };
+  const audios = {};
+  Object.values(VOCES).flat().forEach(([n]) => { audios[n] = new Audio(`assets/voz/${n}.mp3`); audios[n].preload = "auto"; });
+  let sonando = [], tPaso = 0;
+  function detenerVoces() { sonando.forEach(a => { a.pause(); a.currentTime = 0; }); sonando = []; }
+  function revisarVoces(t) {
+    (VOCES[i] || []).forEach(([n, at, p]) => {
+      const a = audios[n], inicio = p ? (paso >= p ? tPaso + at : Infinity) : at;
+      if (t >= inicio && !sonando.includes(a)) { sonando.push(a); a.currentTime = Math.max(0, t - inicio); a.play().catch(() => {}); }
+    });
+  }
   // avanzar: primero agota los pasos de la slide actual, luego cambia de slide
   function avanzar() {
-    if (paso + 1 < (PASOS[SLIDES[i]] || 1) && !document.getElementById("inicio")) { paso++; return; }
+    if (paso + 1 < (PASOS[SLIDES[i]] || 1) && !document.getElementById("inicio")) { paso++; tPaso = (performance.now() - t0) / 1000; return; }
     ir(i + 1);
   }
   const SLIDES = ["compositions/m0-apertura.html", "compositions/m-balas.html", "compositions/m1-business.html", "compositions/m1-ppt.html", "compositions/m2-ppt.html", "compositions/m3-ppt.html", "compositions/m4-ppt.html", "compositions/m5-ppt.html", "compositions/m6-final.html"];
@@ -66,7 +84,7 @@
     if (n < 0 || n >= SLIDES.length) return;
     enTransicion = true; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
     const entrar = () => {
-      i = n; paso = 0; f.src = SLIDES[i]; t0 = performance.now(); musicaPara(i);
+      detenerVoces(); i = n; paso = 0; f.src = SLIDES[i]; t0 = performance.now(); musicaPara(i);
       document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
       zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
       tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => {
@@ -96,7 +114,7 @@
   document.getElementById("sig").addEventListener("click", e => { e.stopPropagation(); avanzar(); });
   // reloj de la presentación: le pasa el tiempo a la slide actual
   let t0 = 0;
-  (function reloj() { f.contentWindow?.postMessage({ t: (performance.now() - t0) / 1000, paso }, "*"); requestAnimationFrame(reloj); })();
+  (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) revisarVoces(t); f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();
   // el primer toque activa el sonido del navegador y arranca el slide 1
   const ini = document.getElementById("inicio");
   ini.addEventListener("click", () => { ini.remove(); ir(0, true); }, { once: true });

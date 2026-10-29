@@ -103,8 +103,9 @@
   }
   // máquina de escribir: letra por letra a ritmo constante, con cursor que parpadea
   function maquina(el, g, t, fijo) {
-    if (!g || t < g[0]) { el.textContent = ""; return; }
-    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    if (!g || t < g[0] - 0.35) { el.textContent = ""; return; }
+    // el texto se adelanta un poco a la voz y se escribe más rápido que ella
+    const n = Math.min(g[2].length, Math.floor((t - g[0] + 0.35) / ((g[1] - g[0]) * 0.6) * g[2].length));
     const cursor = n < g[2].length || (fijo && Math.floor(t * 2.5) % 2 === 0) ? "▌" : " ";
     el.textContent = g[2].slice(0, Math.max(0, n)) + (fijo || n < g[2].length ? cursor : "");
   }
@@ -114,7 +115,7 @@
   function pintar() {
     const t = st.t;
     mate(t, st.foco); jaina(t);
-    const g = GUION.find(([a, b]) => t >= a && t <= b + 0.5);
+    const g = GUION.find(([a, b]) => t >= a - 0.35 && t <= b + 0.5);
     maquina(sub, g, t, true); sub.style.opacity = g ? 1 : 0;
     maquina(document.getElementById("mod"), MOD, t, false);
     maquina(document.getElementById("q1"), Q1, t, false);
@@ -130,11 +131,8 @@
   window.__timelines["m1-business"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: presentacion.html envía el tiempo; al terminar, el fondo sigue en bucle
-  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
-  const VOCES = [["../assets/voz/03-pregunta.mp3", 0.6]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
-    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
     // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
     if (t < DUR) tl.seek(t); else st.t = t;
     pintar();

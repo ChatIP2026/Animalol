@@ -171,14 +171,11 @@
   window.__timelines["m6-final"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle
-  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
-  const VOCES = [["../assets/voz/04-cierre.mp3", 1.0], ["../assets/voz/05-foto.mp3", Infinity]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   let enVivo = false;
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
     if (!enVivo) { enVivo = true; PASO[1] = Infinity; }
-    if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; VOCES[1].at = t + 0.4; }
-    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
+    if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; }
     // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
     if (t < DUR) tl.seek(t); else st.t = t;
     pintar();

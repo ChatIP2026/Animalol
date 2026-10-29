@@ -54,9 +54,9 @@
   const P = [];
   for (const [x, y] of PTS) {
       const r = rnd();
-      // sincronizado con la voz: cada letra aterriza cuando Jaina la dice ("hemos desbloqueado" 22.9–24.3 s, "la" 24.5 s, "Matrix" 25.0 s)
+      // sincronizado con la voz: las dos líneas se arman a la vez mientras Jaina dice "hemos desbloqueado la Matrix" (22.9–25.2 s)
       const l2 = y > 565;
-      P.push({ x, y, linea2: l2, t0: l2 ? 24.15 + ((x - 480) / 970) * 0.55 + r * 0.15 : 22.5 + ((x - 115) / 1695) * 1.1 + r * 0.2, caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
+      P.push({ x, y, linea2: l2, t0: l2 ? 22.5 + ((x - 480) / 970) * 1.1 + r * 0.2 : 22.5 + ((x - 115) / 1695) * 1.1 + r * 0.2, caida: 250 + r * 700, k: (x * 7 + y * 3) % 10 });
     }
   const ct = document.getElementById("titulo").getContext("2d");
   const DUR_CAIDA = 0.45;
@@ -137,17 +137,18 @@
   // máquina de escribir: letra por letra a ritmo constante, con cursor que parpadea
   function maquina(el, g, t) {
     if (!g) { el.textContent = ""; return; }
-    const n = Math.min(g[2].length, Math.floor((t - g[0]) / ((g[1] - g[0]) * 0.8) * g[2].length));
+    // el texto se adelanta un poco a la voz y se escribe más rápido que ella
+    const n = Math.min(g[2].length, Math.floor((t - g[0] + 0.35) / ((g[1] - g[0]) * 0.6) * g[2].length));
     const cursor = n < g[2].length || Math.floor(t * 2.5) % 2 === 0 ? "▌" : "\u00a0";
     el.textContent = g[2].slice(0, Math.max(0, n)) + cursor;
   }
   function subtitulo(t) {
-    const g = GUION.map(abs).find(([a, b]) => t >= a && t <= b + 0.5);
+    const g = GUION.map(abs).find(([a, b]) => t >= a - 0.35 && t <= b + 0.5);
     maquina(sub, g && g[3] === "abajo" ? g : null, t);
     maquina(cen, g && g[3] === "centro" ? g : null, t);
     sub.style.opacity = g && g[3] === "abajo" ? 1 : 0;
     const NOM = [NOM0[0] + PASO[1], NOM0[1] + PASO[1], NOM0[2]];
-    maquina(document.getElementById("nom"), t >= NOM[0] ? NOM : null, t);
+    maquina(document.getElementById("nom"), t >= NOM[0] - 0.35 ? NOM : null, t);
   }
   function pintar() { lluvia(st.t); titulo(st.t, st.b); jaina(st.t); subtitulo(st.t); }
   const DUR = 38;
@@ -165,15 +166,12 @@
   window.__timelines["m0-apertura"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: presentacion.html envía el tiempo; tras la entrada, la lluvia sigue en bucle con el título fijo
-  // voz de Jaina en modo presentación: arranca sincronizada con el reloj de la slide
-  const VOCES = [["../assets/voz/01a-intro.mp3", 2.8], ["../assets/voz/01b-mario.mp3", Infinity]].map(([src, at]) => ({ a: new Audio(src), at, ok: false }));
   let enVivo = false;
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
     // en vivo, el paso 1 espera el toque del presentador
     if (!enVivo) { enVivo = true; PASO[1] = Infinity; }
-    if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; VOCES[1].at = t + 0.4; }
-    VOCES.forEach(v => { if (!v.ok && t >= v.at) { v.ok = true; v.a.currentTime = Math.max(0, t - v.at); v.a.play().catch(() => {}); } });
+    if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; }
     // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
     if (t < DUR) tl.seek(t); else st.t = t;
     pintar();

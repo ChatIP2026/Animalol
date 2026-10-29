@@ -96,7 +96,7 @@
 
   // --- guion de Jaina (tiempos provisionales, se ajustarán al audio) ---
   const GUION = [];
-  const Q1 = [0.5, 1.2, "Mario:"], Q2 = [1.6, 5.0, "¿qué código descifraron para que los reportes trabajen solos?"], MOD = [0.2, 1.4, "> MÓDULO_03 // REPORTS_MATRIX"];
+  const Q1 = [0.6, 1.1, "Mario:"], Q2 = [1.10, 4.85, "¿qué código descifraron para que los reportes trabajen solos?"], MOD = [0.2, 1.4, "> MÓDULO_03 // REPORTS_MATRIX"];
   const VOZ = GUION.concat([Q1, Q2]);
   function habla(t) {
     if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;

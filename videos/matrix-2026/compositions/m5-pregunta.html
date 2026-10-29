@@ -96,7 +96,7 @@
 
   // --- guion de Jaina (tiempos provisionales, se ajustarán al audio) ---
   const GUION = [];
-  const Q1 = [0.5, 1.2, "Mario:"], Q2 = [1.6, 5.6, "¿cómo preparan a los nuevos para entrar a la Matrix desde el primer día?"], MOD = [0.2, 1.4, "> MÓDULO_05 // ONBOARDING_MATRIX"];
+  const Q1 = [0.6, 1.1, "Mario:"], Q2 = [1.55, 5.54, "¿cómo preparan a los nuevos para entrar a la Matrix desde el primer día?"], MOD = [0.2, 1.4, "> MÓDULO_05 // ONBOARDING_MATRIX"];
   const VOZ = GUION.concat([Q1, Q2]);
   function habla(t) {
     if (!VOZ.some(([a, b]) => t >= a && t <= b)) return 0;

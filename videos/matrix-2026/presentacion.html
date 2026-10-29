@@ -22,6 +22,8 @@
 <div id="inicio">TOCA PARA COMENZAR</div><div id="num"></div>
 <script>
   // orden de slides: se irán agregando aquí
+  // GitHub Pages guarda los archivos 10 min en caché: con esto siempre se carga la última versión
+  const VER = "?v=" + Date.now();
   // pasos: cuántos toques "sin transición" tiene la slide antes de pasar a la siguiente
   const PASOS = { "compositions/m0-apertura.html": 2, "compositions/m6-final.html": 2 };
   let paso = 0;
@@ -44,7 +46,7 @@
     8: [["04-cierre", 1.0, 0], ["05-foto", 0.4, 1]],
   };
   const audios = {};
-  Object.values(VOCES).flat().forEach(([n]) => { audios[n] = new Audio(`assets/voz/${n}.mp3`); audios[n].preload = "auto"; });
+  Object.values(VOCES).flat().forEach(([n]) => { audios[n] = new Audio(`assets/voz/${n}.mp3${VER}`); audios[n].preload = "auto"; });
   let sonando = [], tPaso = 0;
   function detenerVoces() { sonando.forEach(a => { a.pause(); a.currentTime = 0; }); sonando = []; }
   function revisarVoces(t) {
@@ -84,7 +86,7 @@
     if (n < 0 || n >= SLIDES.length) return;
     enTransicion = true; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
     const entrar = () => {
-      detenerVoces(); i = n; paso = 0; f.src = SLIDES[i]; t0 = performance.now(); musicaPara(i);
+      detenerVoces(); i = n; paso = 0; f.src = SLIDES[i] + VER; t0 = performance.now(); musicaPara(i);
       document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
       zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
       tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => {

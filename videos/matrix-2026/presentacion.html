@@ -189,7 +189,7 @@
   // pantalla inicial: lluvia de código en movimiento y la pregunta escribiéndose
   (function () {
     const cv = document.getElementById("lluviaIni"), cx = cv.getContext("2d"), fr = document.getElementById("frase");
-    const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>", F = 22, TXT = "¿Quieres romper la Matrix?";
+    const G = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン0123456789Z:.=*+<>", F = 22, TXT = "¿Cómo vencimos a la Matrix 2026?";
     let cols = [], t0i = performance.now();
     function medir() { cv.width = innerWidth; cv.height = innerHeight; cols = [...Array(Math.ceil(innerWidth / F))].map(() => ({ y: Math.random() * -50, v: .25 + Math.random() * .55, len: 10 + Math.random() * 25 | 0 })); }
     addEventListener("resize", medir); medir();

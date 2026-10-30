@@ -7,6 +7,7 @@
   #escena{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
   iframe{width:1920px;height:1080px;border:0;display:block}
   #vid{position:absolute;inset:0;width:1920px;height:1080px;background:#000;object-fit:contain;display:none}
+  #subvid{position:absolute;left:160px;right:160px;top:930px;text-align:center;font-family:"Maquina",monospace;font-size:40px;line-height:1.35;color:#e6ffee;text-shadow:0 0 4px #000,0 0 10px #000,0 0 18px #000,0 0 12px rgba(43,255,106,.6);display:none;pointer-events:none}
   #zoom{width:1920px;height:1080px;transform-origin:50% 50%}
   #tunel{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;z-index:3}
   #capa{position:fixed;inset:0;cursor:pointer}
@@ -19,7 +20,7 @@
   #atras{left:0} #sig{right:60px}
   #num{position:fixed;right:16px;bottom:12px;font:14px monospace;color:#3dff7a;opacity:.4}
 </style></head><body>
-<div id="escena"><div id="zoom"><iframe id="f" allow="autoplay" scrolling="no"></iframe><video id="vid" playsinline preload="auto"></video></div></div>
+<div id="escena"><div id="zoom"><iframe id="f" allow="autoplay" scrolling="no"></iframe><video id="vid" playsinline preload="auto"></video><div id="subvid"></div></div></div>
 <canvas id="tunel"></canvas>
 <div id="capa"></div>
 <div id="atras" class="nav">‹</div><div id="sig" class="nav">›</div>
@@ -64,6 +65,26 @@
       const a = audios[n], inicio = p ? (paso >= p ? tPaso + at : Infinity) : at;
       if (t >= inicio && !sonando.includes(a)) { sonando.push(a); a.currentTime = Math.max(0, t - inicio); a.play().catch(() => {}); }
     });
+  }
+  // subtítulos en español del video de entrada (está en inglés): [inicio, fin, texto] en segundos del video
+  const SUBS = [
+    [0.0, 2.2, "¡Nos atacan!"],
+    [33.0, 36.0, "¡Trinity! ¡Ayuda!"],
+    [57.9, 59.7, "Solo humano."],
+    [60.0, 61.8, "Esquiva esto."],
+    [73.4, 75.0, "¿Cómo hiciste eso?"],
+    [75.0, 75.9, "¿Hacer qué?"],
+    [76.0, 77.8, "Te moviste como ellos."],
+    [77.9, 79.8, "Nunca vi a nadie moverse tan rápido."],
+    [79.9, 82.0, "No fue lo bastante rápido."],
+    [82.9, 85.6, "¿Puedes pilotear esa cosa?"],
+    [85.9, 87.6, "Todavía no."],
+  ];
+  const subvid = document.getElementById("subvid");
+  function subtituloVideo() {
+    const esVideo = SLIDES[i] === "VIDEO"; subvid.style.display = esVideo ? "block" : "none"; if (!esVideo) return;
+    const ct = document.getElementById("vid").currentTime, c = SUBS.find(([a, b]) => ct >= a && ct <= b);
+    subvid.textContent = c ? c[2] : "";
   }
   // avanzar: primero agota los pasos de la slide actual, luego cambia de slide
   function avanzar() {
@@ -159,7 +180,7 @@
       } else if (!v.paused) v.pause();
     });
   }
-  (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) { revisarVoces(t); revisarVideosSlide(t); } f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();
+  (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) { revisarVoces(t); revisarVideosSlide(t); subtituloVideo(); } f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();
   // el primer toque activa el sonido del navegador y arranca el slide 1
   const ini = document.getElementById("inicio");
   // pantalla inicial: lluvia de código en movimiento y la pregunta escribiéndose

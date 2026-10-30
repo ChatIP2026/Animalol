@@ -162,10 +162,9 @@
   tl.fromTo(st, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: pintar }, 0);
   tl.to("#vel", { opacity: 1, duration: 0.8 }, 0.6);
   // Jaina aparece al centro, se presenta y se desplaza a la esquina inferior derecha
-  tl.set("#jw", { opacity: 1 }, 0.4);
   // la esfera se apaga y aparece Jaina "real" hablando; al terminar "propósito" vuelve la esfera ya en la esquina
-  tl.to("#jw", { opacity: 0, scale: 0.6, duration: 0.4 }, 2.3);
-  tl.fromTo("#mujerw", { opacity: 0 }, { opacity: 1, duration: 0.5, immediateRender: false }, 2.5);
+  // la esfera ya no aparece al centro: Jaina real entra directo y la esfera solo vuelve en la esquina
+  tl.fromTo("#mujerw", { opacity: 0 }, { opacity: 1, duration: 0.6, immediateRender: false }, 1.6);
   tl.to("#mujerw", { opacity: 0, duration: 0.5 }, 20.4);
   tl.set("#jw", { x: 790, y: 370, scale: 0.42 }, 20.4);
   tl.to("#jw", { opacity: 1, duration: 0.5 }, 20.5);

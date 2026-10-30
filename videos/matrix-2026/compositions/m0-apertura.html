@@ -182,8 +182,9 @@
     // en vivo, el paso 1 espera el toque del presentador
     if (!enVivo) { enVivo = true; PASO[1] = Infinity; }
     if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; }
-    // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
-    if (t < DUR) tl.seek(t); else st.t = t;
+    // Siempre se lleva la línea de tiempo hasta donde toca (o a su final si ya pasó): si el reloj da un salto
+    // (pestaña en segundo plano, equipo lento) nada queda a medio aparecer. seek no repinta solo, así que se repinta a mano.
+    tl.seek(Math.min(t, DUR)); st.t = t;
     pintar();
   });
 </script>

@@ -147,7 +147,7 @@
   }
   // paso 1 (pedido de foto) arranca con un toque; en el render cae a los 23 s
   const PASO = [0, 22.6, 31.0];
-  function habla(t) { return [[1.0, 21.2], [PASO[1] + 0.4, PASO[1] + 8.0], [PASO[2] + 0.6, PASO[2] + 6.0]].some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
+  function habla(t) { return [[1.0, 21.2], [PASO[1] + 0.4, PASO[1] + 8.0], [PASO[2] + 0.6, PASO[2] + 4.9]].some(([a, b]) => t >= a && t <= b) ? Math.abs(Math.sin(t * 11) * Math.sin(t * 4.3 + 1)) : 0; }
   gsap.set("#jw", { scale: 0.42 });
   const fmt = v => (v / 1000).toFixed(2) + " MM";
   const barras = [...document.querySelectorAll(".bar")], vals = [...document.querySelectorAll(".val")], proy = [...document.querySelectorAll(".proy")];
@@ -168,7 +168,7 @@
     // tercer toque: despedida a pantalla completa, escrita a máquina
     const ad = document.getElementById("adios"), TA = "Adiós iPartner. Neo Mario se retira… Cambio y fuera.", e = t - PASO[2];
     ad.style.opacity = e > 0 ? Math.min(1, e / 0.6) : 0;
-    ad.textContent = e > 0.4 ? TA.slice(0, Math.min(TA.length, Math.floor((e - 0.4) * 16))) + (Math.floor(t * 2.5) % 2 ? "▌" : "\u00a0") : "";
+    ad.textContent = e > 0.3 ? TA.slice(0, Math.min(TA.length, Math.floor((e - 0.3) * 12.4))) + (Math.floor(t * 2.5) % 2 ? "▌" : "\u00a0") : "";
     jaina(t);
   }
   const DUR = 38;
@@ -193,8 +193,9 @@
     if (!enVivo) { enVivo = true; PASO[1] = Infinity; PASO[2] = Infinity; }
     if (e.data.paso >= 1 && PASO[1] === Infinity) { PASO[1] = t; }
     if (e.data.paso >= 2 && PASO[2] === Infinity) { PASO[2] = t; }
-    // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
-    if (t < DUR) tl.seek(t); else st.t = t;
+    // Siempre se lleva la línea de tiempo hasta donde toca (o a su final si ya pasó): si el reloj da un salto
+    // (pestaña en segundo plano, equipo lento) nada queda a medio aparecer. seek no repinta solo, así que se repinta a mano.
+    tl.seek(Math.min(t, DUR)); st.t = t;
     pintar();
   });
 </script>

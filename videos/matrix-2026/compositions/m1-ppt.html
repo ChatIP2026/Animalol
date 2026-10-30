@@ -82,6 +82,8 @@
     const t = st.t;
     lluvia(t); hud(t);
     TXT.forEach(([id, g]) => maquina(document.getElementById(id), g, t, false));
+    // las imágenes flotan suavemente, para siempre (las fotos a pantalla completa no)
+    document.querySelectorAll(".ico").forEach((e, k) => { if (e.style.objectFit !== "cover") e.style.transform = t < 2 ? "" : `translateY(${(-5 - 5 * Math.sin((t - 2) * 1.96 + k)).toFixed(1)}px)`; });
   }
   // --- HUD: anillos que giran, cifras que se descifran, pulsos por la red, engranaje ---
   const D10 = "0123456789";
@@ -119,15 +121,14 @@
     tl.fromTo(c + " .tr", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, stagger: 0.12, ease: "power1.inOut", immediateRender: false }, d + 0.5);
   });
   window.__timelines = window.__timelines || {};
-  // la imagen de la cotización "flota" suavemente
-  tl.fromTo("#c1 .ico, #c2 .ico", { y: 0 }, { y: -10, duration: 1.6, ease: "sine.inOut", repeat: 5, yoyo: true, immediateRender: false }, 2.0);
   window.__timelines["m1-ppt"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
-    // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
-    if (t < DUR) tl.seek(t); else st.t = t;
+    // Siempre se lleva la línea de tiempo hasta donde toca (o a su final si ya pasó): si el reloj da un salto
+    // (pestaña en segundo plano, equipo lento) nada queda a medio aparecer. seek no repinta solo, así que se repinta a mano.
+    tl.seek(Math.min(t, DUR)); st.t = t;
     pintar();
   });
 </script>

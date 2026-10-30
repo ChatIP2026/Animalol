@@ -111,8 +111,9 @@
   // modo presentación: presentacion.html envía el tiempo; las balas siguen en bucle durante el show
   addEventListener("message", e => {
     const t = e.data && e.data.t; if (typeof t !== "number") return;
-    // seek no dispara onUpdate (suppressEvents), así que se repinta a mano
-    if (t < DUR) tl.seek(t); else st.t = t;
+    // Siempre se lleva la línea de tiempo hasta donde toca (o a su final si ya pasó): si el reloj da un salto
+    // (pestaña en segundo plano, equipo lento) nada queda a medio aparecer. seek no repinta solo, así que se repinta a mano.
+    tl.seek(Math.min(t, DUR)); st.t = t;
     pintar();
   });
 </script>

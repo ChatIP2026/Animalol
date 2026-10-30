@@ -133,20 +133,30 @@
   document.getElementById("sig").addEventListener("click", e => { e.stopPropagation(); avanzar(); });
   // reloj de la presentación: le pasa el tiempo a la slide actual
   let t0 = 0;
+  // Los videos pesados de las slides se descargan completos desde que se abre la presentación
+  // (mientras se ve la pantalla inicial y el video de entrada). Así, cuando les toca, ya están en memoria
+  // y no dependen de la red: es lo que antes congelaba a Jaina real a mitad de frase.
+  const PRECARGA = ["assets/jaina-real/jaina-habla.webm"], blobs = {};
+  PRECARGA.forEach(u => fetch(u).then(r => r.blob()).then(b => { blobs[u.split("/").pop()] = URL.createObjectURL(b); }).catch(() => {}));
   // en vivo, los videos dentro de una slide (data-start/duration) los reproduce la presentación
   function revisarVideosSlide(t) {
     let doc; try { doc = f.contentDocument; } catch (e) { return; }
     if (!doc) return;
     doc.querySelectorAll("video[data-start]").forEach(v => {
+      if (!v.dataset.listo) {
+        const b = blobs[(v.getAttribute("src") || "").split("/").pop()];
+        if (b && !v.src.startsWith("blob:")) { v.src = b; v.load(); }
+        if (v.readyState < 3) return;   // sin datos suficientes todavía: no se arranca
+        v.dataset.listo = 1;
+      }
       const mt = t - parseFloat(v.dataset.start);
       if (mt >= 0 && mt < parseFloat(v.dataset.duration)) {
-        // arranca una sola vez; si se desfasa poco, ajusta la velocidad (buscar a cada rato congela el video)
-        if (v.paused && !v.dataset.iniciado) { v.dataset.iniciado = 1; v.currentTime = mt; v.play().catch(() => {}); }
+        if (!v.dataset.iniciado) { v.dataset.iniciado = 1; v.currentTime = mt; v.play().catch(() => {}); return; }
+        if (v.paused && !v.ended) v.play().catch(() => {});
+        // nunca se vuelve a buscar dentro del video (eso lo congelaba): solo se ajusta la velocidad hasta alcanzar la voz
         const d = mt - v.currentTime;
-        if (Math.abs(d) > 1.5 && !v.seeking) v.currentTime = mt;
-        else v.playbackRate = Math.abs(d) > 0.15 ? (d > 0 ? 1.08 : 0.92) : 1;
-      }
-      else if (!v.paused) v.pause();
+        v.playbackRate = Math.abs(d) < 0.1 ? 1 : Math.max(0.85, Math.min(1.15, 1 + d * 0.5));
+      } else if (!v.paused) v.pause();
     });
   }
   (function reloj() { const t = (performance.now() - t0) / 1000; if (!document.getElementById("inicio")) { revisarVoces(t); revisarVideosSlide(t); } f.contentWindow?.postMessage({ t, paso }, "*"); requestAnimationFrame(reloj); })();

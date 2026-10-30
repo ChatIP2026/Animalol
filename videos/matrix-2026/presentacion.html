@@ -95,7 +95,7 @@
   function ir(n, primera) {
     if (document.getElementById("inicio") || enTransicion) return;
     if (n < 0 || n >= SLIDES.length) return;
-    enTransicion = true; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
+    enTransicion = true; tunel.style.display = "block"; tt0 = performance.now(); requestAnimationFrame(dibujarTunel);
     const entrar = () => {
       detenerVoces(); i = n; paso = 0; t0 = performance.now(); musicaPara(i);
       const vid = document.getElementById("vid"), esVideo = SLIDES[i] === "VIDEO";
@@ -103,10 +103,12 @@
       if (esVideo) { f.src = "about:blank"; if (!vid.src) vid.src = "assets/video-inicio.mp4"; vid.currentTime = 0; vid.play().catch(() => {}); }
       else { vid.pause(); f.src = SLIDES[i] + VER; }
       document.getElementById("num").textContent = (i + 1) + " / " + SLIDES.length;
+      zoom.getAnimations().forEach(a => a.cancel());
       zoom.animate([{ transform: "scale(.35)", opacity: 0, filter: "blur(10px)" }, { transform: "scale(1)", opacity: 1, filter: "blur(0)" }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
       tunel.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, fill: "forwards" }).onfinish = () => {
         // al terminar se quitan los efectos: un filtro fijo sobre el iframe congela su contenido
-        zoom.getAnimations().forEach(a => a.cancel()); enTransicion = false;
+        zoom.getAnimations().forEach(a => a.cancel()); tunel.getAnimations().forEach(a => a.cancel());
+        tunel.style.display = "none"; zoom.style.opacity = 1; enTransicion = false;
       };
     };
     if (primera) { tunel.style.opacity = 1; entrar(); return; }

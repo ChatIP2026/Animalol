@@ -158,6 +158,9 @@
   // (mientras se ve la pantalla inicial y el video de entrada). Así, cuando les toca, ya están en memoria
   // y no dependen de la red: es lo que antes congelaba a Jaina real a mitad de frase.
   const PRECARGA = ["assets/jaina-real/jaina-habla.webm"], blobs = {};
+  // las imágenes de las PPTs también se descargan al abrir: cuando llega su slide ya están en caché y salen al instante
+  ["cotizacion", "ingenieria-comercial", "cowork", "machine-learning", "kommo", "homonimias", "odoo", "factoring", "onboarding"]
+    .map(n => `assets/iconos/${n}.webp`).concat("assets/iconos/podcast.jpg").forEach(u => { const im = new Image(); im.src = u; });
   PRECARGA.forEach(u => fetch(u).then(r => r.blob()).then(b => { blobs[u.split("/").pop()] = URL.createObjectURL(b); }).catch(() => {}));
   // en vivo, los videos dentro de una slide (data-start/duration) los reproduce la presentación
   function revisarVideosSlide(t) {

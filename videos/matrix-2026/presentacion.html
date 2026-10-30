@@ -139,7 +139,13 @@
     if (!doc) return;
     doc.querySelectorAll("video[data-start]").forEach(v => {
       const mt = t - parseFloat(v.dataset.start);
-      if (mt >= 0 && mt < parseFloat(v.dataset.duration)) { if (v.paused) v.play().catch(() => {}); if (Math.abs(v.currentTime - mt) > 0.3) v.currentTime = mt; }
+      if (mt >= 0 && mt < parseFloat(v.dataset.duration)) {
+        // arranca una sola vez; si se desfasa poco, ajusta la velocidad (buscar a cada rato congela el video)
+        if (v.paused && !v.dataset.iniciado) { v.dataset.iniciado = 1; v.currentTime = mt; v.play().catch(() => {}); }
+        const d = mt - v.currentTime;
+        if (Math.abs(d) > 1.5 && !v.seeking) v.currentTime = mt;
+        else v.playbackRate = Math.abs(d) > 0.15 ? (d > 0 ? 1.08 : 0.92) : 1;
+      }
       else if (!v.paused) v.pause();
     });
   }

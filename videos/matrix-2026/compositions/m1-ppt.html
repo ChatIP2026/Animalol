@@ -37,13 +37,7 @@
     <div class="tit" id="t1"></div>
   </div>
   <div id="c2" class="abs card">
-    <div class="marco"><svg class="ico" viewBox="0 0 760 440">
-      <g id="anC" opacity=".45"><circle cx="380" cy="215" r="205" stroke="#3dff7a" stroke-width="2" fill="none" stroke-dasharray="3 12"/></g>
-      <path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L380 72"/><circle class="pul" data-x="380" data-y="72" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="380" cy="72" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="380" y="34" text-anchor="middle" class="fx" data-t="1.6">CLIENTE</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L535 144"/><circle class="pul" data-x="535" data-y="144" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="535" cy="144" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="535" y="106" text-anchor="middle" class="fx" data-t="1.75">DATOS</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L535 286"/><circle class="pul" data-x="535" data-y="286" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="535" cy="286" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="535" y="334" text-anchor="middle" class="fx" data-t="1.9000000000000001">PROPUESTA</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L380 358"/><circle class="pul" data-x="380" data-y="358" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="380" cy="358" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="380" y="406" text-anchor="middle" class="fx" data-t="2.05">PRECIO</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L225 286"/><circle class="pul" data-x="225" data-y="286" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="225" cy="286" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="225" y="334" text-anchor="middle" class="fx" data-t="2.2">MERCADO</text><path stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="2.5" d="M380 215 L225 144"/><circle class="pul" data-x="225" data-y="144" r="6" fill="#b9ffd0" opacity="0"/><circle stroke="#3dff7a" fill="none" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="tr" stroke-width="4" cx="225" cy="144" r="26"/><text font-family="Maquina, monospace" fill="#c8ffd8" font-size="15" x="225" y="106" text-anchor="middle" class="fx" data-t="2.35">CIERRE</text>
-      <circle cx="380" cy="215" r="62" fill="rgba(2,16,6,.95)" stroke="#3dff7a" stroke-width="4"/>
-      <path id="engr" fill="none" stroke="#3dff7a" stroke-width="5" stroke-linejoin="round" d=""/>
-      <circle cx="380" cy="215" r="11" fill="#3dff7a"/>
-    </svg><div class="tapa abs"></div><div class="scan abs"></div>
+    <div class="marco"><img class="ico" src="../assets/iconos/ingenieria-comercial.png" style="object-fit:contain;padding:18px;box-sizing:border-box" alt="Ingeniería Comercial"/><div class="tapa abs"></div><div class="scan abs"></div>
       <i class="esq a"></i><i class="esq b"></i><i class="esq c"></i><i class="esq d"></i></div>
     <div class="tit" id="t2"></div>
   </div>
@@ -102,8 +96,6 @@
     return d + "Z";
   }
   function hud(t) {
-    document.getElementById("anC").setAttribute("transform", `rotate(${t * 10} 380 215)`);
-    document.getElementById("engr").setAttribute("d", engranaje(30, 42, 10, t * 0.8));
     fx.forEach(e => e.style.opacity = t >= +e.dataset.t ? 1 : 0);
     // las cifras nunca se fijan: se ven "descifrándose" (no son datos reales)
     cifras.forEach((e, k) => { e.style.opacity = t >= +e.dataset.t ? 1 : 0; e.textContent = e.dataset.base.replace(/0/g, (m, j) => D10[(Math.floor(t * 14) * 7 + j * 3 + k * 5) % 10]); });
@@ -128,7 +120,7 @@
   });
   window.__timelines = window.__timelines || {};
   // la imagen de la cotización "flota" suavemente
-  tl.fromTo("#c1 .ico", { y: 0 }, { y: -10, duration: 1.6, ease: "sine.inOut", repeat: 5, yoyo: true, immediateRender: false }, 2.0);
+  tl.fromTo("#c1 .ico, #c2 .ico", { y: 0 }, { y: -10, duration: 1.6, ease: "sine.inOut", repeat: 5, yoyo: true, immediateRender: false }, 2.0);
   window.__timelines["m1-ppt"] = tl;
   pintar(); tl.seek(0);
   // modo presentación: tras la entrada, la lluvia sigue en bucle

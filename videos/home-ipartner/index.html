@@ -14,7 +14,7 @@
   #cursor{left:0;top:0;width:34px;height:40px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45))}
   .tap{left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid #fff;opacity:0}
 </style></head><body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1920" data-height="1004">
+<div id="root" data-composition-id="main" data-start="0" data-duration="15.2" data-width="1920" data-height="1004">
   <div id="stage" class="abs"><div id="cam" class="abs">
     <div id="base" class="scr abs" style="background-image:url(assets/capturas/despues-cara1.png)">
       <div id="madera" class="abs" style="opacity:0"></div>
@@ -46,6 +46,10 @@
   ["#p1", "#p2"].forEach(s => recorte(s, 796, 316, 408, 414));
   const P = (x, y) => ({ x: x * K, y: y * K });   // punto de la captura → coordenadas en pantalla
   const tl = gsap.timeline({ paused: true }), E = "power2.inOut", cam = "#cam", cur = "#cursor";
+  // ritmo: todo el guion se escribe en "segundos de guion" y se comprime con S (más ágil y fluido)
+  const S = 0.52;
+  ["to", "set"].forEach(m => { const f = tl[m].bind(tl); tl[m] = (t, v, pos) => f(t, { ...v, ...(v.duration != null ? { duration: v.duration * S } : {}) }, pos * S); });
+  { const f = tl.fromTo.bind(tl); tl.fromTo = (t, a, b, pos) => f(t, a, { ...b, ...(b.duration != null ? { duration: b.duration * S } : {}) }, pos * S); }
   // la cámara centra un punto (px, py) con escala s
   // nunca se ve el borde negro de la captura ni el fondo: el desplazamiento se limita según el zoom
   const B = 18, cl = (v, m) => Math.max(-m, Math.min(m, v));
@@ -59,11 +63,10 @@
 
   // 0–3 s · el home completo, plano (el video va dentro de un pop up)
   tl.set(cam, { scale: 1.03, x: 0, y: 0 }, 0);
-  tl.set(cur, { ...P(1250, 960), opacity: 0 }, 0);
-  tl.to(cur, { opacity: 1, duration: .4 }, 2.0);
+  tl.set(cur, { ...P(1250, 960), opacity: 1 }, 0);
   // 3–7 s · recorrido por los productos de la cara 1
-  tl.to(cam, { ...enfoca(1380, 520, 1.18), duration: 2.4, ease: E }, 2.8);
-  mueve(1062, 452, 3.0, 1.2); mueve(1376, 452, 4.4, 1.0); mueve(1532, 330, 5.5, .9);
+  tl.to(cam, { ...enfoca(1380, 520, 1.18), duration: 2.4, ease: E }, 0.6);
+  mueve(1062, 452, 1.0, 1.6); mueve(1376, 452, 4.4, 1.0); mueve(1532, 330, 5.5, .9);
   // 7–9 s · flecha → pasa a la cara 2 (deslizamiento horizontal, como en un iPhone)
   mueve(1724, 771, 6.5, 1.0); clic(1724, 771, 7.6);
   tl.set("#madera", { opacity: 1 }, 7.75);
@@ -100,7 +103,6 @@
   // 26–32 s · zoom out a la vista completa: el bucle empalma con el inicio
   tl.to(cam, { x: 0, y: 0, scale: 1.03, duration: 2, ease: E }, 26.2);
   mueve(1250, 960, 26.6, 1.6);
-  tl.to(cur, { opacity: 0, duration: .4 }, 29.6);
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = tl;
   tl.seek(0);

@@ -1,20 +1,20 @@
 <!doctype html>
 <html lang="es"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=1920, height=1080"/>
+<meta name="viewport" content="width=1920, height=1004"/>
 <script src="vendor/gsap.min.js"></script>
 <style>
   html,body{margin:0;background:#0d0a18;overflow:hidden}
-  #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(ellipse 90% 80% at 50% 45%,#2a2048 0%,#17122b 55%,#0b0814 100%)}
+  #root{position:relative;width:1920px;height:1004px;overflow:hidden;background:#000}
   .abs{position:absolute}
-  #stage{left:0;top:0;width:1920px;height:1080px;perspective:2400px;perspective-origin:50% 45%}
-  #cam{left:160px;top:121px;width:1600px;height:837px;transform-style:preserve-3d}
-  .scr{left:0;top:0;width:1600px;height:837px;border-radius:26px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.55);background-size:1600px 837px}
+  #stage{left:0;top:0;width:1920px;height:1004px;transform:scale(1.2);transform-origin:0 0}
+  #cam{left:0;top:0;width:1600px;height:837px}
+  .scr{left:0;top:0;width:1600px;height:837px;overflow:hidden;background-size:1600px 837px}
   .crop{overflow:hidden}
   .crop>div{position:absolute;left:0;top:0;width:1600px;height:837px;background-size:1600px 837px}
   #cursor{left:0;top:0;width:34px;height:40px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45))}
   .tap{left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid #fff;opacity:0}
 </style></head><body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1920" data-height="1080">
+<div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1920" data-height="1004">
   <div id="stage" class="abs"><div id="cam" class="abs">
     <div id="base" class="scr abs" style="background-image:url(assets/capturas/despues-cara1.png)">
       <div id="madera" class="abs" style="opacity:0"></div>
@@ -47,7 +47,9 @@
   const P = (x, y) => ({ x: x * K, y: y * K });   // punto de la captura → coordenadas en pantalla
   const tl = gsap.timeline({ paused: true }), E = "power2.inOut", cam = "#cam", cur = "#cursor";
   // la cámara centra un punto (px, py) con escala s
-  const enfoca = (px, py, s, extra = {}) => ({ x: (800 - px * K) * s, y: (418 - py * K) * s, scale: s, ...extra });
+  // nunca se ve el borde negro de la captura ni el fondo: el desplazamiento se limita según el zoom
+  const B = 18, cl = (v, m) => Math.max(-m, Math.min(m, v));
+  const enfoca = (px, py, s, extra = {}) => { s = Math.max(s, 1.03); return { x: cl((800 - px * K) * s, s * (800 - B) - 800), y: cl((418 - py * K) * s, s * (418 - B) - 418), scale: s, ...extra }; };
   function clic(x, y, t) {
     tl.set("#tap", P(x, y), t);
     tl.fromTo("#tap", { scale: .3, opacity: .9 }, { scale: 1.6, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false }, t);
@@ -55,12 +57,12 @@
   }
   const mueve = (x, y, t, d = 1.1) => tl.to(cur, { ...P(x, y), duration: d, ease: E }, t);
 
-  // 0–3 s · el home aparece: se endereza desde una leve inclinación 3D
-  tl.fromTo(cam, { rotationX: 12, rotationY: -14, scale: .88, opacity: 0 }, { rotationX: 0, rotationY: 0, scale: .94, opacity: 1, duration: 2.4, ease: E, immediateRender: false }, 0.1);
+  // 0–3 s · el home completo, plano (el video va dentro de un pop up)
+  tl.set(cam, { scale: 1.03, x: 0, y: 0 }, 0);
   tl.set(cur, { ...P(1250, 960), opacity: 0 }, 0);
   tl.to(cur, { opacity: 1, duration: .4 }, 2.0);
   // 3–7 s · recorrido por los productos de la cara 1
-  tl.to(cam, { ...enfoca(1380, 520, 1.18), rotationY: -4, duration: 2.4, ease: E }, 2.8);
+  tl.to(cam, { ...enfoca(1380, 520, 1.18), duration: 2.4, ease: E }, 2.8);
   mueve(1062, 452, 3.0, 1.2); mueve(1376, 452, 4.4, 1.0); mueve(1532, 330, 5.5, .9);
   // 7–9 s · flecha → pasa a la cara 2 (deslizamiento horizontal, como en un iPhone)
   mueve(1724, 771, 6.5, 1.0); clic(1724, 771, 7.6);
@@ -69,10 +71,10 @@
   tl.fromTo("#g2", { x: 260, opacity: 0 }, { x: 0, opacity: 1, duration: .8, ease: "power3.out", immediateRender: false }, 8.25);
   tl.set("#madera", { opacity: 0 }, 9.1);
   // 9–14 s · recorrido por la cara 2
-  tl.to(cam, { ...enfoca(1300, 470, 1.3), rotationY: 4, duration: 2.6, ease: E }, 9.0);
+  tl.to(cam, { ...enfoca(1300, 470, 1.3), duration: 2.6, ease: E }, 9.0);
   mueve(1062, 330, 9.3, 1.2); mueve(1376, 330, 10.7, 1.0); mueve(1218, 452, 11.9, 1.0); mueve(1532, 452, 13.0, .9);
   // 14–16 s · flecha ← vuelve a la cara 1
-  tl.to(cam, { ...enfoca(1380, 520, 1.18), rotationY: -2, duration: 1.6, ease: E }, 13.8);
+  tl.to(cam, { ...enfoca(1380, 520, 1.18), duration: 1.6, ease: E }, 13.8);
   mueve(1688, 771, 14.0, 1.0); clic(1688, 771, 15.1);
   tl.set("#madera", { opacity: 1 }, 15.25);
   tl.to("#g2", { x: 260, opacity: 0, duration: .7, ease: "power2.in" }, 15.25);
@@ -80,7 +82,7 @@
   tl.set("#madera", { opacity: 0 }, 16.6);
   // 17–21 s · Credit Pro → "Coming Soon 2027"
   mueve(1690, 452, 16.6, 1.0); clic(1690, 452, 17.7);
-  tl.to(cam, { ...enfoca(1000, 523, 1.0), rotationY: 0, duration: 1.2, ease: E }, 17.8);
+  tl.to(cam, { ...enfoca(1000, 523, 1.0), duration: 1.2, ease: E }, 17.8);
   tl.to("#al1", { opacity: 1, duration: .5 }, 17.9);
   tl.fromTo("#p1", { opacity: 0, scale: .85 }, { opacity: 1, scale: 1, duration: .55, ease: "back.out(1.6)", immediateRender: false }, 18.1);
   mueve(1000, 676, 19.0, 1.1); clic(1000, 676, 20.4);
@@ -95,11 +97,10 @@
   mueve(1000, 676, 23.9, 1.1); clic(1000, 676, 25.3);
   tl.to("#p2", { opacity: 0, scale: .9, duration: .35, ease: "power2.in" }, 25.4);
   tl.to("#al2", { opacity: 0, duration: .45 }, 25.5);
-  // 26–32 s · vista general y regreso al estado inicial para que el bucle empalme
-  tl.to(cam, { x: 0, y: 0, scale: .94, rotationY: 0, duration: 2, ease: E }, 26.2);
+  // 26–32 s · zoom out a la vista completa: el bucle empalma con el inicio
+  tl.to(cam, { x: 0, y: 0, scale: 1.03, duration: 2, ease: E }, 26.2);
   mueve(1250, 960, 26.6, 1.6);
   tl.to(cur, { opacity: 0, duration: .4 }, 29.6);
-  tl.to(cam, { rotationX: 12, rotationY: -14, scale: .88, opacity: 0, duration: 1.8, ease: E }, 30.1);
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = tl;
   tl.seek(0);

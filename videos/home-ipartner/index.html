@@ -6,148 +6,100 @@
   html,body{margin:0;background:#0d0a18;overflow:hidden}
   #root{position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(ellipse 90% 80% at 50% 45%,#2a2048 0%,#17122b 55%,#0b0814 100%)}
   .abs{position:absolute}
-  #stage{left:0;top:0;width:1920px;height:1080px;perspective:2200px;perspective-origin:50% 45%}
+  #stage{left:0;top:0;width:1920px;height:1080px;perspective:2400px;perspective-origin:50% 45%}
   #cam{left:160px;top:121px;width:1600px;height:837px;transform-style:preserve-3d}
-  .scr{left:0;top:0;width:1600px;height:837px;border-radius:26px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.55);backface-visibility:hidden;background-size:1600px 837px}
-  .pz{background-size:1600px 837px;border-radius:10px}
-  .lab{left:96px;top:56px;padding:10px 26px;border-radius:40px;font:600 26px/1 Inter,system-ui,sans-serif;letter-spacing:.18em;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);opacity:0}
-  .card{border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.5);background-size:var(--bs);opacity:0}
-  #ring,#ring2{width:40px;height:40px;border-radius:50%;border:3px solid #fff;opacity:0;box-shadow:0 0 18px #fff}
+  .scr{left:0;top:0;width:1600px;height:837px;border-radius:26px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.55);background-size:1600px 837px}
+  .crop{overflow:hidden}
+  .crop>div{position:absolute;left:0;top:0;width:1600px;height:837px;background-size:1600px 837px}
+  #cursor{left:0;top:0;width:34px;height:40px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45))}
+  .tap{left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid #fff;opacity:0}
 </style></head><body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="58" data-width="1920" data-height="1080">
-  <div id="intro" class="abs" style="inset:0;perspective:1800px"></div>
+<div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1920" data-height="1080">
   <div id="stage" class="abs"><div id="cam" class="abs">
-    <div id="antes" class="scr abs" style="background-image:url(assets/capturas/antes.png)"></div>
-    <div id="cara1" class="scr abs" style="opacity:0">
-      <div id="c1base" class="abs" style="inset:0;background:url(assets/capturas/despues-cara1.png) 0 0/1600px 837px"></div>
-      <div id="c1blur" class="abs" style="left:250px;top:110px;width:1180px;height:620px;border-radius:30px;background:url(assets/capturas/despues-cara1.png) -250px -110px/1600px 837px;filter:blur(38px) brightness(1.05)"></div>
-      <div id="c1parts"></div>
+    <div id="base" class="scr abs" style="background-image:url(assets/capturas/despues-cara1.png)">
+      <div id="madera" class="abs" style="opacity:0"></div>
+      <div id="g1" class="abs crop"><div style="background-image:url(assets/capturas/despues-cara1.png)"></div></div>
+      <div id="g2" class="abs crop" style="opacity:0"><div style="background-image:url(assets/capturas/despues-cara2.png)"></div></div>
     </div>
-    <div id="cara2" class="scr abs" style="opacity:0;transform:rotateY(180deg)">
-      <div class="abs" style="inset:0;background:url(assets/capturas/despues-cara2.png) 0 0/1600px 837px"></div>
-      <div id="c2blur" class="abs" style="left:795px;top:210px;width:620px;height:330px;border-radius:24px;background:url(assets/capturas/despues-cara2.png) -795px -210px/1600px 837px;filter:blur(30px)"></div>
-      <div id="c2parts"></div>
-    </div>
-    <div id="alerta1" class="scr abs" style="opacity:0;background-image:url(assets/capturas/alerta-onboarding.png)"></div>
-    <div id="alerta2" class="scr abs" style="opacity:0;background-image:url(assets/capturas/alerta-creditpro.png)"></div>
-    <div id="menu" class="scr abs" style="opacity:0;background-image:url(assets/capturas/menu-avion.png)"></div>
-    <div id="ring" class="abs"></div><div id="ring2" class="abs"></div>
+    <div id="al1" class="scr abs" style="opacity:0;background-image:url(assets/capturas/alerta-creditpro.png)"><div class="abs" style="left:1416px;top:730px;width:184px;height:107px;background:url(assets/capturas/alerta-onboarding.png) -1416px -730px/1600px 837px"></div></div>
+    <div id="p1" class="abs crop" style="opacity:0"><div style="background-image:url(assets/capturas/alerta-creditpro.png)"></div></div>
+    <div id="al2" class="scr abs" style="opacity:0;background-image:url(assets/capturas/alerta-onboarding.png)"></div>
+    <div id="p2" class="abs crop" style="opacity:0"><div style="background-image:url(assets/capturas/alerta-onboarding.png)"></div></div>
+    <div id="tap" class="tap abs"></div>
+    <svg id="cursor" class="abs" viewBox="0 0 34 40"><path d="M3 2 L3 31 L10.5 24.5 L15.5 36 L21 33.5 L16 22.5 L26 22.5 Z" fill="#fff" stroke="#17122b" stroke-width="2.2" stroke-linejoin="round"/></svg>
   </div></div>
-  <div id="sys" class="abs" style="inset:0;opacity:0"></div>
-  <div id="lAntes" class="lab abs">ANTES</div>
-  <div id="lDesp" class="lab abs">DESPUÉS</div>
 </div>
 <script>
-  // coordenadas medidas sobre la captura a 1000 px de ancho; en pantalla el home mide 1600 px (×1.6)
-  const K = 1.6, IMG1 = "assets/capturas/despues-cara1.png", IMG2 = "assets/capturas/despues-cara2.png";
-  function pieza(padre, img, x, y, w, h, cls = "pz") {
-    const d = document.createElement("div"); d.className = cls + " abs";
-    Object.assign(d.style, { left: x * K + "px", top: y * K + "px", width: w * K + "px", height: h * K + "px",
-      backgroundImage: `url(${img})`, backgroundPosition: `${-x * K}px ${-y * K}px`, opacity: 0 });
-    padre.appendChild(d); return d;
+  // coordenadas medidas en las capturas de 2000 px de ancho; en pantalla el home mide 1600 px (×0.8)
+  const K = 0.8;
+  function recorte(sel, x, y, w, h) {
+    const e = document.querySelector(sel);
+    Object.assign(e.style, { left: x * K + "px", top: y * K + "px", width: w * K + "px", height: h * K + "px" });
+    if (e.firstElementChild) Object.assign(e.firstElementChild.style, { left: -x * K + "px", top: -y * K + "px" });
   }
-  // piezas de la cara 1 que se construyen una por una
-  const p1 = document.getElementById("c1parts");
-  const PARTES = [[168, 82, 102, 30], [308, 80, 134, 32], [168, 124, 80, 14], [168, 141, 136, 56], [306, 141, 137, 56],
-    [168, 202, 275, 56], [168, 263, 275, 57], [168, 325, 275, 117], [505, 81, 366, 31], [505, 124, 72, 14], [505, 396, 366, 46], [832, 377, 40, 18]].map(r => pieza(p1, IMG1, ...r));
-  const CX = [531, 609, 688, 766, 845], CY = [165, 226, 287, 348];
-  const celda = (img, padre, i) => pieza(padre, img, CX[i % 5] - 38, CY[Math.floor(i / 5)] - 28, 76, 66);
-  const ICO1 = [...Array(18)].map((_, i) => celda(IMG1, p1, i));
-  const p2 = document.getElementById("c2parts");
-  const ICO2 = [...Array(11)].map((_, i) => celda(IMG2, p2, i));
-  // tarjetas flotantes de la intro (piezas reales del home nuevo)
-  const intro = document.getElementById("intro");
-  const TARJ = [[168, 141, 136, 56, 250, 230, -18, 22], [306, 141, 137, 56, 1330, 170, 14, -20], [168, 325, 275, 117, 180, 620, 10, 26],
-    [505, 396, 366, 46, 1080, 760, -12, -18], [505, 140, 366, 230, 700, 260, 8, -14]].map(([x, y, w, h, X, Y, rx, ry]) => {
-    const d = document.createElement("div"); d.className = "card abs";
-    const s = 2.1; Object.assign(d.style, { left: X + "px", top: Y + "px", width: w * s + "px", height: h * s + "px",
-      backgroundImage: `url(${IMG1})`, "--bs": `${1000 * s}px auto`, backgroundPosition: `${-x * s}px ${-y * s}px`,
-      transform: `rotateX(${rx}deg) rotateY(${ry}deg)` });
-    intro.appendChild(d); return d;
-  });
-  // System: 4 capturas en columna, se recorren despacio
-  const sys = document.getElementById("sys");
-  const SYS = [1, 2, 3, 4].map(n => {
-    // panel de System de cada captura (x 690–1300 de 2000 px), ampliado ×1.3
-    const d = document.createElement("div"); d.className = "abs";
-    Object.assign(d.style, { left: "560px", top: "40px", width: "800px", height: "1000px", borderRadius: "28px", overflow: "hidden", opacity: 0,
-      boxShadow: "0 40px 120px rgba(0,0,0,.5)", background: "#f6f6f8" });
-    const im = document.createElement("div"); im.className = "abs sysimg";
-    Object.assign(im.style, { left: "-897px", top: "-60px", width: "2600px", height: "1360px", background: `url(assets/capturas/system-${n}.png) 0 0/2600px 1360px` });
-    d.appendChild(im); sys.appendChild(d); return d;
-  });
+  // zona de productos (íconos + flechas), la única que cambia entre la cara 1 y la cara 2
+  ["#g1", "#g2"].forEach(s => recorte(s, 990, 272, 780, 520));
+  // madera limpia (sacada de la parte vacía de la cara 2) para tapar la zona mientras se desliza
+  Object.assign(document.getElementById("madera").style, { left: 990 * K + "px", top: 272 * K + "px", width: 780 * K + "px", height: 520 * K + "px",
+    background: "url(assets/capturas/despues-cara2.png) " + (-1140 * K * 1.26) + "px " + (-545 * K * 2.54) + "px/" + (1600 * 1.26) + "px " + (837 * 2.54) + "px", filter: "blur(2px)" });
+  // ventanas de las alertas
+  ["#p1", "#p2"].forEach(s => recorte(s, 796, 316, 408, 414));
+  const P = (x, y) => ({ x: x * K, y: y * K });   // punto de la captura → coordenadas en pantalla
+  const tl = gsap.timeline({ paused: true }), E = "power2.inOut", cam = "#cam", cur = "#cursor";
+  // la cámara centra un punto (px, py) con escala s
+  const enfoca = (px, py, s, extra = {}) => ({ x: (800 - px * K) * s, y: (418 - py * K) * s, scale: s, ...extra });
+  function clic(x, y, t) {
+    tl.set("#tap", P(x, y), t);
+    tl.fromTo("#tap", { scale: .3, opacity: .9 }, { scale: 1.6, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false }, t);
+    tl.to(cur, { scale: .85, duration: .1, yoyo: true, repeat: 1 }, t);
+  }
+  const mueve = (x, y, t, d = 1.1) => tl.to(cur, { ...P(x, y), duration: d, ease: E }, t);
 
-  const tl = gsap.timeline({ paused: true }), E = "power2.inOut";
-  const cam = "#cam";
-  // 0–4 s · intro: tarjetas flotando en 3D
-  tl.set(TARJ, { opacity: 1 }, 0);
-  TARJ.forEach((c, i) => tl.fromTo(c, { y: 40 }, { y: -40, duration: 4.5, ease: "sine.inOut", immediateRender: false }, 0));
-  tl.to(TARJ, { opacity: 0, scale: .9, duration: .8, ease: E, stagger: .05 }, 3.6);
-  // 4–8 s · ANTES
-  tl.fromTo(cam, { rotationX: 14, rotationY: -16, scale: .82, opacity: 0 }, { rotationX: 0, rotationY: 0, scale: .92, opacity: 1, duration: 2.2, ease: E, immediateRender: false }, 3.9);
-  tl.set(cam, { opacity: 0 }, 0);
-  tl.to("#lAntes", { opacity: 1, duration: .5 }, 4.6);
-  // 8–10 s · transición: el antes se inclina y se va, llega el después
-  tl.to("#lAntes", { opacity: 0, duration: .4 }, 8.0);
-  tl.to(cam, { rotationY: 22, rotationX: 8, scale: .86, duration: 1.4, ease: E }, 8.0);
-  tl.to("#antes", { opacity: 0, duration: .6 }, 8.6);
-  tl.to("#cara1", { opacity: 1, duration: .6 }, 8.9);
-  tl.set([...PARTES, ...ICO1], { opacity: 0 }, 8.9);
-  tl.to(cam, { rotationY: -10, rotationX: 10, scale: .9, duration: 1.8, ease: E }, 9.4);
-  tl.to("#lDesp", { opacity: 1, duration: .5 }, 9.6);
-  // 10–15 s · construcción: entran las piezas una por una
-  PARTES.forEach((p, i) => tl.fromTo(p, { opacity: 0, y: 18, scale: .96 }, { opacity: 1, y: 0, scale: 1, duration: .55, ease: "power3.out", immediateRender: false }, 10.6 + i * .32));
-  tl.to("#lDesp", { opacity: 0, duration: .4 }, 13.5);
-  // 15–20 s · íconos estilo iPhone, uno por uno con rebote
-  tl.to(cam, { rotationY: -18, rotationX: 6, scale: 1.25, x: -230, y: 60, duration: 2.2, ease: E }, 14.4);
-  ICO1.forEach((p, i) => tl.fromTo(p, { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: .5, ease: "back.out(2.2)", immediateRender: false }, 15.2 + i * .24));
-  tl.to("#c1blur", { opacity: 0, duration: 1 }, 18.6);
-  // 20–25 s · detalle: el punto de color junto al nombre (Income Ultra)
-  const DOTX = (521) * K, DOTY = (165 + 30) * K;
-  // para centrar un punto P del home: x = (800 − Px)·escala, y = (418 − Py)·escala
-  tl.to(cam, { rotationY: 0, rotationX: 0, scale: 3.2, x: (800 - DOTX - 60) * 3.2, y: (418 - DOTY + 20) * 3.2, duration: 2.4, ease: E }, 20.2);
-  tl.set("#ring", { x: DOTX - 20, y: DOTY - 20 }, 20);
-  tl.fromTo("#ring", { opacity: 0, scale: .3 }, { opacity: 1, scale: 1, duration: .6, ease: "back.out(2)", immediateRender: false }, 22.6);
-  tl.to("#ring", { scale: 2.4, opacity: 0, duration: .9, ease: "power2.out" }, 23.3);
-  tl.fromTo("#ring", { scale: .3, opacity: 0 }, { opacity: 1, scale: 1, duration: .5, ease: "back.out(2)", immediateRender: false }, 24.25);
-  tl.to("#ring", { scale: 2.4, opacity: 0, duration: .9, ease: "power2.out" }, 24.7);
-  // 25–31 s · giro a la cara 2 y sus íconos entran uno por uno
-  tl.to(cam, { scale: 1, x: 0, y: 0, rotationX: 4, duration: 1.6, ease: E }, 25.4);
-  tl.set(ICO2, { opacity: 0 }, 25.4);
-  tl.to(cam, { rotationY: 180, duration: 1.6, ease: E }, 27.0);
-  tl.set("#cara2", { opacity: 1 }, 27.0);
-  tl.set("#cara1", { opacity: 0 }, 27.8);
-  ICO2.forEach((p, i) => tl.fromTo(p, { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: .5, ease: "back.out(2.2)", immediateRender: false }, 28.5 + i * .22));
-  tl.to("#c2blur", { opacity: 0, duration: .8 }, 30.6);
-  // 31–36 s · vuelta a la cara 1 y alertas "Coming Soon 2027"
-  tl.to(cam, { rotationY: 360, duration: 1.6, ease: E }, 31.4);
-  tl.set("#cara1", { opacity: 1 }, 32.2);
-  tl.set("#cara2", { opacity: 0 }, 32.2);
-  tl.set(cam, { rotationY: 0 }, 33.0);
-  tl.to("#alerta1", { opacity: 1, duration: .6 }, 33.3);
-  tl.to("#alerta2", { opacity: 1, duration: .6 }, 35.0);
-  tl.to(["#alerta1", "#alerta2"], { opacity: 0, duration: .6 }, 36.6);
-  // 37–41 s · menú del avión → System
-  tl.to("#menu", { opacity: 1, duration: .6 }, 37.2);
-  tl.to(cam, { scale: 2.4, x: (800 - 608) * 2.4, y: (418 - 256) * 2.4, rotationX: 0, duration: 2, ease: E }, 37.6);
-  const SX = 335 * K, SY = 123 * K;
-  tl.set("#ring2", { x: SX - 20, y: SY - 20 }, 37);
-  tl.fromTo("#ring2", { opacity: 0, scale: .3 }, { opacity: 1, scale: 1, duration: .5, ease: "back.out(2)", immediateRender: false }, 39.6);
-  tl.to("#ring2", { scale: 2.4, opacity: 0, duration: .8 }, 40.2);
-  tl.to("#stage", { opacity: 0, duration: .7 }, 40.6);
-  // 41–54 s · System, más lento: se recorre cada parte
-  tl.to("#sys", { opacity: 1, duration: .3 }, 41.0);
-  SYS.forEach((s, i) => {
-    const t0 = 41.0 + i * 3.2;
-    tl.fromTo(s, { opacity: 0, y: 30, scale: .97 }, { opacity: 1, y: 0, scale: 1, duration: .8, ease: "power2.out", immediateRender: false }, t0);
-    tl.fromTo(s.firstChild, { y: 0 }, { y: -300, duration: 3.6, ease: "sine.inOut", immediateRender: false }, t0);
-    if (i < 3) tl.to(s, { opacity: 0, duration: .6 }, t0 + 2.8);
-  });
-  // 54–58 s · vuelve a la intro para que el bucle no tenga corte
-  tl.to("#sys", { opacity: 0, duration: .8 }, 54.2);
-  tl.set("#stage", { opacity: 1 }, 54.9);
-  tl.set(cam, { opacity: 0 }, 54.9);
-  TARJ.forEach((c, i) => tl.fromTo(c, { opacity: 0, scale: .9, y: 70 }, { opacity: 1, scale: 1, y: 40, duration: 1.4, ease: "power2.out", immediateRender: false }, 55.2 + i * .1));
+  // 0–3 s · el home aparece: se endereza desde una leve inclinación 3D
+  tl.fromTo(cam, { rotationX: 12, rotationY: -14, scale: .88, opacity: 0 }, { rotationX: 0, rotationY: 0, scale: .94, opacity: 1, duration: 2.4, ease: E, immediateRender: false }, 0.1);
+  tl.set(cur, { ...P(1250, 960), opacity: 0 }, 0);
+  tl.to(cur, { opacity: 1, duration: .4 }, 2.0);
+  // 3–7 s · recorrido por los productos de la cara 1
+  tl.to(cam, { ...enfoca(1380, 520, 1.18), rotationY: -4, duration: 2.4, ease: E }, 2.8);
+  mueve(1062, 452, 3.0, 1.2); mueve(1376, 452, 4.4, 1.0); mueve(1532, 330, 5.5, .9);
+  // 7–9 s · flecha → pasa a la cara 2 (deslizamiento horizontal, como en un iPhone)
+  mueve(1724, 771, 6.5, 1.0); clic(1724, 771, 7.6);
+  tl.set("#madera", { opacity: 1 }, 7.75);
+  tl.to("#g1", { x: -260, opacity: 0, duration: .7, ease: "power2.in" }, 7.75);
+  tl.fromTo("#g2", { x: 260, opacity: 0 }, { x: 0, opacity: 1, duration: .8, ease: "power3.out", immediateRender: false }, 8.25);
+  tl.set("#madera", { opacity: 0 }, 9.1);
+  // 9–14 s · recorrido por la cara 2
+  tl.to(cam, { ...enfoca(1300, 470, 1.3), rotationY: 4, duration: 2.6, ease: E }, 9.0);
+  mueve(1062, 330, 9.3, 1.2); mueve(1376, 330, 10.7, 1.0); mueve(1218, 452, 11.9, 1.0); mueve(1532, 452, 13.0, .9);
+  // 14–16 s · flecha ← vuelve a la cara 1
+  tl.to(cam, { ...enfoca(1380, 520, 1.18), rotationY: -2, duration: 1.6, ease: E }, 13.8);
+  mueve(1688, 771, 14.0, 1.0); clic(1688, 771, 15.1);
+  tl.set("#madera", { opacity: 1 }, 15.25);
+  tl.to("#g2", { x: 260, opacity: 0, duration: .7, ease: "power2.in" }, 15.25);
+  tl.fromTo("#g1", { x: -260, opacity: 0 }, { x: 0, opacity: 1, duration: .8, ease: "power3.out", immediateRender: false }, 15.75);
+  tl.set("#madera", { opacity: 0 }, 16.6);
+  // 17–21 s · Credit Pro → "Coming Soon 2027"
+  mueve(1690, 452, 16.6, 1.0); clic(1690, 452, 17.7);
+  tl.to(cam, { ...enfoca(1000, 523, 1.0), rotationY: 0, duration: 1.2, ease: E }, 17.8);
+  tl.to("#al1", { opacity: 1, duration: .5 }, 17.9);
+  tl.fromTo("#p1", { opacity: 0, scale: .85 }, { opacity: 1, scale: 1, duration: .55, ease: "back.out(1.6)", immediateRender: false }, 18.1);
+  mueve(1000, 676, 19.0, 1.1); clic(1000, 676, 20.4);
+  tl.to("#p1", { opacity: 0, scale: .9, duration: .35, ease: "power2.in" }, 20.5);
+  tl.to("#al1", { opacity: 0, duration: .45 }, 20.6);
+  // 21–26 s · Onboarding → "Coming Soon 2027"
+  tl.to(cam, { ...enfoca(1380, 520, 1.18), duration: 1.4, ease: E }, 21.0);
+  mueve(1376, 696, 21.2, 1.2); clic(1376, 696, 22.6);
+  tl.to(cam, { ...enfoca(1000, 523, 1.0), duration: 1.2, ease: E }, 22.7);
+  tl.to("#al2", { opacity: 1, duration: .5 }, 22.8);
+  tl.fromTo("#p2", { opacity: 0, scale: .85 }, { opacity: 1, scale: 1, duration: .55, ease: "back.out(1.6)", immediateRender: false }, 23.0);
+  mueve(1000, 676, 23.9, 1.1); clic(1000, 676, 25.3);
+  tl.to("#p2", { opacity: 0, scale: .9, duration: .35, ease: "power2.in" }, 25.4);
+  tl.to("#al2", { opacity: 0, duration: .45 }, 25.5);
+  // 26–32 s · vista general y regreso al estado inicial para que el bucle empalme
+  tl.to(cam, { x: 0, y: 0, scale: .94, rotationY: 0, duration: 2, ease: E }, 26.2);
+  mueve(1250, 960, 26.6, 1.6);
+  tl.to(cur, { opacity: 0, duration: .4 }, 29.6);
+  tl.to(cam, { rotationX: 12, rotationY: -14, scale: .88, opacity: 0, duration: 1.8, ease: E }, 30.1);
   window.__timelines = window.__timelines || {};
   window.__timelines["main"] = tl;
   tl.seek(0);
